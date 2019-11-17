@@ -62,227 +62,227 @@
                <children>
                   <Pane id="a8" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #f0dbc0;">
                      <children>
-                        <ImageView fx:id="a8" fitHeight="62.5" fitWidth="62.5" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="a8" fitHeight="62.5" fitWidth="62.5" onMouseClicked="#clickA8" pickOnBounds="true" preserveRatio="true" />
                      </children></Pane>
                   <Pane id="b8" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #6a4c4c;" GridPane.columnIndex="1">
                      <children>
-                        <ImageView fx:id="b8" fitHeight="62.5" fitWidth="62.5" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="b8" fitHeight="62.5" fitWidth="62.5" onMouseClicked="#clickB8" pickOnBounds="true" preserveRatio="true" />
                      </children></Pane>
                   <Pane id="c8" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #f0dbc0;" GridPane.columnIndex="2">
                      <children>
-                        <ImageView fx:id="c8" fitHeight="62.5" fitWidth="62.5" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="c8" fitHeight="62.5" fitWidth="62.5" onMouseClicked="#clickC8" pickOnBounds="true" preserveRatio="true" />
                      </children></Pane>
                   <Pane id="d8" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #6a4c4c;" GridPane.columnIndex="3">
                      <children>
-                        <ImageView fx:id="d8" fitHeight="62.5" fitWidth="62.5" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="d8" fitHeight="62.5" fitWidth="62.5" onMouseClicked="#clickD8" pickOnBounds="true" preserveRatio="true" />
                      </children></Pane>
                   <Pane id="e8" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #f0dbc0;" GridPane.columnIndex="4">
                      <children>
-                        <ImageView fx:id="e8" fitHeight="62.5" fitWidth="62.5" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="e8" fitHeight="62.5" fitWidth="62.5" onMouseClicked="#clickE8" pickOnBounds="true" preserveRatio="true" />
                      </children></Pane>
                   <Pane id="f8" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #6a4c4c;" GridPane.columnIndex="5">
                      <children>
-                        <ImageView fx:id="f8" fitHeight="62.5" fitWidth="62.5" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="f8" fitHeight="62.5" fitWidth="62.5" onMouseClicked="#clickF8" pickOnBounds="true" preserveRatio="true" />
                      </children></Pane>
                   <Pane id="g8" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #f0dbc0;" GridPane.columnIndex="6">
                      <children>
-                        <ImageView fx:id="g8" fitHeight="62.5" fitWidth="62.5" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="g8" fitHeight="62.5" fitWidth="62.5" onMouseClicked="#clickG8" pickOnBounds="true" preserveRatio="true" />
                      </children></Pane>
                   <Pane id="h8" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #6a4c4c;" GridPane.columnIndex="7">
                      <children>
-                        <ImageView fx:id="h8" fitHeight="62.5" fitWidth="62.5" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="h8" fitHeight="62.5" fitWidth="62.5" onMouseClicked="#clickH8" pickOnBounds="true" preserveRatio="true" />
                      </children></Pane>
                   <Pane id="a7" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #6a4c4c;" GridPane.rowIndex="1">
                      <children>
-                        <ImageView fx:id="a7" fitHeight="62.5" fitWidth="62.5" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="a7" fitHeight="62.5" fitWidth="62.5" onMouseClicked="#clickA7" pickOnBounds="true" preserveRatio="true" />
                      </children></Pane>
                   <Pane id="b7" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #f0dbc0;" GridPane.columnIndex="1" GridPane.rowIndex="1">
                      <children>
-                        <ImageView fx:id="b7" fitHeight="62.5" fitWidth="62.5" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="b7" fitHeight="62.5" fitWidth="62.5" onMouseClicked="#clickB7" pickOnBounds="true" preserveRatio="true" />
                      </children></Pane>
                   <Pane id="c7" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #6a4c4c;" GridPane.columnIndex="2" GridPane.rowIndex="1">
                      <children>
-                        <ImageView fx:id="c7" fitHeight="62.5" fitWidth="62.5" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="c7" fitHeight="62.5" fitWidth="62.5" onMouseClicked="#clickC7" pickOnBounds="true" preserveRatio="true" />
                      </children></Pane>
                   <Pane id="d7" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #f0dbc0;" GridPane.columnIndex="3" GridPane.rowIndex="1">
                      <children>
-                        <ImageView fx:id="d7" fitHeight="62.5" fitWidth="62.5" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="d7" fitHeight="62.5" fitWidth="62.5" onMouseClicked="#clickD7" pickOnBounds="true" preserveRatio="true" />
                      </children></Pane>
                   <Pane id="e7" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #6a4c4c;" GridPane.columnIndex="4" GridPane.rowIndex="1">
                      <children>
-                        <ImageView fx:id="e7" fitHeight="62.5" fitWidth="62.5" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="e7" fitHeight="62.5" fitWidth="62.5" onMouseClicked="#clickE7" pickOnBounds="true" preserveRatio="true" />
                      </children></Pane>
                   <Pane id="f7" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #f0dbc0;" GridPane.columnIndex="5" GridPane.rowIndex="1">
                      <children>
-                        <ImageView fx:id="f7" fitHeight="62.5" fitWidth="62.5" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="f7" fitHeight="62.5" fitWidth="62.5" onMouseClicked="#clickF7" pickOnBounds="true" preserveRatio="true" />
                      </children></Pane>
                   <Pane id="g7" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #6a4c4c;" GridPane.columnIndex="6" GridPane.rowIndex="1">
                      <children>
-                        <ImageView fx:id="g7" fitHeight="62.5" fitWidth="62.5" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="g7" fitHeight="62.5" fitWidth="62.5" onMouseClicked="#clickG7" pickOnBounds="true" preserveRatio="true" />
                      </children></Pane>
                   <Pane id="h7" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #f0dbc0;" GridPane.columnIndex="7" GridPane.rowIndex="1">
                      <children>
-                        <ImageView fx:id="h7" fitHeight="62.5" fitWidth="62.5" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="h7" fitHeight="62.5" fitWidth="62.5" onMouseClicked="#clickH7" pickOnBounds="true" preserveRatio="true" />
                      </children></Pane>
                   <Pane id="a6" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #f0dbc0;" GridPane.rowIndex="2">
                      <children>
-                        <ImageView fx:id="a6" fitHeight="62.5" fitWidth="62.5" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="a6" fitHeight="62.5" fitWidth="62.5" onMouseClicked="#clickA6" pickOnBounds="true" preserveRatio="true" />
                      </children></Pane>
                   <Pane id="b6" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #6a4c4c;" GridPane.columnIndex="1" GridPane.rowIndex="2">
                      <children>
-                        <ImageView fx:id="b6" fitHeight="62.5" fitWidth="62.5" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="b6" fitHeight="62.5" fitWidth="62.5" onMouseClicked="#clickB6" pickOnBounds="true" preserveRatio="true" />
                      </children></Pane>
                   <Pane id="c6" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #f0dbc0;" GridPane.columnIndex="2" GridPane.rowIndex="2">
                      <children>
-                        <ImageView fx:id="c6" fitHeight="62.5" fitWidth="62.5" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="c6" fitHeight="62.5" fitWidth="62.5" onMouseClicked="#clickC6" pickOnBounds="true" preserveRatio="true" />
                      </children></Pane>
                   <Pane id="d6" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #6a4c4c;" GridPane.columnIndex="3" GridPane.rowIndex="2">
                      <children>
-                        <ImageView fx:id="d6" fitHeight="62.5" fitWidth="62.5" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="d6" fitHeight="62.5" fitWidth="62.5" onMouseClicked="#clickD6" pickOnBounds="true" preserveRatio="true" />
                      </children></Pane>
                   <Pane id="e6" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #f0dbc0;" GridPane.columnIndex="4" GridPane.rowIndex="2">
                      <children>
-                        <ImageView fx:id="e6" fitHeight="62.5" fitWidth="62.5" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="e6" fitHeight="62.5" fitWidth="62.5" onMouseClicked="#clickE6" pickOnBounds="true" preserveRatio="true" />
                      </children></Pane>
                   <Pane id="f6" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #6a4c4c;" GridPane.columnIndex="5" GridPane.rowIndex="2">
                      <children>
-                        <ImageView fx:id="f6" fitHeight="62.5" fitWidth="62.5" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="f6" fitHeight="62.5" fitWidth="62.5" onMouseClicked="#clickF6" pickOnBounds="true" preserveRatio="true" />
                      </children></Pane>
                   <Pane id="g6" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #f0dbc0;" GridPane.columnIndex="6" GridPane.rowIndex="2">
                      <children>
-                        <ImageView fx:id="g6" fitHeight="62.5" fitWidth="62.5" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="g6" fitHeight="62.5" fitWidth="62.5" onMouseClicked="#clickG6" pickOnBounds="true" preserveRatio="true" />
                      </children></Pane>
                   <Pane id="h6" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #6a4c4c;" GridPane.columnIndex="7" GridPane.rowIndex="2">
                      <children>
-                        <ImageView fx:id="h6" fitHeight="62.5" fitWidth="62.5" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="h6" fitHeight="62.5" fitWidth="62.5" onMouseClicked="#clickH6" pickOnBounds="true" preserveRatio="true" />
                      </children></Pane>
                   <Pane id="a5" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #6a4c4c;" GridPane.rowIndex="3">
                      <children>
-                        <ImageView fx:id="a5" fitHeight="62.5" fitWidth="62.5" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="a5" fitHeight="62.5" fitWidth="62.5" onMouseClicked="#clickA5" pickOnBounds="true" preserveRatio="true" />
                      </children></Pane>
                   <Pane id="b5" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #f0dbc0;" GridPane.columnIndex="1" GridPane.rowIndex="3">
                      <children>
-                        <ImageView fx:id="b5" fitHeight="62.5" fitWidth="62.5" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="b5" fitHeight="62.5" fitWidth="62.5" onMouseClicked="#clickB5" pickOnBounds="true" preserveRatio="true" />
                      </children></Pane>
                   <Pane id="c5" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #6a4c4c;" GridPane.columnIndex="2" GridPane.rowIndex="3">
                      <children>
-                        <ImageView fx:id="c5" fitHeight="62.5" fitWidth="62.5" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="c5" fitHeight="62.5" fitWidth="62.5" onMouseClicked="#clickC5" pickOnBounds="true" preserveRatio="true" />
                      </children></Pane>
                   <Pane id="d5" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #f0dbc0;" GridPane.columnIndex="3" GridPane.rowIndex="3">
                      <children>
-                        <ImageView fx:id="d5" fitHeight="62.5" fitWidth="62.5" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="d5" fitHeight="62.5" fitWidth="62.5" onMouseClicked="#clickD5" pickOnBounds="true" preserveRatio="true" />
                      </children></Pane>
                   <Pane id="e5" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #6a4c4c;" GridPane.columnIndex="4" GridPane.rowIndex="3">
                      <children>
-                        <ImageView fx:id="e5" fitHeight="62.5" fitWidth="62.5" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="e5" fitHeight="62.5" fitWidth="62.5" onMouseClicked="#clickE5" pickOnBounds="true" preserveRatio="true" />
                      </children></Pane>
                   <Pane id="f5" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #f0dbc0;" GridPane.columnIndex="5" GridPane.rowIndex="3">
                      <children>
-                        <ImageView fx:id="f5" fitHeight="62.5" fitWidth="62.5" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="f5" fitHeight="62.5" fitWidth="62.5" onMouseClicked="#clickF5" pickOnBounds="true" preserveRatio="true" />
                      </children></Pane>
                   <Pane id="g5" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #6a4c4c;" GridPane.columnIndex="6" GridPane.rowIndex="3">
                      <children>
-                        <ImageView fx:id="g5" fitHeight="62.5" fitWidth="62.5" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="g5" fitHeight="62.5" fitWidth="62.5" onMouseClicked="#clickG5" pickOnBounds="true" preserveRatio="true" />
                      </children></Pane>
                   <Pane id="h5" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #f0dbc0;" GridPane.columnIndex="7" GridPane.rowIndex="3">
                      <children>
-                        <ImageView fx:id="h5" fitHeight="62.5" fitWidth="62.5" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="h5" fitHeight="62.5" fitWidth="62.5" onMouseClicked="#clickH5" pickOnBounds="true" preserveRatio="true" />
                      </children></Pane>
                   <Pane id="a4" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #f0dbc0;" GridPane.rowIndex="4">
                      <children>
-                        <ImageView fx:id="a4" fitHeight="62.5" fitWidth="62.5" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="a4" fitHeight="62.5" fitWidth="62.5" onMouseClicked="#clickA4" pickOnBounds="true" preserveRatio="true" />
                      </children></Pane>
                   <Pane id="b4" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #6a4c4c;" GridPane.columnIndex="1" GridPane.rowIndex="4">
                      <children>
-                        <ImageView fx:id="b4" fitHeight="62.5" fitWidth="62.5" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="b4" fitHeight="62.5" fitWidth="62.5" onMouseClicked="#clickB4" pickOnBounds="true" preserveRatio="true" />
                      </children></Pane>
                   <Pane id="c4" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #f0dbc0;" GridPane.columnIndex="2" GridPane.rowIndex="4">
                      <children>
-                        <ImageView fx:id="c4" fitHeight="62.5" fitWidth="62.5" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="c4" fitHeight="62.5" fitWidth="62.5" onMouseClicked="#clickC4" pickOnBounds="true" preserveRatio="true" />
                      </children></Pane>
                   <Pane id="d4" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #6a4c4c;" GridPane.columnIndex="3" GridPane.rowIndex="4">
                      <children>
-                        <ImageView fx:id="d4" fitHeight="62.5" fitWidth="62.5" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="d4" fitHeight="62.5" fitWidth="62.5" onMouseClicked="#clickD4" pickOnBounds="true" preserveRatio="true" />
                      </children></Pane>
                   <Pane id="e4" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #f0dbc0;" GridPane.columnIndex="4" GridPane.rowIndex="4">
                      <children>
-                        <ImageView fx:id="e4" fitHeight="62.5" fitWidth="62.5" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="e4" fitHeight="62.5" fitWidth="62.5" onMouseClicked="#clickE4" pickOnBounds="true" preserveRatio="true" />
                      </children></Pane>
                   <Pane id="f4" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #6a4c4c;" GridPane.columnIndex="5" GridPane.rowIndex="4">
                      <children>
-                        <ImageView fx:id="f4" fitHeight="62.5" fitWidth="62.5" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="f4" fitHeight="62.5" fitWidth="62.5" onMouseClicked="#clickF4" pickOnBounds="true" preserveRatio="true" />
                      </children></Pane>
                   <Pane id="g4" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #f0dbc0;" GridPane.columnIndex="6" GridPane.rowIndex="4">
                      <children>
-                        <ImageView fx:id="g4" fitHeight="62.5" fitWidth="62.5" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="g4" fitHeight="62.5" fitWidth="62.5" onMouseClicked="#clickG4" pickOnBounds="true" preserveRatio="true" />
                      </children></Pane>
                   <Pane id="h4" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #6a4c4c;" GridPane.columnIndex="7" GridPane.rowIndex="4">
                      <children>
-                        <ImageView fx:id="h4" fitHeight="62.5" fitWidth="62.5" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="h4" fitHeight="62.5" fitWidth="62.5" onMouseClicked="#clickH4" pickOnBounds="true" preserveRatio="true" />
                      </children></Pane>
                   <Pane id="a3" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #6a4c4c;" GridPane.rowIndex="5">
                      <children>
-                        <ImageView fx:id="a3" fitHeight="62.5" fitWidth="62.5" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="a3" fitHeight="62.5" fitWidth="62.5" onMouseClicked="#clickA3" pickOnBounds="true" preserveRatio="true" />
                      </children></Pane>
                   <Pane id="b3" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #f0dbc0;" GridPane.columnIndex="1" GridPane.rowIndex="5">
                      <children>
-                        <ImageView fx:id="b3" fitHeight="62.5" fitWidth="62.5" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="b3" fitHeight="62.5" fitWidth="62.5" onMouseClicked="#clickB3" pickOnBounds="true" preserveRatio="true" />
                      </children></Pane>
                   <Pane id="c3" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #6a4c4c;" GridPane.columnIndex="2" GridPane.rowIndex="5">
                      <children>
-                        <ImageView fx:id="c3" fitHeight="62.5" fitWidth="62.5" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="c3" fitHeight="62.5" fitWidth="62.5" onMouseClicked="#clickC3" pickOnBounds="true" preserveRatio="true" />
                      </children></Pane>
                   <Pane id="d3" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #f0dbc0;" GridPane.columnIndex="3" GridPane.rowIndex="5">
                      <children>
-                        <ImageView fx:id="d3" fitHeight="62.5" fitWidth="62.5" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="d3" fitHeight="62.5" fitWidth="62.5" onMouseClicked="#clickD3" pickOnBounds="true" preserveRatio="true" />
                      </children></Pane>
                   <Pane id="e3" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #6a4c4c;" GridPane.columnIndex="4" GridPane.rowIndex="5">
                      <children>
-                        <ImageView fx:id="e3" fitHeight="62.5" fitWidth="62.5" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="e3" fitHeight="62.5" fitWidth="62.5" onMouseClicked="#clickE3" pickOnBounds="true" preserveRatio="true" />
                      </children></Pane>
                   <Pane id="f3" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #f0dbc0;" GridPane.columnIndex="5" GridPane.rowIndex="5">
                      <children>
-                        <ImageView fx:id="f3" fitHeight="62.5" fitWidth="62.5" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="f3" fitHeight="62.5" fitWidth="62.5" onMouseClicked="#clickF3" pickOnBounds="true" preserveRatio="true" />
                      </children></Pane>
                   <Pane id="g3" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #6a4c4c;" GridPane.columnIndex="6" GridPane.rowIndex="5">
                      <children>
-                        <ImageView fx:id="g3" fitHeight="62.5" fitWidth="62.5" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="g3" fitHeight="62.5" fitWidth="62.5" onMouseClicked="#clickG3" pickOnBounds="true" preserveRatio="true" />
                      </children></Pane>
                   <Pane id="h3" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #f0dbc0;" GridPane.columnIndex="7" GridPane.rowIndex="5">
                      <children>
-                        <ImageView fx:id="h3" fitHeight="62.5" fitWidth="62.5" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="h3" fitHeight="62.5" fitWidth="62.5" onMouseClicked="#clickH3" pickOnBounds="true" preserveRatio="true" />
                      </children></Pane>
                   <Pane id="a2" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #f0dbc0;" GridPane.rowIndex="6">
                      <children>
-                        <ImageView fx:id="a2" fitHeight="62.5" fitWidth="62.5" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="a2" fitHeight="62.5" fitWidth="62.5" onMouseClicked="#clickA2" pickOnBounds="true" preserveRatio="true" />
                      </children></Pane>
                   <Pane id="b2" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #6a4c4c;" GridPane.columnIndex="1" GridPane.rowIndex="6">
                      <children>
-                        <ImageView fx:id="b2" fitHeight="62.5" fitWidth="62.5" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="b2" fitHeight="62.5" fitWidth="62.5" onMouseClicked="#clickB2" pickOnBounds="true" preserveRatio="true" />
                      </children></Pane>
                   <Pane id="c2" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #f0dbc0;" GridPane.columnIndex="2" GridPane.rowIndex="6">
                      <children>
-                        <ImageView fx:id="c2" fitHeight="62.5" fitWidth="62.5" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="c2" fitHeight="62.5" fitWidth="62.5" onMouseClicked="#clickC2" pickOnBounds="true" preserveRatio="true" />
                      </children></Pane>
                   <Pane id="d2" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #6a4c4c;" GridPane.columnIndex="3" GridPane.rowIndex="6">
                      <children>
-                        <ImageView fx:id="d2" fitHeight="62.5" fitWidth="62.5" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="d2" fitHeight="62.5" fitWidth="62.5" onMouseClicked="#clickD2" pickOnBounds="true" preserveRatio="true" />
                      </children></Pane>
                   <Pane id="e2" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #f0dbc0;" GridPane.columnIndex="4" GridPane.rowIndex="6">
                      <children>
-                        <ImageView fx:id="e2" fitHeight="62.5" fitWidth="62.5" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="e2" fitHeight="62.5" fitWidth="62.5" onMouseClicked="#clickE2" pickOnBounds="true" preserveRatio="true" />
                      </children></Pane>
                   <Pane id="f2" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #6a4c4c;" GridPane.columnIndex="5" GridPane.rowIndex="6">
                      <children>
-                        <ImageView fx:id="f2" fitHeight="62.5" fitWidth="62.5" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="f2" fitHeight="62.5" fitWidth="62.5" onMouseClicked="#clickF2" pickOnBounds="true" preserveRatio="true" />
                      </children></Pane>
                   <Pane id="g2" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #f0dbc0;" GridPane.columnIndex="6" GridPane.rowIndex="6">
                      <children>
-                        <ImageView fx:id="g2" fitHeight="62.5" fitWidth="62.5" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="g2" fitHeight="62.5" fitWidth="62.5" onMouseClicked="#clickG2" pickOnBounds="true" preserveRatio="true" />
                      </children></Pane>
                   <Pane id="h2" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #6a4c4c;" GridPane.columnIndex="7" GridPane.rowIndex="6">
                      <children>
-                        <ImageView fx:id="h2" fitHeight="62.5" fitWidth="62.5" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="h2" fitHeight="62.5" fitWidth="62.5" onMouseClicked="#clickH2" pickOnBounds="true" preserveRatio="true" />
                      </children></Pane>
                   <Pane id="a1" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #6a4c4c;" GridPane.rowIndex="7">
                      <children>
@@ -290,31 +290,31 @@
                      </children></Pane>
                   <Pane id="b1" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #f0dbc0;" GridPane.columnIndex="1" GridPane.rowIndex="7">
                      <children>
-                        <ImageView fx:id="b1" fitHeight="62.5" fitWidth="62.5" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="b1" fitHeight="62.5" fitWidth="62.5" onMouseClicked="#clickB1" pickOnBounds="true" preserveRatio="true" />
                      </children></Pane>
                   <Pane id="c1" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #6a4c4c;" GridPane.columnIndex="2" GridPane.rowIndex="7">
                      <children>
-                        <ImageView fx:id="c1" fitHeight="62.5" fitWidth="62.5" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="c1" fitHeight="62.5" fitWidth="62.5" onMouseClicked="#clickC1" pickOnBounds="true" preserveRatio="true" />
                      </children></Pane>
                   <Pane id="d1" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #f0dbc0;" GridPane.columnIndex="3" GridPane.rowIndex="7">
                      <children>
-                        <ImageView fx:id="d1" fitHeight="62.5" fitWidth="62.5" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="d1" fitHeight="62.5" fitWidth="62.5" onMouseClicked="#clickD1" pickOnBounds="true" preserveRatio="true" />
                      </children></Pane>
                   <Pane id="e1" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #6a4c4c;" GridPane.columnIndex="4" GridPane.rowIndex="7">
                      <children>
-                        <ImageView fx:id="e1" fitHeight="62.5" fitWidth="62.5" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="e1" fitHeight="62.5" fitWidth="62.5" onMouseClicked="#clickE1" pickOnBounds="true" preserveRatio="true" />
                      </children></Pane>
                   <Pane id="f1" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #f0dbc0;" GridPane.columnIndex="5" GridPane.rowIndex="7">
                      <children>
-                        <ImageView fx:id="f1" fitHeight="62.5" fitWidth="62.5" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="f1" fitHeight="62.5" fitWidth="62.5" onMouseClicked="#clickF1" pickOnBounds="true" preserveRatio="true" />
                      </children></Pane>
                   <Pane id="g1" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #6a4c4c;" GridPane.columnIndex="6" GridPane.rowIndex="7">
                      <children>
-                        <ImageView fx:id="g1" fitHeight="62.5" fitWidth="62.5" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="g1" fitHeight="62.5" fitWidth="62.5" onMouseClicked="#clickG1" pickOnBounds="true" preserveRatio="true" />
                      </children></Pane>
                   <Pane id="h1" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #f0dbc0;" GridPane.columnIndex="7" GridPane.rowIndex="7">
                      <children>
-                        <ImageView fx:id="h1" fitHeight="62.5" fitWidth="62.5" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="h1" fitHeight="62.5" fitWidth="62.5" onMouseClicked="#clickH1" pickOnBounds="true" preserveRatio="true" />
                      </children></Pane>
                </children>
             </GridPane>
