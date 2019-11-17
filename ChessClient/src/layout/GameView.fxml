@@ -286,7 +286,7 @@
                      </children></Pane>
                   <Pane id="a1" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #6a4c4c;" GridPane.rowIndex="7">
                      <children>
-                        <ImageView fx:id="a1" fitHeight="62.5" fitWidth="62.5" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="a1" fitHeight="62.5" fitWidth="62.5" onMouseClicked="#clickA1" pickOnBounds="true" preserveRatio="true" />
                      </children></Pane>
                   <Pane id="b1" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #f0dbc0;" GridPane.columnIndex="1" GridPane.rowIndex="7">
                      <children>

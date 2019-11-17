@@ -5,6 +5,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 
 import java.io.File;
@@ -95,16 +96,22 @@ public class Controller implements Initializable {
             ty = "bialy";
             przeciwnik = "czarny";
             label_kto.setText("białe");
+            d1.setImage(new Image("file:images/hetman_"+ty+".png"));
+            e1.setImage(new Image("file:images/krol_"+ty+".png"));
+            d8.setImage(new Image("file:images/hetman_"+przeciwnik+".png"));
+            e8.setImage(new Image("file:images/krol_"+przeciwnik+".png"));
         } else {
             ty = "czarny";
             przeciwnik = "bialy";
             label_kto.setText("czarne");
+            d1.setImage(new Image("file:images/krol_"+ty+".png"));
+            e1.setImage(new Image("file:images/hetman_"+ty+".png"));
+            d8.setImage(new Image("file:images/krol_"+przeciwnik+".png"));
+            e8.setImage(new Image("file:images/hetman_"+przeciwnik+".png"));
         }
         a1.setImage(new Image("file:images/wieza_"+ty+".png"));
         b1.setImage(new Image("file:images/skoczek_"+ty+".png"));
         c1.setImage(new Image("file:images/goniec_"+ty+".png"));
-        d1.setImage(new Image("file:images/hetman_"+ty+".png"));
-        e1.setImage(new Image("file:images/krol_"+ty+".png"));
         f1.setImage(new Image("file:images/goniec_"+ty+".png"));
         g1.setImage(new Image("file:images/skoczek_"+ty+".png"));
         h1.setImage(new Image("file:images/wieza_"+ty+".png"));
@@ -120,8 +127,6 @@ public class Controller implements Initializable {
         a8.setImage(new Image("file:images/wieza_"+przeciwnik+".png"));
         b8.setImage(new Image("file:images/skoczek_"+przeciwnik+".png"));
         c8.setImage(new Image("file:images/goniec_"+przeciwnik+".png"));
-        d8.setImage(new Image("file:images/hetman_"+przeciwnik+".png"));
-        e8.setImage(new Image("file:images/krol_"+przeciwnik+".png"));
         f8.setImage(new Image("file:images/goniec_"+przeciwnik+".png"));
         g8.setImage(new Image("file:images/skoczek_"+przeciwnik+".png"));
         h8.setImage(new Image("file:images/wieza_"+przeciwnik+".png"));
@@ -133,5 +138,20 @@ public class Controller implements Initializable {
         f7.setImage(new Image("file:images/pion_"+przeciwnik+".png"));
         g7.setImage(new Image("file:images/pion_"+przeciwnik+".png"));
         h7.setImage(new Image("file:images/pion_"+przeciwnik+".png"));
+    }
+
+    public void clickA1(MouseEvent mouseEvent) {
+        int wyn = Game.onClick("A1");
+        switch (wyn) {
+            case 1 : {
+                moveTower();
+                break;
+            }
+        }
+    }
+
+    public void  moveTower() {
+        a1.setImage(null);
+        a2.setImage(new Image("file:images/wieza_bialy.png"));
     }
 }
