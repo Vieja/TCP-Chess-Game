@@ -88,11 +88,15 @@ public class Controller implements Initializable {
     public ImageView h7;
     public ImageView h8;
 
+    private Game game = new Game();
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        game.setCzyBiale(true);
+
         String ty;
         String przeciwnik;
-        if (Game.czy_biale) {
+        if (game.czyTyToBiale) {
             ty = "bialy";
             przeciwnik = "czarny";
             label_kto.setText("białe");
@@ -146,7 +150,7 @@ public class Controller implements Initializable {
     }
 
     public void clickOn(String what) {
-        int wyn = Game.onClick(what);
+        int wyn = game.onClick(what);
         switch (wyn) {
             case 1 : {
                 moveTower();

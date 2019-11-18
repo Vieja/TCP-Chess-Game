@@ -1,16 +1,18 @@
 package bierki;
 
+import logic.Operacje;
+
 import java.util.ArrayList;
 
 public abstract class Bierka {
 
     private boolean kolor_czarny;
-    private int polozenie[];
+    private int[] polozenie;
     private int wartosc;
     private int ilosc_wykon_ruchow;
     private String poleStartu;
 
-    public Bierka(boolean kolor_czarny, int polozenie[], int wartosc, String poleStartu) {
+    public Bierka(boolean kolor_czarny, int[] polozenie, int wartosc, String poleStartu) {
         this.kolor_czarny = kolor_czarny;
         this.polozenie = polozenie;
         this.wartosc = wartosc;
@@ -22,29 +24,6 @@ public abstract class Bierka {
 
     public abstract String getNazwaBierki();
 
-    public String zakodujPozycje(int a, int b) {
-        String pozycja="";
-        switch (a) {
-            case 1: pozycja="A";
-                break;
-            case 2: pozycja="B";
-                break;
-            case 3: pozycja="C";
-                break;
-            case 4: pozycja="D";
-                break;
-            case 5: pozycja="E";
-                break;
-            case 6: pozycja="F";
-                break;
-            case 7: pozycja="G";
-                break;
-            case 8: pozycja="H";
-                break;
-        }
-        pozycja=pozycja+b;
-        return pozycja;
-    }
 
     //gettery i settery
 
@@ -68,12 +47,12 @@ public abstract class Bierka {
         return polozenie;
     }
 
-    public String getPolozenieJakoString() {
-        return zakodujPozycje(polozenie[0],polozenie[1]);
-    }
-
     public void setPolozenie(int[] polozenie) {
         this.polozenie = polozenie;
+    }
+
+    public String getPolozenieJakoString() {
+        return Operacje.zakodujPozycje(polozenie[0],polozenie[1]);
     }
 
     public boolean isKolorCzarny() {

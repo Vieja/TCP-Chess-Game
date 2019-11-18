@@ -1,5 +1,7 @@
 package bierki;
 
+import logic.Operacje;
+
 import java.util.ArrayList;
 
 public class Pion extends Bierka {
@@ -18,29 +20,29 @@ public class Pion extends Bierka {
             if (pol[1] != 1) {
                 if (tab[pol[0]][pol[1] - 1] == 0) {
                     if (getIlosc_wykon_ruchow() == 0 && tab[pol[0]][pol[1] - 2] == 0)
-                        mozliwe_ruchy.add(this.zakodujPozycje(pol[0], pol[1] - 2));
-                    mozliwe_ruchy.add(this.zakodujPozycje(pol[0], pol[1] - 1));
+                        mozliwe_ruchy.add(Operacje.zakodujPozycje(pol[0], pol[1] - 2));
+                    mozliwe_ruchy.add(Operacje.zakodujPozycje(pol[0], pol[1] - 1));
                 }
                 if (pol[0] - 1 > 0 && pol[1] - 1 > 0)
                     if (tab[pol[0] - 1][pol[1] - 1] == -1)
-                        mozliwe_ruchy.add(this.zakodujPozycje(pol[0] - 1, pol[1] - 1));
+                        mozliwe_ruchy.add(Operacje.zakodujPozycje(pol[0] - 1, pol[1] - 1));
                 if (pol[0] + 1 < 9 && pol[1] - 1 > 0)
                     if (tab[pol[0] + 1][pol[1] - 1] == -1)
-                        mozliwe_ruchy.add(this.zakodujPozycje(pol[0] + 1, pol[1] - 1));
+                        mozliwe_ruchy.add(Operacje.zakodujPozycje(pol[0] + 1, pol[1] - 1));
             }
         } else {
             if (pol[1] != 8) {
                 if (tab[pol[0]][pol[1] + 1] == 0) {
                     if (getIlosc_wykon_ruchow() == 0 && tab[pol[0]][pol[1] + 2] == 0)
-                        mozliwe_ruchy.add(this.zakodujPozycje(pol[0], pol[1] + 2));
-                    mozliwe_ruchy.add(this.zakodujPozycje(pol[0], pol[1] + 1));
+                        mozliwe_ruchy.add(Operacje.zakodujPozycje(pol[0], pol[1] + 2));
+                    mozliwe_ruchy.add(Operacje.zakodujPozycje(pol[0], pol[1] + 1));
                 }
                 if (pol[0] - 1 > 0 && pol[1] + 1 < 9)
                     if (tab[pol[0] - 1][pol[1] + 1] == -1)
-                        mozliwe_ruchy.add(this.zakodujPozycje(pol[0] - 1, pol[1] + 1));
+                        mozliwe_ruchy.add(Operacje.zakodujPozycje(pol[0] - 1, pol[1] + 1));
                 if (pol[0] + 1 < 9 && pol[1] + 1 < 9)
                     if (tab[pol[0] + 1][pol[1] + 1] == -1)
-                        mozliwe_ruchy.add(this.zakodujPozycje(pol[0] + 1, pol[1] + 1));
+                        mozliwe_ruchy.add(Operacje.zakodujPozycje(pol[0] + 1, pol[1] + 1));
             }
         }
         return mozliwe_ruchy;
