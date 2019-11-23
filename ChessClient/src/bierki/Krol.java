@@ -1,5 +1,7 @@
 package bierki;
 
+import logic.Operacje;
+
 import java.util.ArrayList;
 
 public class Krol extends Bierka {
@@ -17,21 +19,21 @@ public class Krol extends Bierka {
         int i = pol[0];
         int j = pol[1];
         if (i-1 > 0 && j - 1 > 0)
-            if (tab[i-1][j-1] != 1) mozliwe_ruchy.add(this.zakodujPozycje(i-1,j-1));
+            if (tab[i-1][j-1] != 1) mozliwe_ruchy.add(Operacje.zakodujPozycje(i-1,j-1));
         if (i-1 > 0)
-            if (tab[i-1][j] != 1) mozliwe_ruchy.add(this.zakodujPozycje(i-1,j));
+            if (tab[i-1][j] != 1) mozliwe_ruchy.add(Operacje.zakodujPozycje(i-1,j));
         if (i-1 > 0 && j + 1 < 9)
-            if (tab[i-1][j+1] != 1) mozliwe_ruchy.add(this.zakodujPozycje(i-1,j+1));
+            if (tab[i-1][j+1] != 1) mozliwe_ruchy.add(Operacje.zakodujPozycje(i-1,j+1));
         if (j + 1 < 9)
-            if (tab[i][j+1] != 1) mozliwe_ruchy.add(this.zakodujPozycje(i,j+1));
+            if (tab[i][j+1] != 1) mozliwe_ruchy.add(Operacje.zakodujPozycje(i,j+1));
         if (i+1 < 9 && j + 1 < 9)
-            if (tab[i+1][j+1] != 1) mozliwe_ruchy.add(this.zakodujPozycje(i+1,j+1));
+            if (tab[i+1][j+1] != 1) mozliwe_ruchy.add(Operacje.zakodujPozycje(i+1,j+1));
         if (i+1 < 9)
-            if (tab[i+1][j] != 1) mozliwe_ruchy.add(this.zakodujPozycje(i+1,j));
+            if (tab[i+1][j] != 1) mozliwe_ruchy.add(Operacje.zakodujPozycje(i+1,j));
         if (i+1 < 9 && j - 1 > 0)
-            if (tab[i+1][j-1] != 1) mozliwe_ruchy.add(this.zakodujPozycje(i+1,j-1));
+            if (tab[i+1][j-1] != 1) mozliwe_ruchy.add(Operacje.zakodujPozycje(i+1,j-1));
         if (j - 1 > 0)
-            if (tab[i][j-1] != 1) mozliwe_ruchy.add(this.zakodujPozycje(i,j-1));
+            if (tab[i][j-1] != 1) mozliwe_ruchy.add(Operacje.zakodujPozycje(i,j-1));
         return mozliwe_ruchy;
     }
 

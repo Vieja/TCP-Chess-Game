@@ -1,5 +1,7 @@
 package bierki;
 
+import logic.Operacje;
+
 import java.util.ArrayList;
 
 public class Skoczek extends Bierka {
@@ -17,14 +19,14 @@ public class Skoczek extends Bierka {
         for (int i = 1;i < 9;i++)
             for (int j = 1;j < 9;j++) {
                 if (tab[i][j] != 1) {
-                    if (i-2 == pol[0] && j+1 == pol[1]) mozliwe_ruchy.add(this.zakodujPozycje(i,j));
-                    if (i-1 == pol[0] && j+2 == pol[1]) mozliwe_ruchy.add(this.zakodujPozycje(i,j));
-                    if (i+1 == pol[0] && j+2 == pol[1]) mozliwe_ruchy.add(this.zakodujPozycje(i,j));
-                    if (i+2 == pol[0] && j+1 == pol[1]) mozliwe_ruchy.add(this.zakodujPozycje(i,j));
-                    if (i+2 == pol[0] && j-1 == pol[1]) mozliwe_ruchy.add(this.zakodujPozycje(i,j));
-                    if (i+1 == pol[0] && j-2 == pol[1]) mozliwe_ruchy.add(this.zakodujPozycje(i,j));
-                    if (i-1 == pol[0] && j-2 == pol[1]) mozliwe_ruchy.add(this.zakodujPozycje(i,j));
-                    if (i-2 == pol[0] && j-1 == pol[1]) mozliwe_ruchy.add(this.zakodujPozycje(i,j));
+                    if (i-2 == pol[0] && j+1 == pol[1]) mozliwe_ruchy.add(Operacje.zakodujPozycje(i,j));
+                    if (i-1 == pol[0] && j+2 == pol[1]) mozliwe_ruchy.add(Operacje.zakodujPozycje(i,j));
+                    if (i+1 == pol[0] && j+2 == pol[1]) mozliwe_ruchy.add(Operacje.zakodujPozycje(i,j));
+                    if (i+2 == pol[0] && j+1 == pol[1]) mozliwe_ruchy.add(Operacje.zakodujPozycje(i,j));
+                    if (i+2 == pol[0] && j-1 == pol[1]) mozliwe_ruchy.add(Operacje.zakodujPozycje(i,j));
+                    if (i+1 == pol[0] && j-2 == pol[1]) mozliwe_ruchy.add(Operacje.zakodujPozycje(i,j));
+                    if (i-1 == pol[0] && j-2 == pol[1]) mozliwe_ruchy.add(Operacje.zakodujPozycje(i,j));
+                    if (i-2 == pol[0] && j-1 == pol[1]) mozliwe_ruchy.add(Operacje.zakodujPozycje(i,j));
                 }
             }
         return mozliwe_ruchy;

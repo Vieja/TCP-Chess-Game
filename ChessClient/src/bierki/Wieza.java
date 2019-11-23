@@ -1,5 +1,7 @@
 package bierki;
 
+import logic.Operacje;
+
 import java.util.ArrayList;
 
 public class Wieza extends Bierka {
@@ -18,9 +20,9 @@ public class Wieza extends Bierka {
         int i = pol[0]+1;
         int j = pol[1];
         while(i > 0 && i < 9) {
-            if(tab[i][j] == 0) mozliwe_ruchy.add(this.zakodujPozycje(i,j));
+            if(tab[i][j] == 0) mozliwe_ruchy.add(Operacje.zakodujPozycje(i,j));
             else if(tab[i][j] == -1) {
-                mozliwe_ruchy.add(this.zakodujPozycje(i,j));
+                mozliwe_ruchy.add(Operacje.zakodujPozycje(i,j));
                 break;
             } else break;
             i++;
@@ -29,9 +31,9 @@ public class Wieza extends Bierka {
         i = pol[0]-1;
         j = pol[1];
         while(i > 0 && i < 9) {
-            if(tab[i][j] == 0) mozliwe_ruchy.add(this.zakodujPozycje(i,j));
+            if(tab[i][j] == 0) mozliwe_ruchy.add(Operacje.zakodujPozycje(i,j));
             else if(tab[i][j] == -1) {
-                mozliwe_ruchy.add(this.zakodujPozycje(i,j));
+                mozliwe_ruchy.add(Operacje.zakodujPozycje(i,j));
                 break;
             } else break;
             i--;
@@ -40,9 +42,9 @@ public class Wieza extends Bierka {
         i = pol[0];
         j = pol[1]+1;
         while(j > 0 && j < 9) {
-            if(tab[i][j] == 0) mozliwe_ruchy.add(this.zakodujPozycje(i,j));
+            if(tab[i][j] == 0) mozliwe_ruchy.add(Operacje.zakodujPozycje(i,j));
             else if(tab[i][j] == -1) {
-                mozliwe_ruchy.add(this.zakodujPozycje(i,j));
+                mozliwe_ruchy.add(Operacje.zakodujPozycje(i,j));
                 break;
             } else break;
             j++;
@@ -51,9 +53,9 @@ public class Wieza extends Bierka {
         i = pol[0];
         j = pol[1]-1;
         while(j > 0 && j < 9) {
-            if(tab[i][j] == 0) mozliwe_ruchy.add(this.zakodujPozycje(i,j));
+            if(tab[i][j] == 0) mozliwe_ruchy.add(Operacje.zakodujPozycje(i,j));
             else if(tab[i][j] == -1) {
-                mozliwe_ruchy.add(this.zakodujPozycje(i,j));
+                mozliwe_ruchy.add(Operacje.zakodujPozycje(i,j));
                 break;
             } else break;
             j--;

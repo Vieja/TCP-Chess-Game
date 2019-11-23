@@ -152,8 +152,13 @@ public class Controller implements Initializable {
     public void clickOn(String what) {
         int wyn = game.onClick(what);
         switch (wyn) {
-            case 1 : {
-                moveTower();
+            case -1 : {
+                System.out.println("Brak możliwych ruchów dla wybranego piona");
+                break;
+            }
+            case 2 : {
+                System.out.println("Wybrano piona z możliwymi ruchami");
+                game.etap_wybierania_piona = true;
                 break;
             }
         }
