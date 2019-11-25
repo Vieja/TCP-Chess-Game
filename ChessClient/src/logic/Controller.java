@@ -226,32 +226,63 @@ public class Controller implements Initializable {
     public void clickOn(String what) {
         int wyn = game.onClick(what);
         switch (wyn) {
-            case -1 : {
+            case -1 : //WYBRANO BIERKĘ, ALE NIE MA ON MOZLIWYCH RUCHÓW
                 System.out.println("Brak możliwych ruchów dla wybranego piona");
+                odkolorujWszystko();
                 break;
-            }
-            case 2 : {
+            case 1 :
+                odkolorujWszystko();
+                //
+                game.czyscMozliweRuchy();
+                game.mozliwe_ruchy.addAll(game.mozliwe);
+                pokolorujNaNiebiesko();
+                //
+                break;
+            case 2 : //WYBRANO PRAWIDLOWO BIERKE
                 System.out.println("Wybrano piona z możliwymi ruchami");
-                ArrayList<String> mozliwe_ruchy = game.getMozliweRuchy();
-                pokolorujNaNiebiesko(mozliwe_ruchy);
+                pokolorujNaNiebiesko();
                 break;
-            }
+
+            case 3: //ODKLIKNIECIE (WYBRANO POLE NIEBĘDĄCE NA LIŚCIE MOZLIWYCH RUCHÓW)
+                odkolorujWszystko();
+                game.czyscMozliweRuchy();
+                game.resetujRoszade();
+                game.etap_wybierania_piona = true;
+                break;
+
+            case 4 : //WYBRANO PRAWIDLOWO BIERKE
+                System.out.println("Wybrano piona z możliwymi ruchami");
+                odkolorujWszystko();
+                game.czyscMozliweRuchy();
+                game.mozliwe_ruchy.addAll(game.mozliwe);
+                pokolorujNaNiebiesko();
+                break;
         }
     }
 
-    public void pokolorujNaNiebiesko(ArrayList<String> mozliwe_ruchy) {
+    //usun niebieskie pola
+    public void odkolorujWszystko() {
+        kolorujPola(game.getMozliweRuchy(), "#f0dbc0", "#6a4c4c");
+    }
+
+    // pokoloruj mozliwe ruchy na niebiesko
+    public void pokolorujNaNiebiesko() {
+        kolorujPola(game.getMozliweRuchy(), "#5199FF", "#1771F1");
+    }
+
+
+    public void kolorujPola(ArrayList<String> mozliwe_ruchy, String kolor_bialy, String kolor_czarny) {
         for (String pole : mozliwe_ruchy) {
-            String kolor;
             char a = pole.charAt(0);
             char b = pole.charAt(1);
+            String kolor;
             if (a == 'A' || a == 'C' || a == 'E' || a == 'G') {
-                if (b == '2' || b == '4' || b == '6' || b == '8') kolor = "#5199FF";
-                else kolor = "#1771F1";
+                if (b == '2' || b == '4' || b == '6' || b == '8') kolor = kolor_bialy;
+                else kolor = kolor_czarny;
             } else {
-                if (b == '2' || b == '4' || b == '6' || b == '8') kolor = "#1771F1";
-                else kolor = "#5199FF";
+                if (b == '2' || b == '4' || b == '6' || b == '8') kolor = kolor_czarny;
+                else kolor = kolor_bialy;
             }
-
             switch (pole) {
                 case "A1": {
                     a1pane.setStyle("-fx-background-color: " + kolor);
@@ -517,27 +548,8 @@ public class Controller implements Initializable {
                     break;
                 }
             }
-            }
         }
-
-
-//            SquareLayout sl = findViewById(getResources().getIdentifier(pole, "id", getPackageName()));
-//
-//            String kolor;
-//            char a = pole.charAt(0);
-//            char b = pole.charAt(1);
-//            if (a == 'A' || a == 'C' || a == 'E' || a == 'G') {
-//                if (b == '2' || b == '4' || b == '6' || b == '8') kolor = "blueOnWhiteSquare";
-//                else kolor = "blueOnBlackSquare";
-//            } else {
-//                if (b == '2' || b == '4' || b == '6' || b == '8') kolor = "blueOnBlackSquare";
-//                else kolor = "blueOnWhiteSquare";
-//            }
-//            int kolor_id = getResources().getIdentifier(kolor, "color", getPackageName());
-//            sl.setBackgroundColor(getResources().getColor(kolor_id));
-
-
- //   }
+    }
 
     public void clickA1(MouseEvent mouseEvent) {
         clickOn("A1");

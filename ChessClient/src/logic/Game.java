@@ -17,6 +17,7 @@ public class Game {
 
     private Bierka wybrana_bierka = null;
     ArrayList<String> mozliwe_ruchy = new ArrayList<>();
+    ArrayList<String> mozliwe = new ArrayList<>();
 
     private ArrayList<Bierka> biale_bierki = new ArrayList<>();
     private ArrayList<Bierka> czarne_bierki = new ArrayList<>();
@@ -68,27 +69,49 @@ public class Game {
     }
 
     public int onClick(String where) {
-        int odp = -1;
-
+        int odp;
         if (etap_wybierania_piona) {
-            wybrana_bierka = null;
-            mozliwe_ruchy.clear();
-            if (czyTyToBiale) wybrana_bierka = sprawdzCoTuJest(biale_bierki, Operacje.rozkodujPozycje(where));
-            else wybrana_bierka = sprawdzCoTuJest(czarne_bierki, Operacje.rozkodujPozycje(where));
-            if (wybrana_bierka != null) { //wybrano pionek, nie wiemy czy ma możliwe ruchy
-                /* TODO tutaj mozna wsadzic bicie w przelocie "" kazBierceZnalezcMozliweRuchy "" */
-                mozliwe_ruchy = wybrana_bierka.znajdzMozliweRuchy(glupia_szachownica);
-                if (mozliwe_ruchy.isEmpty()) {
-                    wybrana_bierka = null;
-                } else { //wybrano pionek, mamy listę możliwych ruchów
-                    boolean wybranoKrola = false;
-                    if (wybrana_bierka.getNazwaBierki().equals("krol")) wybranoKrola = true;
-                    mozliweRuchyBezSzachaZOdkrycia(wybrana_bierka.getPolozenie(), wybranoKrola);
-                    if (!mozliwe_ruchy.isEmpty()) {
-                        //jeżeli coś jest na liście to zakończ etap wybierania piona
-                        etap_wybierania_piona = false;
-                        odp = 2;
-                    }
+            odp = wybieraniePiona(where);
+            mozliwe_ruchy.addAll(mozliwe);
+        } else {
+            int mozeNowaBierka;
+            Bierka wybrana = wybrana_bierka;
+            mozeNowaBierka = wybieraniePiona(where);
+            if (mozeNowaBierka == 2) {
+                odp = 4;
+            } else { //obsługa wybierania ruchu
+                wybrana_bierka = wybrana;
+                //
+                //
+
+                mozliwe_ruchy.clear();
+                etap_wybierania_piona = true;
+                odp = 1;
+
+            }
+        }
+        return odp;
+    }
+
+    public int wybieraniePiona(String where) {
+        int odp = -1;
+        wybrana_bierka = null;
+        mozliwe.clear();
+        if (czyTyToBiale) wybrana_bierka = sprawdzCoTuJest(biale_bierki, Operacje.rozkodujPozycje(where));
+        else wybrana_bierka = sprawdzCoTuJest(czarne_bierki, Operacje.rozkodujPozycje(where));
+        if (wybrana_bierka != null) { //wybrano pionek, nie wiemy czy ma możliwe ruchy
+            /* TODO tutaj mozna wsadzic bicie w przelocie "" kazBierceZnalezcMozliweRuchy "" */
+            mozliwe= wybrana_bierka.znajdzMozliweRuchy(glupia_szachownica);
+            if (mozliwe.isEmpty()) {
+                wybrana_bierka = null;
+            } else { //wybrano pionek, mamy listę możliwych ruchów
+                boolean wybranoKrola = false;
+                if (wybrana_bierka.getNazwaBierki().equals("krol")) wybranoKrola = true;
+                mozliweRuchyBezSzachaZOdkrycia(wybrana_bierka.getPolozenie(), wybranoKrola);
+                if (!mozliwe.isEmpty()) {
+                    //jeżeli coś jest na liście to zakończ etap wybierania piona
+                    etap_wybierania_piona = false;
+                    odp = 2;
                 }
             }
         }
@@ -349,6 +372,17 @@ public class Game {
         for (int i = 1; i < 9; i++)
             for (int j = 1; j < 9; j++)
                 glupia_szachownica[i][j] = (-1) * glupia_szachownica[i][j];
+    }
+
+    // wyczysc informacje o roszadzie - nie doszło do niej
+    public void resetujRoszade() {
+        wykonano_roszade = false;
+        dluga_roszada = false;
+        krotka_roszada = false;
+    }
+
+    public void czyscMozliweRuchy() {
+        mozliwe_ruchy.clear();
     }
 
     public void setCzyBiale(boolean czy) {
