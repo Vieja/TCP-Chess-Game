@@ -7,9 +7,11 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 
 import java.io.File;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class Controller implements Initializable {
@@ -88,6 +90,78 @@ public class Controller implements Initializable {
     public ImageView h7;
     public ImageView h8;
 
+    public Pane a1pane;
+    public Pane a2pane;
+    public Pane a3pane;
+    public Pane a4pane;
+    public Pane a5pane;
+    public Pane a6pane;
+    public Pane a7pane;
+    public Pane a8pane;
+
+    public Pane b1pane;
+    public Pane b2pane;
+    public Pane b3pane;
+    public Pane b4pane;
+    public Pane b5pane;
+    public Pane b6pane;
+    public Pane b7pane;
+    public Pane b8pane;
+
+    public Pane c1pane;
+    public Pane c2pane;
+    public Pane c3pane;
+    public Pane c4pane;
+    public Pane c5pane;
+    public Pane c6pane;
+    public Pane c7pane;
+    public Pane c8pane;
+
+    public Pane d1pane;
+    public Pane d2pane;
+    public Pane d3pane;
+    public Pane d4pane;
+    public Pane d5pane;
+    public Pane d6pane;
+    public Pane d7pane;
+    public Pane d8pane;
+
+    public Pane e1pane;
+    public Pane e2pane;
+    public Pane e3pane;
+    public Pane e4pane;
+    public Pane e5pane;
+    public Pane e6pane;
+    public Pane e7pane;
+    public Pane e8pane;
+
+    public Pane f1pane;
+    public Pane f2pane;
+    public Pane f3pane;
+    public Pane f4pane;
+    public Pane f5pane;
+    public Pane f6pane;
+    public Pane f7pane;
+    public Pane f8pane;
+
+    public Pane g1pane;
+    public Pane g2pane;
+    public Pane g3pane;
+    public Pane g4pane;
+    public Pane g5pane;
+    public Pane g6pane;
+    public Pane g7pane;
+    public Pane g8pane;
+
+    public Pane h1pane;
+    public Pane h2pane;
+    public Pane h3pane;
+    public Pane h4pane;
+    public Pane h5pane;
+    public Pane h6pane;
+    public Pane h7pane;
+    public Pane h8pane;
+
     private Game game = new Game();
 
     @Override
@@ -158,11 +232,312 @@ public class Controller implements Initializable {
             }
             case 2 : {
                 System.out.println("Wybrano piona z możliwymi ruchami");
-                game.etap_wybierania_piona = true;
+                ArrayList<String> mozliwe_ruchy = game.getMozliweRuchy();
+                pokolorujNaNiebiesko(mozliwe_ruchy);
                 break;
             }
         }
     }
+
+    public void pokolorujNaNiebiesko(ArrayList<String> mozliwe_ruchy) {
+        for (String pole : mozliwe_ruchy) {
+            String kolor;
+            char a = pole.charAt(0);
+            char b = pole.charAt(1);
+            if (a == 'A' || a == 'C' || a == 'E' || a == 'G') {
+                if (b == '2' || b == '4' || b == '6' || b == '8') kolor = "#5199FF";
+                else kolor = "#1771F1";
+            } else {
+                if (b == '2' || b == '4' || b == '6' || b == '8') kolor = "#1771F1";
+                else kolor = "#5199FF";
+            }
+
+            switch (pole) {
+                case "A1": {
+                    a1pane.setStyle("-fx-background-color: " + kolor);
+                    break;
+                }
+                case "B1": {
+                    b1pane.setStyle("-fx-background-color: " + kolor);
+                    break;
+                }
+                case "C1": {
+                    c1pane.setStyle("-fx-background-color: " + kolor);
+                    break;
+                }
+                case "D1": {
+                    d1pane.setStyle("-fx-background-color: " + kolor);
+                    break;
+                }
+                case "E1": {
+                    e1pane.setStyle("-fx-background-color: " + kolor);
+                    break;
+                }
+                case "F1": {
+                    f1pane.setStyle("-fx-background-color: " + kolor);
+                    break;
+                }
+                case "G1": {
+                    g1pane.setStyle("-fx-background-color: " + kolor);
+                    break;
+                }
+                case "H1": {
+                    h1pane.setStyle("-fx-background-color: " + kolor);
+                    break;
+                }
+
+                case "A2": {
+                    a2pane.setStyle("-fx-background-color: " + kolor);
+                    break;
+                }
+                case "B2": {
+                    b2pane.setStyle("-fx-background-color: " + kolor);
+                    break;
+                }
+                case "C2": {
+                    c2pane.setStyle("-fx-background-color: " + kolor);
+                    break;
+                }
+                case "D2": {
+                    d2pane.setStyle("-fx-background-color: " + kolor);
+                    break;
+                }
+                case "E2": {
+                    e2pane.setStyle("-fx-background-color: " + kolor);
+                    break;
+                }
+                case "F2": {
+                    f2pane.setStyle("-fx-background-color: " + kolor);
+                    break;
+                }
+                case "G2": {
+                    g2pane.setStyle("-fx-background-color: " + kolor);
+                    break;
+                }
+                case "H2": {
+                    h2pane.setStyle("-fx-background-color: " + kolor);
+                    break;
+                }
+
+                case "A3": {
+                    a3pane.setStyle("-fx-background-color: " + kolor);
+                    break;
+                }
+                case "B3": {
+                    b3pane.setStyle("-fx-background-color: " + kolor);
+                    break;
+                }
+                case "C3": {
+                    c3pane.setStyle("-fx-background-color: " + kolor);
+                    break;
+                }
+                case "D3": {
+                    d3pane.setStyle("-fx-background-color: " + kolor);
+                    break;
+                }
+                case "E3": {
+                    e3pane.setStyle("-fx-background-color: " + kolor);
+                    break;
+                }
+                case "F3": {
+                    f3pane.setStyle("-fx-background-color: " + kolor);
+                    break;
+                }
+                case "G3": {
+                    g3pane.setStyle("-fx-background-color: " + kolor);
+                    break;
+                }
+                case "H3": {
+                    h3pane.setStyle("-fx-background-color: " + kolor);
+                    break;
+                }
+
+                case "A4": {
+                    a4pane.setStyle("-fx-background-color: " + kolor);
+                    break;
+                }
+                case "B4": {
+                    b4pane.setStyle("-fx-background-color: " + kolor);
+                    break;
+                }
+                case "C4": {
+                    c4pane.setStyle("-fx-background-color: " + kolor);
+                    break;
+                }
+                case "D4": {
+                    d4pane.setStyle("-fx-background-color: " + kolor);
+                    break;
+                }
+                case "E4": {
+                    e4pane.setStyle("-fx-background-color: " + kolor);
+                    break;
+                }
+                case "F4": {
+                    f4pane.setStyle("-fx-background-color: " + kolor);
+                    break;
+                }
+                case "G4": {
+                    g4pane.setStyle("-fx-background-color: " + kolor);
+                    break;
+                }
+                case "H4": {
+                    h4pane.setStyle("-fx-background-color: " + kolor);
+                    break;
+                }
+
+                case "A5": {
+                    a5pane.setStyle("-fx-background-color: " + kolor);
+                    break;
+                }
+                case "B5": {
+                    b5pane.setStyle("-fx-background-color: " + kolor);
+                    break;
+                }
+                case "C5": {
+                    c5pane.setStyle("-fx-background-color: " + kolor);
+                    break;
+                }
+                case "D5": {
+                    d5pane.setStyle("-fx-background-color: " + kolor);
+                    break;
+                }
+                case "E5": {
+                    e5pane.setStyle("-fx-background-color: " + kolor);
+                    break;
+                }
+                case "F5": {
+                    f5pane.setStyle("-fx-background-color: " + kolor);
+                    break;
+                }
+                case "G5": {
+                    g5pane.setStyle("-fx-background-color: " + kolor);
+                    break;
+                }
+                case "H5": {
+                    h5pane.setStyle("-fx-background-color: " + kolor);
+                    break;
+                }
+
+                case "A6": {
+                    a6pane.setStyle("-fx-background-color: " + kolor);
+                    break;
+                }
+                case "B6": {
+                    b6pane.setStyle("-fx-background-color: " + kolor);
+                    break;
+                }
+                case "C6": {
+                    c6pane.setStyle("-fx-background-color: " + kolor);
+                    break;
+                }
+                case "D6": {
+                    d6pane.setStyle("-fx-background-color: " + kolor);
+                    break;
+                }
+                case "E6": {
+                    e6pane.setStyle("-fx-background-color: " + kolor);
+                    break;
+                }
+                case "F6": {
+                    f6pane.setStyle("-fx-background-color: " + kolor);
+                    break;
+                }
+                case "G6": {
+                    g6pane.setStyle("-fx-background-color: " + kolor);
+                    break;
+                }
+                case "H6": {
+                    h6pane.setStyle("-fx-background-color: " + kolor);
+                    break;
+                }
+
+                case "A7": {
+                    a7pane.setStyle("-fx-background-color: " + kolor);
+                    break;
+                }
+                case "B7": {
+                    b7pane.setStyle("-fx-background-color: " + kolor);
+                    break;
+                }
+                case "C7": {
+                    c7pane.setStyle("-fx-background-color: " + kolor);
+                    break;
+                }
+                case "D7": {
+                    d7pane.setStyle("-fx-background-color: " + kolor);
+                    break;
+                }
+                case "E7": {
+                    e7pane.setStyle("-fx-background-color: " + kolor);
+                    break;
+                }
+                case "F7": {
+                    f7pane.setStyle("-fx-background-color: " + kolor);
+                    break;
+                }
+                case "G7": {
+                    g7pane.setStyle("-fx-background-color: " + kolor);
+                    break;
+                }
+                case "H7": {
+                    h7pane.setStyle("-fx-background-color: " + kolor);
+                    break;
+                }
+
+                case "A8": {
+                    a8pane.setStyle("-fx-background-color: " + kolor);
+                    break;
+                }
+                case "B8": {
+                    b8pane.setStyle("-fx-background-color: " + kolor);
+                    break;
+                }
+                case "C8": {
+                    c8pane.setStyle("-fx-background-color: " + kolor);
+                    break;
+                }
+                case "D8": {
+                    d8pane.setStyle("-fx-background-color: " + kolor);
+                    break;
+                }
+                case "E8": {
+                    e8pane.setStyle("-fx-background-color: " + kolor);
+                    break;
+                }
+                case "F8": {
+                    f8pane.setStyle("-fx-background-color: " + kolor);
+                    break;
+                }
+                case "G8": {
+                    g8pane.setStyle("-fx-background-color: " + kolor);
+                    break;
+                }
+                case "H8": {
+                    h8pane.setStyle("-fx-background-color: " + kolor);
+                    break;
+                }
+            }
+            }
+        }
+
+
+//            SquareLayout sl = findViewById(getResources().getIdentifier(pole, "id", getPackageName()));
+//
+//            String kolor;
+//            char a = pole.charAt(0);
+//            char b = pole.charAt(1);
+//            if (a == 'A' || a == 'C' || a == 'E' || a == 'G') {
+//                if (b == '2' || b == '4' || b == '6' || b == '8') kolor = "blueOnWhiteSquare";
+//                else kolor = "blueOnBlackSquare";
+//            } else {
+//                if (b == '2' || b == '4' || b == '6' || b == '8') kolor = "blueOnBlackSquare";
+//                else kolor = "blueOnWhiteSquare";
+//            }
+//            int kolor_id = getResources().getIdentifier(kolor, "color", getPackageName());
+//            sl.setBackgroundColor(getResources().getColor(kolor_id));
+
+
+ //   }
 
     public void clickA1(MouseEvent mouseEvent) {
         clickOn("A1");

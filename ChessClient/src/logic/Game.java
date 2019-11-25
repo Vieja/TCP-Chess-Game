@@ -354,4 +354,8 @@ public class Game {
     public void setCzyBiale(boolean czy) {
         this.czyTyToBiale = czy;
     }
+
+    public ArrayList<String> getMozliweRuchy() {
+        return mozliwe_ruchy;
+    }
 }
