@@ -1,6 +1,9 @@
 package logic;
 
 import bierki.Bierka;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -10,6 +13,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 
+import java.awt.*;
 import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
@@ -166,12 +170,23 @@ public class Controller implements Initializable {
     private Game game = new Game();
     private ArrayList<String> niebieskie_pola = new ArrayList<>();
 
+
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
         EnemyAction enemy = new EnemyAction(game);
         Thread enemyThread = new Thread(enemy);
         enemyThread.start();
+
+        game.Przeciwnik_wykonal_ruch.addListener((observable, oldValue, newValue) -> {
+            // Only if completed
+            if (newValue) {
+                przesunBierkePrzeciwnika();
+                game.Przeciwnik_wykonal_ruch.set(false);
+            }
+        });
+
 
         game.setCzyBiale(true);
         String ty;
@@ -224,13 +239,17 @@ public class Controller implements Initializable {
         h7.setImage(new Image("file:images/pion_"+przeciwnik+".png"));
     }
 
+    private void przesunBierkePrzeciwnika() {
+        czyscBierke(game.Przeciwnik_START);
+        movePiece(game.Przeciwnik_BIERKA, game.Przeciwnik_KONIEC);
+    }
+
     public void  movePiece(Bierka bierka, String where) {
         String kolor, nazwa;
         if (bierka.isKolorCzarny()) kolor = "_czarny";
         else kolor = "_bialy";
         nazwa = bierka.getNazwaBierki();
         String calosc = "file:images/"+nazwa+kolor+".png";
-        czyscBierke(bierka.getPolozenieJakoString());
         rysujBierke(where, calosc);
     }
 
@@ -244,8 +263,8 @@ public class Controller implements Initializable {
                     break;
                 case 1: // bierka wykonuje ruch
                     odkolorujWszystko();
+                    czyscBierke(game.wybrana_bierka.getPolozenieJakoString());
                     movePiece(game.wybrana_bierka, what);
-                    game.setBicie(false);
                     game.zaktualizujPolozenieBierki(what);
                     game.czyscMozliweRuchy();
                     game.poraNaWroga = true;
@@ -264,7 +283,7 @@ public class Controller implements Initializable {
                     break;
 
                 case 4: //WYBRANO PRAWIDLOWO BIERKE PO INNEJ
-                    System.out.println("Wybrano piona z możliwymi ruchami (po innej");
+                    System.out.println("Wybrano piona z możliwymi ruchami (po innej)");
                     odkolorujWszystko();
                     pokolorujNaNiebiesko();
                     break;

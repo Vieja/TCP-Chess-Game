@@ -15,11 +15,10 @@ public class EnemyAction implements Runnable{
         while (true) {
             if (game.poraNaWroga) {
                 System.out.println("KNUJĘ COŚ NIEDOBREGO HEHEHEHE");
-                //
                 Scanner scan = new Scanner(System.in);
-                String pole = scan.nextLine();
-                System.out.println(pole);
-                //
+                String start = scan.nextLine();
+                String koniec = scan.nextLine();
+                game.wrogWykonalRuch(start, koniec);
                 game.poraNaWroga = false;
             }
 

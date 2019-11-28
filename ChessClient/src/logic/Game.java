@@ -1,6 +1,8 @@
 package logic;
 
 import bierki.*;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -14,10 +16,6 @@ public class Game {
     private boolean krotka_roszada = false;
     private boolean wykonano_roszade = false;
 
-    private boolean bicie = false;
-
-    private String getPoleStartuZbijanej;
-
     private int[][] glupia_szachownica;
 
     public Bierka wybrana_bierka = null;
@@ -25,6 +23,10 @@ public class Game {
 
     private ArrayList<Bierka> biale_bierki = new ArrayList<>();
     private ArrayList<Bierka> czarne_bierki = new ArrayList<>();
+    public String Przeciwnik_START;
+    public String Przeciwnik_KONIEC;
+    public Bierka Przeciwnik_BIERKA;
+    public BooleanProperty Przeciwnik_wykonal_ruch = new SimpleBooleanProperty();
 
     public Game() {
         glupia_szachownica = new int[9][9];
@@ -94,7 +96,7 @@ public class Game {
                         odp = 1;
                         //usun bierke wroga, jeżeli nastąpiło bicie
                         czyBicie(where);
-
+                        wybrana_bierka.wykonanoRuch();
                         //aktualny_gracz_to_biale = !aktualny_gracz_to_biale;
                         zaktualizujGlupiaSzachownice(wybrana_bierka.getPolozenie(), Operacje.rozkodujPozycje(where));
                         //odwrocGlupiaSzachownice();
@@ -127,7 +129,7 @@ public class Game {
             String poz_bierka = bierka.getPolozenieJakoString();
             if (pozycja.equals(poz_bierka)) {
                 System.out.println("Zbicie bierki przeciwnika");
-                bicie = true;
+                //bicie = true;
                 //getPoleStartuZbijanej = bierka.getPoleStartu();
                 if (czyTyToBiale) {
                     czarne_bierki.remove(bierka);
@@ -160,6 +162,23 @@ public class Game {
             }
         }
         return mozliwe;
+    }
+
+    public void wrogWykonalRuch(String start, String koniec) {
+        Bierka ruszana = czyJestTuBierkaGraczaX(!czyTyToBiale, start);
+        Bierka zbijana = czyJestTuBierkaGraczaX(czyTyToBiale, koniec);
+        if (zbijana!=null) {
+            if (czyTyToBiale) { biale_bierki.remove(zbijana); }
+            else { czarne_bierki.remove(zbijana); }
+        }
+        odwrocGlupiaSzachownice();
+        zaktualizujGlupiaSzachownice(ruszana.getPolozenie(), Operacje.rozkodujPozycje(koniec));
+        odwrocGlupiaSzachownice();
+        ruszana.setPolozenie(Operacje.rozkodujPozycje(koniec));
+        Przeciwnik_START = start;
+        Przeciwnik_KONIEC = koniec;
+        Przeciwnik_BIERKA = ruszana;
+        Przeciwnik_wykonal_ruch.set(true);
     }
 
     public Bierka czyJestTuBierkaGraczaX(Boolean biale, String where) {
@@ -426,9 +445,5 @@ public class Game {
 
     public ArrayList<String> getMozliweRuchy() {
         return mozliwe_ruchy;
-    }
-
-    public void setBicie(boolean bicie) {
-        this.bicie = bicie;
     }
 }

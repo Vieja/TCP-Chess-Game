@@ -58,4 +58,5 @@ public abstract class Bierka {
     public boolean isKolorCzarny() {
         return kolor_czarny;
     }
+
 }
