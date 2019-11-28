@@ -164,12 +164,12 @@ public class Controller implements Initializable {
     public Pane h8pane;
 
     private Game game = new Game();
-    ArrayList<String> niebieskie_pola = new ArrayList<>();
+    private ArrayList<String> niebieskie_pola = new ArrayList<>();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-        EnemyAction enemy = new EnemyAction();
+        EnemyAction enemy = new EnemyAction(game);
         Thread enemyThread = new Thread(enemy);
         enemyThread.start();
 
@@ -235,38 +235,40 @@ public class Controller implements Initializable {
     }
 
     public void clickOn(String what) {
-        int wyn = game.onClick(what);
-        switch (wyn) {
-            case 0 : //WYBRANO BIERKĘ, ALE NIE MA ON MOZLIWYCH RUCHÓW
-                System.out.println("Brak możliwych ruchów dla wybranego piona");
-                odkolorujWszystko();
-                break;
-            case 1 : // bierka wykonuje ruch
-                odkolorujWszystko();
-                movePiece(game.wybrana_bierka, what);
-                game.setBicie(false);
-                game.zaktualizujPolozenieBierki(what);
-                game.czyscMozliweRuchy();
-                //
-                break;
-            case 2 : //WYBRANO PRAWIDLOWO BIERKE
-                System.out.println("Wybrano piona z możliwymi ruchami");
-                odkolorujWszystko();
-                pokolorujNaNiebiesko();
-                break;
+        if(!game.poraNaWroga) {
+            int wyn = game.onClick(what);
+            switch (wyn) {
+                case 0: //WYBRANO BIERKĘ, ALE NIE MA ON MOZLIWYCH RUCHÓW
+                    System.out.println("Brak możliwych ruchów dla wybranego piona");
+                    odkolorujWszystko();
+                    break;
+                case 1: // bierka wykonuje ruch
+                    odkolorujWszystko();
+                    movePiece(game.wybrana_bierka, what);
+                    game.setBicie(false);
+                    game.zaktualizujPolozenieBierki(what);
+                    game.czyscMozliweRuchy();
+                    game.poraNaWroga = true;
+                    break;
+                case 2: //WYBRANO PRAWIDLOWO BIERKE
+                    System.out.println("Wybrano piona z możliwymi ruchami");
+                    odkolorujWszystko();
+                    pokolorujNaNiebiesko();
+                    break;
 
-            case 3: //ODKLIKNIECIE (WYBRANO POLE NIEBĘDĄCE NA LIŚCIE MOZLIWYCH RUCHÓW)
-                odkolorujWszystko();
-                game.czyscMozliweRuchy();
-                game.resetujRoszade();
-                game.etap_wybierania_piona = true;
-                break;
+                case 3: //ODKLIKNIECIE (WYBRANO POLE NIEBĘDĄCE NA LIŚCIE MOZLIWYCH RUCHÓW)
+                    odkolorujWszystko();
+                    game.czyscMozliweRuchy();
+                    game.resetujRoszade();
+                    game.etap_wybierania_piona = true;
+                    break;
 
-            case 4 : //WYBRANO PRAWIDLOWO BIERKE PO INNEJ
-                System.out.println("Wybrano piona z możliwymi ruchami (po innej");
-                odkolorujWszystko();
-                pokolorujNaNiebiesko();
-                break;
+                case 4: //WYBRANO PRAWIDLOWO BIERKE PO INNEJ
+                    System.out.println("Wybrano piona z możliwymi ruchami (po innej");
+                    odkolorujWszystko();
+                    pokolorujNaNiebiesko();
+                    break;
+            }
         }
     }
 

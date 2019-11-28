@@ -9,6 +9,7 @@ import java.util.List;
 public class Game {
     public boolean czyTyToBiale;
     public boolean etap_wybierania_piona = true;
+    public boolean poraNaWroga;
     private boolean dluga_roszada = false;
     private boolean krotka_roszada = false;
     private boolean wykonano_roszade = false;
