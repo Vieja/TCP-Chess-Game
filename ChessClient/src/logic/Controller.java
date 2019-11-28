@@ -163,6 +163,7 @@ public class Controller implements Initializable {
     public Pane h8pane;
 
     private Game game = new Game();
+    ArrayList<String> niebieskie_pola = new ArrayList<>();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -226,20 +227,18 @@ public class Controller implements Initializable {
     public void clickOn(String what) {
         int wyn = game.onClick(what);
         switch (wyn) {
-            case -1 : //WYBRANO BIERKĘ, ALE NIE MA ON MOZLIWYCH RUCHÓW
+            case 0 : //WYBRANO BIERKĘ, ALE NIE MA ON MOZLIWYCH RUCHÓW
                 System.out.println("Brak możliwych ruchów dla wybranego piona");
                 odkolorujWszystko();
                 break;
-            case 1 :
+            case 1 : // bierka wykonuje ruch
                 odkolorujWszystko();
                 //
-                game.czyscMozliweRuchy();
-                game.mozliwe_ruchy.addAll(game.mozliwe);
-                pokolorujNaNiebiesko();
                 //
                 break;
             case 2 : //WYBRANO PRAWIDLOWO BIERKE
                 System.out.println("Wybrano piona z możliwymi ruchami");
+                odkolorujWszystko();
                 pokolorujNaNiebiesko();
                 break;
 
@@ -250,11 +249,9 @@ public class Controller implements Initializable {
                 game.etap_wybierania_piona = true;
                 break;
 
-            case 4 : //WYBRANO PRAWIDLOWO BIERKE
-                System.out.println("Wybrano piona z możliwymi ruchami");
+            case 4 : //WYBRANO PRAWIDLOWO BIERKE PO INNEJ
+                System.out.println("Wybrano piona z możliwymi ruchami (po innej");
                 odkolorujWszystko();
-                game.czyscMozliweRuchy();
-                game.mozliwe_ruchy.addAll(game.mozliwe);
                 pokolorujNaNiebiesko();
                 break;
         }
@@ -262,12 +259,14 @@ public class Controller implements Initializable {
 
     //usun niebieskie pola
     public void odkolorujWszystko() {
-        kolorujPola(game.getMozliweRuchy(), "#f0dbc0", "#6a4c4c");
+        kolorujPola(niebieskie_pola, "#f0dbc0", "#6a4c4c");
+        niebieskie_pola.clear();
     }
 
     // pokoloruj mozliwe ruchy na niebiesko
     public void pokolorujNaNiebiesko() {
-        kolorujPola(game.getMozliweRuchy(), "#5199FF", "#1771F1");
+        niebieskie_pola.addAll(game.getMozliweRuchy());
+        kolorujPola(niebieskie_pola, "#5199FF", "#1771F1");
     }
 
 

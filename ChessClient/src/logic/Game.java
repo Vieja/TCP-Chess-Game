@@ -17,7 +17,6 @@ public class Game {
 
     private Bierka wybrana_bierka = null;
     ArrayList<String> mozliwe_ruchy = new ArrayList<>();
-    ArrayList<String> mozliwe = new ArrayList<>();
 
     private ArrayList<Bierka> biale_bierki = new ArrayList<>();
     private ArrayList<Bierka> czarne_bierki = new ArrayList<>();
@@ -71,34 +70,37 @@ public class Game {
     public int onClick(String where) {
         int odp;
         if (etap_wybierania_piona) {
-            odp = wybieraniePiona(where);
-            mozliwe_ruchy.addAll(mozliwe);
-        } else {
-            int mozeNowaBierka;
-            Bierka wybrana = wybrana_bierka;
-            mozeNowaBierka = wybieraniePiona(where);
-            if (mozeNowaBierka == 2) {
+            mozliwe_ruchy = wybieranieBierki(where);
+            if (mozliwe_ruchy.isEmpty()) odp = 0;
+            else odp = 2;
+        }
+        else {
+            boolean jest_nowa_bierka;
+            Bierka poprzednia_wybrana = wybrana_bierka;
+            ArrayList<String> nowe_mozliwe;
+            nowe_mozliwe = wybieranieBierki(where);
+            if (!nowe_mozliwe.isEmpty()) {
                 odp = 4;
+                mozliwe_ruchy.clear();
+                mozliwe_ruchy.addAll(nowe_mozliwe);
             } else { //obsługa wybierania ruchu
-                wybrana_bierka = wybrana;
+                wybrana_bierka = poprzednia_wybrana;
                 //
                 //
 
                 mozliwe_ruchy.clear();
                 etap_wybierania_piona = true;
-                odp = 1;
-
+                //odp = 1;
+                odp = 3; // tymczasowo
             }
         }
         return odp;
     }
 
-    public int wybieraniePiona(String where) {
-        int odp = -1;
+    public ArrayList<String> wybieranieBierki(String where) {
+        ArrayList<String> mozliwe = new ArrayList<>();
         wybrana_bierka = null;
-        mozliwe.clear();
-        if (czyTyToBiale) wybrana_bierka = sprawdzCoTuJest(biale_bierki, Operacje.rozkodujPozycje(where));
-        else wybrana_bierka = sprawdzCoTuJest(czarne_bierki, Operacje.rozkodujPozycje(where));
+        wybrana_bierka = czyJestTuBierkaGraczaX(czyTyToBiale, where);
         if (wybrana_bierka != null) { //wybrano pionek, nie wiemy czy ma możliwe ruchy
             /* TODO tutaj mozna wsadzic bicie w przelocie "" kazBierceZnalezcMozliweRuchy "" */
             mozliwe= wybrana_bierka.znajdzMozliweRuchy(glupia_szachownica);
@@ -111,15 +113,14 @@ public class Game {
                 if (!mozliwe.isEmpty()) {
                     //jeżeli coś jest na liście to zakończ etap wybierania piona
                     etap_wybierania_piona = false;
-                    odp = 2;
                 }
             }
         }
-        return odp;
+        return mozliwe;
     }
 
-    public Bierka sprawdzCzyJestTuTwojPion(String where) {
-        if (czyTyToBiale) {
+    public Bierka czyJestTuBierkaGraczaX(Boolean biale, String where) {
+        if (biale) {
             for (Bierka bierka : biale_bierki) {
                 String pozycjaBierki = bierka.getPolozenieJakoString();
                 if (pozycjaBierki.equals(where)) return bierka;
@@ -196,19 +197,6 @@ public class Game {
         return false;
     }
 
-    //przejrzyj liste bierek konkretnego koloru i znajdz tą która znajduje sie na zadanej pozycji
-    //zwraca null jeżeli brak takiej bierki
-    public Bierka sprawdzCoTuJest(List<Bierka> kolor, int[] sprawdzanaPozycja) {
-        for (Bierka bierka : kolor) {
-            int[] pozycjaBierki = bierka.getPolozenie();
-            if (sprawdzanaPozycja[0] == pozycjaBierki[0] && sprawdzanaPozycja[1] == pozycjaBierki[1]) {
-                System.out.println("Na tej pozycji jest " + bierka.getNazwaBierki());
-                return bierka;
-            }
-        }
-        return null;
-    }
-
     public boolean sprawdzCzySzach(int[][] tab, int[] potancjalneBicie, int[] pozycjaKrola) {
         int[][] szachownica = new int[9][9];
         for (int i = 1; i < 9; i++)
@@ -222,7 +210,7 @@ public class Game {
         if (czyTyToBiale) listaBierek = czarne_bierki;
         else listaBierek = biale_bierki;
 
-        Bierka potencjalnaBita = sprawdzCoTuJest(listaBierek, potancjalneBicie);
+        Bierka potencjalnaBita = czyJestTuBierkaGraczaX(!czyTyToBiale, Operacje.zakodujPozycje(potancjalneBicie[0],potancjalneBicie[1]));
 
         for (Bierka bierka : listaBierek) {
             if (bierka != potencjalnaBita) {
