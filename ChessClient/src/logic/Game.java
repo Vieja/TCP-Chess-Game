@@ -119,18 +119,22 @@ public class Game {
     //sprawdza, czy na zadanej pozycji jest wroga bierka
     //jeżeli tak, to ją usuwa
     public void czyBicie(String pozycja) {
-        int[] poz = Operacje.rozkodujPozycje(pozycja);
         ArrayList<Bierka> lista;
         if (czyTyToBiale) lista = czarne_bierki;
         else lista = biale_bierki;
         for (Bierka bierka : lista) {
-            int[] poz_bierka = bierka.getPolozenie();
-            if (poz[0] == poz_bierka[0] && poz[1] == poz_bierka[1]) {
+            String poz_bierka = bierka.getPolozenieJakoString();
+            if (pozycja.equals(poz_bierka)) {
                 System.out.println("Zbicie bierki przeciwnika");
                 bicie = true;
-                getPoleStartuZbijanej = bierka.getPoleStartu();
-                if (czyTyToBiale) czarne_bierki.remove(bierka);
-                else biale_bierki.remove(bierka);
+                //getPoleStartuZbijanej = bierka.getPoleStartu();
+                if (czyTyToBiale) {
+                    czarne_bierki.remove(bierka);
+                }
+                else {
+                    biale_bierki.remove(bierka);
+                }
+                break;
             }
         }
     }
