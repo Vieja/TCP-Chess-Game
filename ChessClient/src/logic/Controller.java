@@ -1,5 +1,6 @@
 package logic;
 
+import bierki.Bierka;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -219,9 +220,14 @@ public class Controller implements Initializable {
         h7.setImage(new Image("file:images/pion_"+przeciwnik+".png"));
     }
 
-    public void  moveTower() {
-        a1.setImage(null);
-        a2.setImage(new Image("file:images/wieza_bialy.png"));
+    public void  movePiece(Bierka bierka, String where) {
+        String kolor, nazwa;
+        if (bierka.isKolorCzarny()) kolor = "_czarny";
+        else kolor = "_bialy";
+        nazwa = bierka.getNazwaBierki();
+        String calosc = "file:images/"+nazwa+kolor+".png";
+        czyscBierke(bierka.getPolozenieJakoString());
+        rysujBierke(where, calosc);
     }
 
     public void clickOn(String what) {
@@ -233,7 +239,10 @@ public class Controller implements Initializable {
                 break;
             case 1 : // bierka wykonuje ruch
                 odkolorujWszystko();
-                //
+                movePiece(game.wybrana_bierka, what);
+                game.setBicie(false);
+                game.zaktualizujPolozenieBierki(what);
+                game.czyscMozliweRuchy();
                 //
                 break;
             case 2 : //WYBRANO PRAWIDLOWO BIERKE
@@ -269,6 +278,541 @@ public class Controller implements Initializable {
         kolorujPola(niebieskie_pola, "#5199FF", "#1771F1");
     }
 
+    public void rysujBierke(String pole, String calosc) {
+        switch (pole) {
+            case "A1": {
+                a1.setImage(new Image(calosc));
+                break;
+            }
+            case "B1": {
+                b1.setImage(new Image(calosc));
+                break;
+            }
+            case "C1": {
+                c1.setImage(new Image(calosc));
+                break;
+            }
+            case "D1": {
+                d1.setImage(new Image(calosc));
+                break;
+            }
+            case "E1": {
+                e1.setImage(new Image(calosc));
+                break;
+            }
+            case "F1": {
+                f1.setImage(new Image(calosc));
+                break;
+            }
+            case "G1": {
+                g1.setImage(new Image(calosc));
+                break;
+            }
+            case "H1": {
+                h1.setImage(new Image(calosc));
+                break;
+            }
+
+            case "A2": {
+                a2.setImage(new Image(calosc));
+                break;
+            }
+            case "B2": {
+                b2.setImage(new Image(calosc));
+                break;
+            }
+            case "C2": {
+                c2.setImage(new Image(calosc));
+                break;
+            }
+            case "D2": {
+                d2.setImage(new Image(calosc));
+                break;
+            }
+            case "E2": {
+                e2.setImage(new Image(calosc));
+                break;
+            }
+            case "F2": {
+                f2.setImage(new Image(calosc));
+                break;
+            }
+            case "G2": {
+                g2.setImage(new Image(calosc));
+                break;
+            }
+            case "H2": {
+                h2.setImage(new Image(calosc));
+                break;
+            }
+
+            case "A3": {
+                a3.setImage(new Image(calosc));
+                break;
+            }
+            case "B3": {
+                b3.setImage(new Image(calosc));
+                break;
+            }
+            case "C3": {
+                c3.setImage(new Image(calosc));
+                break;
+            }
+            case "D3": {
+                d3.setImage(new Image(calosc));
+                break;
+            }
+            case "E3": {
+                e3.setImage(new Image(calosc));
+                break;
+            }
+            case "F3": {
+                f3.setImage(new Image(calosc));
+                break;
+            }
+            case "G3": {
+                g3.setImage(new Image(calosc));
+                break;
+            }
+            case "H3": {
+                h3.setImage(new Image(calosc));
+                break;
+            }
+
+            case "A4": {
+                a4.setImage(new Image(calosc));
+                break;
+            }
+            case "B4": {
+                b4.setImage(new Image(calosc));
+                break;
+            }
+            case "C4": {
+                c4.setImage(new Image(calosc));
+                break;
+            }
+            case "D4": {
+                d4.setImage(new Image(calosc));
+                break;
+            }
+            case "E4": {
+                e4.setImage(new Image(calosc));
+                break;
+            }
+            case "F4": {
+                f4.setImage(new Image(calosc));
+                break;
+            }
+            case "G4": {
+                g4.setImage(new Image(calosc));
+                break;
+            }
+            case "H4": {
+                h4.setImage(new Image(calosc));
+                break;
+            }
+
+            case "A5": {
+                a5.setImage(new Image(calosc));
+                break;
+            }
+            case "B5": {
+                b5.setImage(new Image(calosc));
+                break;
+            }
+            case "C5": {
+                c5.setImage(new Image(calosc));
+                break;
+            }
+            case "D5": {
+                d5.setImage(new Image(calosc));
+                break;
+            }
+            case "E5": {
+                e5.setImage(new Image(calosc));
+                break;
+            }
+            case "F5": {
+                f5.setImage(new Image(calosc));
+                break;
+            }
+            case "G5": {
+                g5.setImage(new Image(calosc));
+                break;
+            }
+            case "H5": {
+                h5.setImage(new Image(calosc));
+                break;
+            }
+
+            case "A6": {
+                a6.setImage(new Image(calosc));
+                break;
+            }
+            case "B6": {
+                b6.setImage(new Image(calosc));
+                break;
+            }
+            case "C6": {
+                c6.setImage(new Image(calosc));
+                break;
+            }
+            case "D6": {
+                d6.setImage(new Image(calosc));
+                break;
+            }
+            case "E6": {
+                e6.setImage(new Image(calosc));
+                break;
+            }
+            case "F6": {
+                f6.setImage(new Image(calosc));
+                break;
+            }
+            case "G6": {
+                g6.setImage(new Image(calosc));
+                break;
+            }
+            case "H6": {
+                h6.setImage(new Image(calosc));
+                break;
+            }
+
+            case "A7": {
+                a7.setImage(new Image(calosc));
+                break;
+            }
+            case "B7": {
+                b7.setImage(new Image(calosc));
+                break;
+            }
+            case "C7": {
+                c7.setImage(new Image(calosc));
+                break;
+            }
+            case "D7": {
+                d7.setImage(new Image(calosc));
+                break;
+            }
+            case "E7": {
+                e7.setImage(new Image(calosc));
+                break;
+            }
+            case "F7": {
+                f7.setImage(new Image(calosc));
+                break;
+            }
+            case "G7": {
+                g7.setImage(new Image(calosc));
+                break;
+            }
+            case "H7": {
+                h7.setImage(new Image(calosc));
+                break;
+            }
+
+            case "A8": {
+                a8.setImage(new Image(calosc));
+                break;
+            }
+            case "B8": {
+                b8.setImage(new Image(calosc));
+                break;
+            }
+            case "C8": {
+                c8.setImage(new Image(calosc));
+                break;
+            }
+            case "D8": {
+                d8.setImage(new Image(calosc));
+                break;
+            }
+            case "E8": {
+                e8.setImage(new Image(calosc));
+                break;
+            }
+            case "F8": {
+                f8.setImage(new Image(calosc));
+                break;
+            }
+            case "G8": {
+                g8.setImage(new Image(calosc));
+                break;
+            }
+            case "H8": {
+                h8.setImage(new Image(calosc));
+                break;
+            }
+        }
+    }
+
+    public void czyscBierke(String pole) {
+        switch (pole) {
+            case "A1": {
+                a1.setImage(null);
+                break;
+            }
+            case "B1": {
+                b1.setImage(null);
+                break;
+            }
+            case "C1": {
+                c1.setImage(null);
+                break;
+            }
+            case "D1": {
+                d1.setImage(null);
+                break;
+            }
+            case "E1": {
+                e1.setImage(null);
+                break;
+            }
+            case "F1": {
+                f1.setImage(null);
+                break;
+            }
+            case "G1": {
+                g1.setImage(null);
+                break;
+            }
+            case "H1": {
+                h1.setImage(null);
+                break;
+            }
+
+            case "A2": {
+                a2.setImage(null);
+                break;
+            }
+            case "B2": {
+                b2.setImage(null);
+                break;
+            }
+            case "C2": {
+                c2.setImage(null);
+                break;
+            }
+            case "D2": {
+                d2.setImage(null);
+                break;
+            }
+            case "E2": {
+                e2.setImage(null);
+                break;
+            }
+            case "F2": {
+                f2.setImage(null);
+                break;
+            }
+            case "G2": {
+                g2.setImage(null);
+                break;
+            }
+            case "H2": {
+                h2.setImage(null);
+                break;
+            }
+
+            case "A3": {
+                a3.setImage(null);
+                break;
+            }
+            case "B3": {
+                b3.setImage(null);
+                break;
+            }
+            case "C3": {
+                c3.setImage(null);
+                break;
+            }
+            case "D3": {
+                d3.setImage(null);
+                break;
+            }
+            case "E3": {
+                e3.setImage(null);
+                break;
+            }
+            case "F3": {
+                f3.setImage(null);
+                break;
+            }
+            case "G3": {
+                g3.setImage(null);
+                break;
+            }
+            case "H3": {
+                h3.setImage(null);
+                break;
+            }
+
+            case "A4": {
+                a4.setImage(null);
+                break;
+            }
+            case "B4": {
+                b4.setImage(null);
+                break;
+            }
+            case "C4": {
+                c4.setImage(null);
+                break;
+            }
+            case "D4": {
+                d4.setImage(null);
+                break;
+            }
+            case "E4": {
+                e4.setImage(null);
+                break;
+            }
+            case "F4": {
+                f4.setImage(null);
+                break;
+            }
+            case "G4": {
+                g4.setImage(null);
+                break;
+            }
+            case "H4": {
+                h4.setImage(null);
+                break;
+            }
+
+            case "A5": {
+                a5.setImage(null);
+                break;
+            }
+            case "B5": {
+                b5.setImage(null);
+                break;
+            }
+            case "C5": {
+                c5.setImage(null);
+                break;
+            }
+            case "D5": {
+                d5.setImage(null);
+                break;
+            }
+            case "E5": {
+                e5.setImage(null);
+                break;
+            }
+            case "F5": {
+                f5.setImage(null);
+                break;
+            }
+            case "G5": {
+                g5.setImage(null);
+                break;
+            }
+            case "H5": {
+                h5.setImage(null);
+                break;
+            }
+
+            case "A6": {
+                a6.setImage(null);
+                break;
+            }
+            case "B6": {
+                b6.setImage(null);
+                break;
+            }
+            case "C6": {
+                c6.setImage(null);
+                break;
+            }
+            case "D6": {
+                d6.setImage(null);
+                break;
+            }
+            case "E6": {
+                e6.setImage(null);
+                break;
+            }
+            case "F6": {
+                f6.setImage(null);
+                break;
+            }
+            case "G6": {
+                g6.setImage(null);
+                break;
+            }
+            case "H6": {
+                h6.setImage(null);
+                break;
+            }
+
+            case "A7": {
+                a7.setImage(null);
+                break;
+            }
+            case "B7": {
+                b7.setImage(null);
+                break;
+            }
+            case "C7": {
+                c7.setImage(null);
+                break;
+            }
+            case "D7": {
+                d7.setImage(null);
+                break;
+            }
+            case "E7": {
+                e7.setImage(null);
+                break;
+            }
+            case "F7": {
+                f7.setImage(null);
+                break;
+            }
+            case "G7": {
+                g7.setImage(null);
+                break;
+            }
+            case "H7": {
+                h7.setImage(null);
+                break;
+            }
+
+            case "A8": {
+                a8.setImage(null);
+                break;
+            }
+            case "B8": {
+                b8.setImage(null);
+                break;
+            }
+            case "C8": {
+                c8.setImage(null);
+                break;
+            }
+            case "D8": {
+                d8.setImage(null);
+                break;
+            }
+            case "E8": {
+                e8.setImage(null);
+                break;
+            }
+            case "F8": {
+                f8.setImage(null);
+                break;
+            }
+            case "G8": {
+                g8.setImage(null);
+                break;
+            }
+            case "H8": {
+                h8.setImage(null);
+                break;
+            }
+        }
+    }
 
     public void kolorujPola(ArrayList<String> mozliwe_ruchy, String kolor_bialy, String kolor_czarny) {
         for (String pole : mozliwe_ruchy) {

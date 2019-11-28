@@ -13,9 +13,13 @@ public class Game {
     private boolean krotka_roszada = false;
     private boolean wykonano_roszade = false;
 
+    private boolean bicie = false;
+
+    private String getPoleStartuZbijanej;
+
     private int[][] glupia_szachownica;
 
-    private Bierka wybrana_bierka = null;
+    public Bierka wybrana_bierka = null;
     ArrayList<String> mozliwe_ruchy = new ArrayList<>();
 
     private ArrayList<Bierka> biale_bierki = new ArrayList<>();
@@ -68,14 +72,13 @@ public class Game {
     }
 
     public int onClick(String where) {
-        int odp;
+        int odp = 0;
         if (etap_wybierania_piona) {
             mozliwe_ruchy = wybieranieBierki(where);
             if (mozliwe_ruchy.isEmpty()) odp = 0;
             else odp = 2;
         }
         else {
-            boolean jest_nowa_bierka;
             Bierka poprzednia_wybrana = wybrana_bierka;
             ArrayList<String> nowe_mozliwe;
             nowe_mozliwe = wybieranieBierki(where);
@@ -85,16 +88,51 @@ public class Game {
                 mozliwe_ruchy.addAll(nowe_mozliwe);
             } else { //obsługa wybierania ruchu
                 wybrana_bierka = poprzednia_wybrana;
-                //
-                //
+                for (String pole : mozliwe_ruchy) {
+                    if (pole.equals(where)) {
+                        odp = 1;
+                        //usun bierke wroga, jeżeli nastąpiło bicie
+                        czyBicie(where);
 
-                mozliwe_ruchy.clear();
+                        //aktualny_gracz_to_biale = !aktualny_gracz_to_biale;
+                        zaktualizujGlupiaSzachownice(wybrana_bierka.getPolozenie(), Operacje.rozkodujPozycje(where));
+                        //odwrocGlupiaSzachownice();
+                        break;
+                    }
+
+                }
+                //jeżeli kliknietej pozycji nie ma na liscie mozliweych ruchów
+                //to uznaj to za odklikniecie
+                if (odp == 0) {
+                    System.out.println("Wykonanie ruchu w to miejsce jest niemożliwe");
+                    odp = 3;
+                }
+                //niezaleznie czy ruch zostal wykonany czy nie,
+                //wracamy do etapu wybierania piona
                 etap_wybierania_piona = true;
-                //odp = 1;
-                odp = 3; // tymczasowo
+                mozliwe_ruchy.clear();
             }
         }
         return odp;
+    }
+
+    //sprawdza, czy na zadanej pozycji jest wroga bierka
+    //jeżeli tak, to ją usuwa
+    public void czyBicie(String pozycja) {
+        int[] poz = Operacje.rozkodujPozycje(pozycja);
+        ArrayList<Bierka> lista;
+        if (czyTyToBiale) lista = czarne_bierki;
+        else lista = biale_bierki;
+        for (Bierka bierka : lista) {
+            int[] poz_bierka = bierka.getPolozenie();
+            if (poz[0] == poz_bierka[0] && poz[1] == poz_bierka[1]) {
+                System.out.println("Zbicie bierki przeciwnika");
+                bicie = true;
+                getPoleStartuZbijanej = bierka.getPoleStartu();
+                if (czyTyToBiale) czarne_bierki.remove(bierka);
+                else biale_bierki.remove(bierka);
+            }
+        }
     }
 
     public ArrayList<String> wybieranieBierki(String where) {
@@ -362,6 +400,10 @@ public class Game {
                 glupia_szachownica[i][j] = (-1) * glupia_szachownica[i][j];
     }
 
+    public void zaktualizujPolozenieBierki(String pozycja) {
+        wybrana_bierka.setPolozenie(Operacje.rozkodujPozycje(pozycja));
+    }
+
     // wyczysc informacje o roszadzie - nie doszło do niej
     public void resetujRoszade() {
         wykonano_roszade = false;
@@ -379,5 +421,9 @@ public class Game {
 
     public ArrayList<String> getMozliweRuchy() {
         return mozliwe_ruchy;
+    }
+
+    public void setBicie(boolean bicie) {
+        this.bicie = bicie;
     }
 }
