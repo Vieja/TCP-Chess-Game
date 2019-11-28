@@ -23,149 +23,24 @@ public class Controller implements Initializable {
 
     public Label label_kto;
 
-    public ImageView a1;
-    public ImageView a2;
-    public ImageView a3;
-    public ImageView a4;
-    public ImageView a5;
-    public ImageView a6;
-    public ImageView a7;
-    public ImageView a8;
+    public ImageView a1, a2, a3, a4, a5, a6, a7, a8,
+            b1, b2, b3, b4, b5, b6, b7, b8,
+            c1, c2, c3, c4, c5, c6, c7, c8,
+            d1, d2, d3, d4, d5, d6, d7, d8,
+            e1, e2, e3, e4, e5, e6, e7, e8,
+            f1, f2, f3, f4, f5, f6, f7, f8,
+            g1, g2, g3, g4, g5, g6, g7, g8,
+            h1, h2, h3, h4, h5, h6, h7, h8;
 
-    public ImageView b1;
-    public ImageView b2;
-    public ImageView b3;
-    public ImageView b4;
-    public ImageView b5;
-    public ImageView b6;
-    public ImageView b7;
-    public ImageView b8;
+    public Pane a1pane, a2pane, a3pane, a4pane, a5pane, a6pane, a7pane, a8pane,
+            b1pane, b2pane, b3pane, b4pane, b5pane, b6pane, b7pane, b8pane,
+            c1pane, c2pane, c3pane, c4pane, c5pane, c6pane, c7pane, c8pane,
+            d1pane, d2pane, d3pane, d4pane, d5pane, d6pane, d7pane, d8pane,
+            e1pane, e2pane, e3pane, e4pane, e5pane, e6pane, e7pane, e8pane,
+            f1pane, f2pane, f3pane, f4pane, f5pane, f6pane, f7pane, f8pane,
+            g1pane, g2pane, g3pane, g4pane, g5pane, g6pane, g7pane, g8pane,
+            h1pane, h2pane, h3pane, h4pane, h5pane, h6pane, h7pane, h8pane;
 
-    public ImageView c1;
-    public ImageView c2;
-    public ImageView c3;
-    public ImageView c4;
-    public ImageView c5;
-    public ImageView c6;
-    public ImageView c7;
-    public ImageView c8;
-
-    public ImageView d1;
-    public ImageView d2;
-    public ImageView d3;
-    public ImageView d4;
-    public ImageView d5;
-    public ImageView d6;
-    public ImageView d7;
-    public ImageView d8;
-
-    public ImageView e1;
-    public ImageView e2;
-    public ImageView e3;
-    public ImageView e4;
-    public ImageView e5;
-    public ImageView e6;
-    public ImageView e7;
-    public ImageView e8;
-
-    public ImageView f1;
-    public ImageView f2;
-    public ImageView f3;
-    public ImageView f4;
-    public ImageView f5;
-    public ImageView f6;
-    public ImageView f7;
-    public ImageView f8;
-
-    public ImageView g1;
-    public ImageView g2;
-    public ImageView g3;
-    public ImageView g4;
-    public ImageView g5;
-    public ImageView g6;
-    public ImageView g7;
-    public ImageView g8;
-
-    public ImageView h1;
-    public ImageView h2;
-    public ImageView h3;
-    public ImageView h4;
-    public ImageView h5;
-    public ImageView h6;
-    public ImageView h7;
-    public ImageView h8;
-
-    public Pane a1pane;
-    public Pane a2pane;
-    public Pane a3pane;
-    public Pane a4pane;
-    public Pane a5pane;
-    public Pane a6pane;
-    public Pane a7pane;
-    public Pane a8pane;
-
-    public Pane b1pane;
-    public Pane b2pane;
-    public Pane b3pane;
-    public Pane b4pane;
-    public Pane b5pane;
-    public Pane b6pane;
-    public Pane b7pane;
-    public Pane b8pane;
-
-    public Pane c1pane;
-    public Pane c2pane;
-    public Pane c3pane;
-    public Pane c4pane;
-    public Pane c5pane;
-    public Pane c6pane;
-    public Pane c7pane;
-    public Pane c8pane;
-
-    public Pane d1pane;
-    public Pane d2pane;
-    public Pane d3pane;
-    public Pane d4pane;
-    public Pane d5pane;
-    public Pane d6pane;
-    public Pane d7pane;
-    public Pane d8pane;
-
-    public Pane e1pane;
-    public Pane e2pane;
-    public Pane e3pane;
-    public Pane e4pane;
-    public Pane e5pane;
-    public Pane e6pane;
-    public Pane e7pane;
-    public Pane e8pane;
-
-    public Pane f1pane;
-    public Pane f2pane;
-    public Pane f3pane;
-    public Pane f4pane;
-    public Pane f5pane;
-    public Pane f6pane;
-    public Pane f7pane;
-    public Pane f8pane;
-
-    public Pane g1pane;
-    public Pane g2pane;
-    public Pane g3pane;
-    public Pane g4pane;
-    public Pane g5pane;
-    public Pane g6pane;
-    public Pane g7pane;
-    public Pane g8pane;
-
-    public Pane h1pane;
-    public Pane h2pane;
-    public Pane h3pane;
-    public Pane h4pane;
-    public Pane h5pane;
-    public Pane h6pane;
-    public Pane h7pane;
-    public Pane h8pane;
 
     private Game game = new Game();
     private ArrayList<String> niebieskie_pola = new ArrayList<>();
