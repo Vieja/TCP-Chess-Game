@@ -168,8 +168,12 @@ public class Controller implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        game.setCzyBiale(true);
 
+        EnemyAction enemy = new EnemyAction();
+        Thread enemyThread = new Thread(enemy);
+        enemyThread.start();
+
+        game.setCzyBiale(true);
         String ty;
         String przeciwnik;
         if (game.czyTyToBiale) {
