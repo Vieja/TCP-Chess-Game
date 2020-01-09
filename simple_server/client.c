@@ -9,7 +9,7 @@
 #include <unistd.h>
 #include <stdio.h>
 
-#define BUF_SIZE 1024
+#define BUF_SIZE 3
 #define NUM_THREADS     5
 
 //struktura zawierająca dane, które zostaną przekazane do wątku
