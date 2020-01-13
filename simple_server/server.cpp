@@ -24,10 +24,34 @@
 
 using namespace std;
 
+string zakodujPozycje(int a, int b) {
+    string pozycja;
+    switch (a) {
+        case 1: pozycja.append("A");
+            break;
+        case 2: pozycja.append("B");
+            break;
+        case 3: pozycja.append("C");
+            break;
+        case 4: pozycja.append("D");
+            break;
+        case 5: pozycja.append("E");
+            break;
+        case 6: pozycja.append("F");
+            break;
+        case 7: pozycja.append("G");
+            break;
+        case 8: pozycja.append("H");
+            break;
+    }
+    pozycja.append(to_string(b));
+    return pozycja;
+}
+
 class Bierka {
 public:
     bool kolor_czarny;
-    int polozenie[2];
+    int pol[2];
     int ilosc_wykon_ruchow=0;
     virtual vector<string> znajdzMozliweRuchy(int glupia_szachownica [][9])=0;
     virtual string getNazwaBierki()=0;
@@ -35,17 +59,51 @@ public:
 
 class Pion : public Bierka {
 public:
+    Pion (bool czarny, int polozenie[]) {
+        kolor_czarny = czarny;
+        pol[0] = polozenie[0];
+        pol[1] = polozenie[1];
+    };
     string getNazwaBierki() {
         return "pion";
     };
-    vector<string> znajdzMozliweRuchy(int glupia_szachownica [][9]) {
-        vector<string> mozliwe;
-        mozliwe.push_back("jeden ");
-        mozliwe.push_back("dwa ");
-        return mozliwe;
-    };
+    vector<string> znajdzMozliweRuchy(int tab [][9]) {
+        vector<string> mozliwe_ruchy;
 
+        if (kolor_czarny) {
+            if (pol[1] != 1) {
+                if (tab[pol[0]][pol[1] - 1] == 0) {
+                    if (ilosc_wykon_ruchow == 0 && tab[pol[0]][pol[1] - 2] == 0)
+                        mozliwe_ruchy.push_back(zakodujPozycje(pol[0], pol[1] - 2));
+                    mozliwe_ruchy.push_back(zakodujPozycje(pol[0], pol[1] - 1));
+                }
+                if (pol[0] - 1 > 0 && pol[1] - 1 > 0)
+                    if (tab[pol[0] - 1][pol[1] - 1] == -1)
+                        mozliwe_ruchy.push_back(zakodujPozycje(pol[0] - 1, pol[1] - 1));
+                if (pol[0] + 1 < 9 && pol[1] - 1 > 0)
+                    if (tab[pol[0] + 1][pol[1] - 1] == -1)
+                        mozliwe_ruchy.push_back(zakodujPozycje(pol[0] + 1, pol[1] - 1));
+            }
+        } else {
+            if (pol[1] != 8) {
+                if (tab[pol[0]][pol[1] + 1] == 0) {
+                    if (ilosc_wykon_ruchow == 0 && tab[pol[0]][pol[1] + 2] == 0)
+                        mozliwe_ruchy.push_back(zakodujPozycje(pol[0], pol[1] + 2));
+                    mozliwe_ruchy.push_back(zakodujPozycje(pol[0], pol[1] + 1));
+                }
+                if (pol[0] - 1 > 0 && pol[1] + 1 < 9)
+                    if (tab[pol[0] - 1][pol[1] + 1] == -1)
+                        mozliwe_ruchy.push_back(zakodujPozycje(pol[0] - 1, pol[1] + 1));
+                if (pol[0] + 1 < 9 && pol[1] + 1 < 9)
+                    if (tab[pol[0] + 1][pol[1] + 1] == -1)
+                        mozliwe_ruchy.push_back(zakodujPozycje(pol[0] + 1, pol[1] + 1));
+            }
+        }
+        return mozliwe_ruchy;
+    };
 };
+
+
 
 class Szachownica {
 private:
@@ -198,17 +256,18 @@ int main(int argc, char* argv[])
 //    string test = gra.getNazwa();
 //    cout << test << endl;
     int szachownica [9][9] = {
-            {1,1,0,0,0,0,-1,-1},
-            {1,1,0,0,0,0,-1,-1},
-            {1,1,0,0,0,0,-1,-1},
-            {1,1,0,0,0,0,-1,-1},
-            {1,1,0,0,0,0,-1,-1},
-            {1,1,0,0,0,0,-1,-1},
-            {1,1,0,0,0,0,-1,-1},
-            {1,1,0,0,0,0,-1,-1},
-            {1,1,0,0,0,0,-1,-1},
+            {0,0,0,0,0,0,0,0,0},
+            {0,1,1,0,0,0,0,-1,-1},
+            {0,1,1,0,0,0,0,-1,-1},
+            {0,1,1,0,0,0,0,-1,-1},
+            {0,1,1,0,0,0,0,-1,-1},
+            {0,1,1,0,0,0,0,-1,-1},
+            {0,1,1,0,0,0,0,-1,-1},
+            {0,1,1,0,0,0,0,-1,-1},
+            {0,1,1,0,0,0,0,-1,-1},
    };
-    Pion pionek;
+   int pozycja[2] = {1, 2};
+    Pion pionek(false, pozycja);
     vector<string> vectorek = pionek.znajdzMozliweRuchy(szachownica);
     cout <<"oto vectorek: " << vectorek[0] << vectorek[1];
     //////////////////////
