@@ -145,17 +145,308 @@ public:
     };
 };
 
-
-
-class Szachownica {
-private:
-    string nazwa = "test";
-    int glupia_szachownica[9][9];
-    double kapital; // początkowy
+class Goniec : public Bierka {
 public:
-    string getNazwa() {
-        return nazwa;
-    }
+    Goniec (bool czarny, polozenie start) {
+        kolor_czarny = czarny;
+        pozycja = start;
+    };
+    string getNazwaBierki() {
+        return "goniec";
+    };
+    vector<string> znajdzMozliweRuchy(int tab [][9]) {
+        vector<string> mozliwe_ruchy;
+        int pol[2];
+        pol[0] = pozycja.k;
+        pol[1] = pozycja.w;
+        int i = pol[0]-1;
+        int j = pol[1]+1;
+        while(i > 0 && i < 9 && j > 0 && j < 9) {
+            if(tab[i][j] == 0) mozliwe_ruchy.push_back(zakodujPozycje(i,j));
+            else if(tab[i][j] == -1) {
+                mozliwe_ruchy.push_back(zakodujPozycje(i,j));
+                break;
+            } else break;
+            i--;
+            j++;
+        }
+
+        i = pol[0] + 1;
+        j = pol[1] + 1;
+        while(i > 0 && i < 9 && j > 0 && j < 9) {
+            if(tab[i][j] == 0) mozliwe_ruchy.push_back(zakodujPozycje(i,j));
+            else if(tab[i][j] == -1) {
+                mozliwe_ruchy.push_back(zakodujPozycje(i,j));
+                break;
+            } else break;
+            i++;
+            j++;
+        }
+
+        i = pol[0] + 1;
+        j = pol[1] - 1;
+        while(i > 0 && i < 9 && j > 0 && j < 9) {
+            if(tab[i][j] == 0) mozliwe_ruchy.push_back(zakodujPozycje(i,j));
+            else if(tab[i][j] == -1) {
+                mozliwe_ruchy.push_back(zakodujPozycje(i,j));
+                break;
+            } else break;
+            i++;
+            j--;
+        }
+
+        i = pol[0] - 1;
+        j = pol[1] - 1;
+        while(i > 0 && i < 9 && j > 0 && j < 9) {
+            if(tab[i][j] == 0) mozliwe_ruchy.push_back(zakodujPozycje(i,j));
+            else if(tab[i][j] == -1) {
+                mozliwe_ruchy.push_back(zakodujPozycje(i,j));
+                break;
+            } else break;
+            i--;
+            j--;
+        }
+        return mozliwe_ruchy;
+    };
+};
+
+class Hetman : public Bierka {
+public:
+    Hetman (bool czarny, polozenie start) {
+        kolor_czarny = czarny;
+        pozycja = start;
+    };
+    string getNazwaBierki() {
+        return "hetman";
+    };
+    vector<string> znajdzMozliweRuchy(int tab [][9]) {
+        vector<string> mozliwe_ruchy;
+        int pol[2];
+        pol[0] = pozycja.k;
+        pol[1] = pozycja.w;
+        int i = pol[0]-1;
+        int j = pol[1]+1;
+        while(i > 0 && i < 9 && j > 0 && j < 9) {
+            if(tab[i][j] == 0) mozliwe_ruchy.push_back(zakodujPozycje(i,j));
+            else if(tab[i][j] == -1) {
+                mozliwe_ruchy.push_back(zakodujPozycje(i,j));
+                break;
+            } else break;
+            i--;
+            j++;
+        }
+
+        i = pol[0] + 1;
+        j = pol[1] + 1;
+        while(i > 0 && i < 9 && j > 0 && j < 9) {
+            if(tab[i][j] == 0) mozliwe_ruchy.push_back(zakodujPozycje(i,j));
+            else if(tab[i][j] == -1) {
+                mozliwe_ruchy.push_back(zakodujPozycje(i,j));
+                break;
+            } else break;
+            i++;
+            j++;
+        }
+
+        i = pol[0] + 1;
+        j = pol[1] - 1;
+        while(i > 0 && i < 9 && j > 0 && j < 9) {
+            if(tab[i][j] == 0) mozliwe_ruchy.push_back(zakodujPozycje(i,j));
+            else if(tab[i][j] == -1) {
+                mozliwe_ruchy.push_back(zakodujPozycje(i,j));
+                break;
+            } else break;
+            i++;
+            j--;
+        }
+
+        i = pol[0] - 1;
+        j = pol[1] - 1;
+        while(i > 0 && i < 9 && j > 0 && j < 9) {
+            if(tab[i][j] == 0) mozliwe_ruchy.push_back(zakodujPozycje(i,j));
+            else if(tab[i][j] == -1) {
+                mozliwe_ruchy.push_back(zakodujPozycje(i,j));
+                break;
+            } else break;
+            i--;
+            j--;
+        }
+
+        i = pol[0]+1;
+        j = pol[1];
+        while(i > 0 && i < 9) {
+            if(tab[i][j] == 0) mozliwe_ruchy.push_back(zakodujPozycje(i,j));
+            else if(tab[i][j] == -1) {
+                mozliwe_ruchy.push_back(zakodujPozycje(i,j));
+                break;
+            } else break;
+            i++;
+        }
+
+        i = pol[0]-1;
+        j = pol[1];
+        while(i > 0 && i < 9) {
+            if(tab[i][j] == 0) mozliwe_ruchy.push_back(zakodujPozycje(i,j));
+            else if(tab[i][j] == -1) {
+                mozliwe_ruchy.push_back(zakodujPozycje(i,j));
+                break;
+            } else break;
+            i--;
+        }
+
+        i = pol[0];
+        j = pol[1]+1;
+        while(j > 0 && j < 9) {
+            if(tab[i][j] == 0) mozliwe_ruchy.push_back(zakodujPozycje(i,j));
+            else if(tab[i][j] == -1) {
+                mozliwe_ruchy.push_back(zakodujPozycje(i,j));
+                break;
+            } else break;
+            j++;
+        }
+
+        i = pol[0];
+        j = pol[1]-1;
+        while(j > 0 && j < 9) {
+            if(tab[i][j] == 0) mozliwe_ruchy.push_back(zakodujPozycje(i,j));
+            else if(tab[i][j] == -1) {
+                mozliwe_ruchy.push_back(zakodujPozycje(i,j));
+                break;
+            } else break;
+            j--;
+        }
+
+        return mozliwe_ruchy;
+    };
+};
+
+class Krol : public Bierka {
+public:
+    Krol (bool czarny, polozenie start) {
+        kolor_czarny = czarny;
+        pozycja = start;
+    };
+    string getNazwaBierki() {
+        return "krol";
+    };
+    vector<string> znajdzMozliweRuchy(int tab [][9]) {
+        vector<string> mozliwe_ruchy;
+        int pol[2];
+        pol[0] = pozycja.k;
+        pol[1] = pozycja.w;
+        int i = pol[0];
+        int j = pol[1];
+        if (i-1 > 0 && j - 1 > 0)
+            if (tab[i-1][j-1] != 1) mozliwe_ruchy.push_back(zakodujPozycje(i-1,j-1));
+        if (i-1 > 0)
+            if (tab[i-1][j] != 1) mozliwe_ruchy.push_back(zakodujPozycje(i-1,j));
+        if (i-1 > 0 && j + 1 < 9)
+            if (tab[i-1][j+1] != 1) mozliwe_ruchy.push_back(zakodujPozycje(i-1,j+1));
+        if (j + 1 < 9)
+            if (tab[i][j+1] != 1) mozliwe_ruchy.push_back(zakodujPozycje(i,j+1));
+        if (i+1 < 9 && j + 1 < 9)
+            if (tab[i+1][j+1] != 1) mozliwe_ruchy.push_back(zakodujPozycje(i+1,j+1));
+        if (i+1 < 9)
+            if (tab[i+1][j] != 1) mozliwe_ruchy.push_back(zakodujPozycje(i+1,j));
+        if (i+1 < 9 && j - 1 > 0)
+            if (tab[i+1][j-1] != 1) mozliwe_ruchy.push_back(zakodujPozycje(i+1,j-1));
+        if (j - 1 > 0)
+            if (tab[i][j-1] != 1) mozliwe_ruchy.push_back(zakodujPozycje(i,j-1));
+        return mozliwe_ruchy;
+    };
+};
+
+class Skoczek : public Bierka {
+public:
+    Skoczek (bool czarny, polozenie start) {
+        kolor_czarny = czarny;
+        pozycja = start;
+    };
+    string getNazwaBierki() {
+        return "skoczek";
+    };
+    vector<string> znajdzMozliweRuchy(int tab [][9]) {
+        vector<string> mozliwe_ruchy;
+        int pol[2];
+        pol[0] = pozycja.k;
+        pol[1] = pozycja.w;
+        for (int i = 1;i < 9;i++)
+            for (int j = 1;j < 9;j++) {
+                if (tab[i][j] != 1) {
+                    if (i-2 == pol[0] && j+1 == pol[1]) mozliwe_ruchy.push_back(zakodujPozycje(i,j));
+                    if (i-1 == pol[0] && j+2 == pol[1]) mozliwe_ruchy.push_back(zakodujPozycje(i,j));
+                    if (i+1 == pol[0] && j+2 == pol[1]) mozliwe_ruchy.push_back(zakodujPozycje(i,j));
+                    if (i+2 == pol[0] && j+1 == pol[1]) mozliwe_ruchy.push_back(zakodujPozycje(i,j));
+                    if (i+2 == pol[0] && j-1 == pol[1]) mozliwe_ruchy.push_back(zakodujPozycje(i,j));
+                    if (i+1 == pol[0] && j-2 == pol[1]) mozliwe_ruchy.push_back(zakodujPozycje(i,j));
+                    if (i-1 == pol[0] && j-2 == pol[1]) mozliwe_ruchy.push_back(zakodujPozycje(i,j));
+                    if (i-2 == pol[0] && j-1 == pol[1]) mozliwe_ruchy.push_back(zakodujPozycje(i,j));
+                }
+            }
+        return mozliwe_ruchy;
+    };
+};
+
+class Wieza : public Bierka {
+public:
+    Wieza (bool czarny, polozenie start) {
+        kolor_czarny = czarny;
+        pozycja = start;
+    };
+    string getNazwaBierki() {
+        return "wieza";
+    };
+    vector<string> znajdzMozliweRuchy(int tab [][9]) {
+        vector<string> mozliwe_ruchy;
+        int pol[2];
+        pol[0] = pozycja.k;
+        pol[1] = pozycja.w;
+        int i = pol[0]+1;
+        int j = pol[1];
+        while(i > 0 && i < 9) {
+            if(tab[i][j] == 0) mozliwe_ruchy.push_back(zakodujPozycje(i,j));
+            else if(tab[i][j] == -1) {
+                mozliwe_ruchy.push_back(zakodujPozycje(i,j));
+                break;
+            } else break;
+            i++;
+        }
+
+        i = pol[0]-1;
+        j = pol[1];
+        while(i > 0 && i < 9) {
+            if(tab[i][j] == 0) mozliwe_ruchy.push_back(zakodujPozycje(i,j));
+            else if(tab[i][j] == -1) {
+                mozliwe_ruchy.push_back(zakodujPozycje(i,j));
+                break;
+            } else break;
+            i--;
+        }
+
+        i = pol[0];
+        j = pol[1]+1;
+        while(j > 0 && j < 9) {
+            if(tab[i][j] == 0) mozliwe_ruchy.push_back(zakodujPozycje(i,j));
+            else if(tab[i][j] == -1) {
+                mozliwe_ruchy.push_back(zakodujPozycje(i,j));
+                break;
+            } else break;
+            j++;
+        }
+
+        i = pol[0];
+        j = pol[1]-1;
+        while(j > 0 && j < 9) {
+            if(tab[i][j] == 0) mozliwe_ruchy.push_back(zakodujPozycje(i,j));
+            else if(tab[i][j] == -1) {
+                mozliwe_ruchy.push_back(zakodujPozycje(i,j));
+                break;
+            } else break;
+            j--;
+        }
+
+        return mozliwe_ruchy;
+    };
 };
 
 //struktura zawierająca dane, które zostaną przekazane do wątku
@@ -212,13 +503,11 @@ void *ThreadBehavior(void *t_data)
                 {0,1,1,0,0,0,0,-1,-1},
                 {0,1,1,0,0,0,0,-1,-1},
         };
-        polozenie poz;
-        poz.k=1;
-        poz.w=2;
-        Pion pionek(false, poz);
-        vector<string> vectorek = pionek.znajdzMozliweRuchy(szachownica);
-        //cout <<"oto vectorek: " << vectorek[0] << vectorek[1];
-        printf("%s, %s\n",vectorek[0].c_str(),vectorek[1].c_str());
+        vector<Bierka*> biale_bierki;
+        biale_bierki.push_back(new Goniec(false, rozkodujPozycje("C2")));
+        //Pion pionek(false, rozkodujPozycje("C3"));
+        vector<string> vectorek = biale_bierki[0]->znajdzMozliweRuchy(szachownica);
+        cout <<"oto vectorek: " << vectorek[0] << vectorek[1] << endl;
         write(th_data->first_socket_descriptor,"bia",BUFF_SIZE);
         write(th_data->second_socket_descriptor,"cza",BUFF_SIZE);
         while (1) {
