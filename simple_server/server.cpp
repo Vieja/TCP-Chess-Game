@@ -24,6 +24,47 @@
 
 using namespace std;
 
+struct polozenie
+{
+    int k;
+    int w;
+};
+
+polozenie rozkodujPozycje(string pozycja) {
+    int tab [2];
+    switch (pozycja.at(0)) {
+        case 'A':
+        tab[0] = 1;
+            break;
+        case 'B':
+        tab[0] = 2;
+            break;
+        case 'C':
+        tab[0] = 3;
+            break;
+        case 'D':
+        tab[0] = 4;
+            break;
+        case 'E':
+        tab[0] = 5;
+            break;
+        case 'F':
+        tab[0] = 6;
+            break;
+        case 'G':
+        tab[0] = 7;
+            break;
+        case 'H':
+        tab[0] = 8;
+            break;
+    }
+    tab[1] = pozycja.at(1)-'0';
+    polozenie pol;
+    pol.k = tab[0];
+    pol.w = tab[1];
+    return pol;
+}
+
 string zakodujPozycje(int a, int b) {
     string pozycja;
     switch (a) {
@@ -51,7 +92,7 @@ string zakodujPozycje(int a, int b) {
 class Bierka {
 public:
     bool kolor_czarny;
-    int pol[2];
+    polozenie pozycja;
     int ilosc_wykon_ruchow=0;
     virtual vector<string> znajdzMozliweRuchy(int glupia_szachownica [][9])=0;
     virtual string getNazwaBierki()=0;
@@ -59,17 +100,18 @@ public:
 
 class Pion : public Bierka {
 public:
-    Pion (bool czarny, int polozenie[]) {
+    Pion (bool czarny, polozenie start) {
         kolor_czarny = czarny;
-        pol[0] = polozenie[0];
-        pol[1] = polozenie[1];
+        pozycja = start;
     };
     string getNazwaBierki() {
         return "pion";
     };
     vector<string> znajdzMozliweRuchy(int tab [][9]) {
         vector<string> mozliwe_ruchy;
-
+        int pol[2];
+        pol[0] = pozycja.k;
+        pol[1] = pozycja.w;
         if (kolor_czarny) {
             if (pol[1] != 1) {
                 if (tab[pol[0]][pol[1] - 1] == 0) {
@@ -159,6 +201,24 @@ void *ThreadBehavior(void *t_data)
         write(th_data->first_socket_descriptor,login_2,LOGIN_SIZE);
         write(th_data->second_socket_descriptor,login_1,LOGIN_SIZE);
         // create game
+        int szachownica [9][9] = {
+                {0,0,0,0,0,0,0,0,0},
+                {0,1,1,0,0,0,0,-1,-1},
+                {0,1,1,0,0,0,0,-1,-1},
+                {0,1,1,0,0,0,0,-1,-1},
+                {0,1,1,0,0,0,0,-1,-1},
+                {0,1,1,0,0,0,0,-1,-1},
+                {0,1,1,0,0,0,0,-1,-1},
+                {0,1,1,0,0,0,0,-1,-1},
+                {0,1,1,0,0,0,0,-1,-1},
+        };
+        polozenie poz;
+        poz.k=1;
+        poz.w=2;
+        Pion pionek(false, poz);
+        vector<string> vectorek = pionek.znajdzMozliweRuchy(szachownica);
+        //cout <<"oto vectorek: " << vectorek[0] << vectorek[1];
+        printf("%s, %s\n",vectorek[0].c_str(),vectorek[1].c_str());
         write(th_data->first_socket_descriptor,"bia",BUFF_SIZE);
         write(th_data->second_socket_descriptor,"cza",BUFF_SIZE);
         while (1) {
@@ -252,24 +312,24 @@ int main(int argc, char* argv[])
    }
     //////////////////////
 
-//    Szachownica gra;
-//    string test = gra.getNazwa();
-//    cout << test << endl;
-    int szachownica [9][9] = {
-            {0,0,0,0,0,0,0,0,0},
-            {0,1,1,0,0,0,0,-1,-1},
-            {0,1,1,0,0,0,0,-1,-1},
-            {0,1,1,0,0,0,0,-1,-1},
-            {0,1,1,0,0,0,0,-1,-1},
-            {0,1,1,0,0,0,0,-1,-1},
-            {0,1,1,0,0,0,0,-1,-1},
-            {0,1,1,0,0,0,0,-1,-1},
-            {0,1,1,0,0,0,0,-1,-1},
-   };
-   int pozycja[2] = {1, 2};
-    Pion pionek(false, pozycja);
-    vector<string> vectorek = pionek.znajdzMozliweRuchy(szachownica);
-    cout <<"oto vectorek: " << vectorek[0] << vectorek[1];
+
+//    int szachownica [9][9] = {
+//            {0,0,0,0,0,0,0,0,0},
+//            {0,1,1,0,0,0,0,-1,-1},
+//            {0,1,1,0,0,0,0,-1,-1},
+//            {0,1,1,0,0,0,0,-1,-1},
+//            {0,1,1,0,0,0,0,-1,-1},
+//            {0,1,1,0,0,0,0,-1,-1},
+//            {0,1,1,0,0,0,0,-1,-1},
+//            {0,1,1,0,0,0,0,-1,-1},
+//            {0,1,1,0,0,0,0,-1,-1},
+//   };
+//   polozenie poz;
+//   poz.k=1;
+//   poz.w=2;
+//    Pion pionek(false, poz);
+//    vector<string> vectorek = pionek.znajdzMozliweRuchy(szachownica);
+//    cout <<"oto vectorek: " << vectorek[0] << vectorek[1];
     //////////////////////
    setsockopt(server_socket_descriptor, SOL_SOCKET, SO_REUSEADDR, (char*)&reuse_addr_val, sizeof(reuse_addr_val));
    printf("Socket serwera: %d\n",server_socket_descriptor);
