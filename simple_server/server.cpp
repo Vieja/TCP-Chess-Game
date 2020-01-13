@@ -18,7 +18,7 @@
 
 #define SERVER_PORT 1234
 #define QUEUE_SIZE 5
-#define BUFF_SIZE 3
+#define BUFF_SIZE 5
 #define LOGIN_SIZE 8
 #define DESCRIPTION_ARRAY_SIZE 100
 
@@ -94,6 +94,9 @@ public:
     bool kolor_czarny;
     polozenie pozycja;
     int ilosc_wykon_ruchow=0;
+    void wykonanoRuch() {
+        ilosc_wykon_ruchow+=1;
+    };
     virtual vector<string> znajdzMozliweRuchy(int glupia_szachownica [][9])=0;
     virtual string getNazwaBierki()=0;
 };
@@ -449,6 +452,24 @@ public:
     };
 };
 
+bool sprawdzCzyPoprawne(char* bufor) {
+    bool odp = false;
+    int z1 = (int) bufor[0];
+    int z2 = (int) bufor[1];
+    int z3 = (int) bufor[2];
+    int z4 = (int) bufor[3];
+    int z5 = (int) bufor[4];
+    //cout << z1 << " " << z2 << " " << z3 << " " << z4 << " " << z5 << " " << endl;
+    if ( ( 64 < z1 ) && ( z1 < 73 ) &&
+         ( 64 < z4 ) && ( z4 < 73 ) &&
+         ( 48 < z2 ) && ( z2 < 57 ) &&
+         ( 48 < z5 ) && ( z5 < 57 ) &&
+         (z3 == 58) ) {
+        odp = true;
+    }
+    return odp;
+}
+
 //struktura zawierająca dane, które zostaną przekazane do wątku
 struct data_thread_join
 {
@@ -471,49 +492,143 @@ void *ThreadBehavior(void *t_data)
     int czy_polaczony=1;
     struct data_thread_game *th_data = (struct data_thread_game*)t_data;
     //dostęp do pól struktury: (*th_data).pole
-    while(czy_polaczony)
-    {
-        int read_result;
-        printf("Powstałem!\n");
-        char * login_1 = (char *) malloc(sizeof(char)*LOGIN_SIZE);
-        char * login_2 = (char *) malloc(sizeof(char)*LOGIN_SIZE);
-        write(th_data->first_socket_descriptor,"log",BUFF_SIZE);
-        read_result = read(th_data->first_socket_descriptor, login_1, LOGIN_SIZE);
-        if (read_result>0) {
-            printf("Login gracza pierwszego: %s\n",login_1);
-        } else printf("Blad");
+    int read_result;
+    printf("Powstałem!\n");
+    char * login_1 = (char *) malloc(sizeof(char)*LOGIN_SIZE);
+    char * login_2 = (char *) malloc(sizeof(char)*LOGIN_SIZE);
+    write(th_data->first_socket_descriptor,"login",BUFF_SIZE);
+    read_result = read(th_data->first_socket_descriptor, login_1, LOGIN_SIZE);
+    if (read_result>0) {
+        printf("Login gracza pierwszego: %s\n",login_1);
+    } else printf("Blad");
 
-        write(th_data->second_socket_descriptor,"log",BUFF_SIZE);
-        read_result = read(th_data->second_socket_descriptor, login_2, LOGIN_SIZE);
-        if (read_result>0) {
-            printf("Login gracza drugiego: %s\n",login_2);
-        } else printf("Blad");
+    write(th_data->second_socket_descriptor,"login",BUFF_SIZE);
+    read_result = read(th_data->second_socket_descriptor, login_2, LOGIN_SIZE);
+    if (read_result>0) {
+        printf("Login gracza drugiego: %s\n",login_2);
+    } else printf("Blad");
 
-        write(th_data->first_socket_descriptor,login_2,LOGIN_SIZE);
-        write(th_data->second_socket_descriptor,login_1,LOGIN_SIZE);
-        // create game
-        int szachownica [9][9] = {
-                {0,0,0,0,0,0,0,0,0},
-                {0,1,1,0,0,0,0,-1,-1},
-                {0,1,1,0,0,0,0,-1,-1},
-                {0,1,1,0,0,0,0,-1,-1},
-                {0,1,1,0,0,0,0,-1,-1},
-                {0,1,1,0,0,0,0,-1,-1},
-                {0,1,1,0,0,0,0,-1,-1},
-                {0,1,1,0,0,0,0,-1,-1},
-                {0,1,1,0,0,0,0,-1,-1},
-        };
-        vector<Bierka*> biale_bierki;
-        biale_bierki.push_back(new Goniec(false, rozkodujPozycje("C2")));
-        //Pion pionek(false, rozkodujPozycje("C3"));
-        vector<string> vectorek = biale_bierki[0]->znajdzMozliweRuchy(szachownica);
-        cout <<"oto vectorek: " << vectorek[0] << vectorek[1] << endl;
-        write(th_data->first_socket_descriptor,"bia",BUFF_SIZE);
-        write(th_data->second_socket_descriptor,"cza",BUFF_SIZE);
-        while (1) {
-            sleep(1);
+    write(th_data->first_socket_descriptor,login_2,LOGIN_SIZE);
+    write(th_data->second_socket_descriptor,login_1,LOGIN_SIZE);
+    // create game
+    int szachownica [9][9] = {
+            {0,0,0,0,0,0,0,0,0},
+            {0,1,1,0,0,0,0,-1,-1},
+            {0,1,1,0,0,0,0,-1,-1},
+            {0,1,1,0,0,0,0,-1,-1},
+            {0,1,1,0,0,0,0,-1,-1},
+            {0,1,1,0,0,0,0,-1,-1},
+            {0,1,1,0,0,0,0,-1,-1},
+            {0,1,1,0,0,0,0,-1,-1},
+            {0,1,1,0,0,0,0,-1,-1},
+    };
+    vector<Bierka*> biale_bierki;
+    vector<Bierka*> czarne_bierki;
+
+    for (int i = 1; i < 9; i++) {
+        int tab[2] = {i, 2};
+        biale_bierki.push_back(new Pion(false, rozkodujPozycje( zakodujPozycje(tab[0],tab[1]) )));
+    }
+
+    for (int i = 1; i < 9; i++) {
+        int tab[2] = {i, 7};
+        czarne_bierki.push_back(new Pion(true, rozkodujPozycje( zakodujPozycje(tab[0],tab[1]) )));
+    }
+
+    biale_bierki.push_back(new Wieza(false, rozkodujPozycje("A1")));
+    biale_bierki.push_back(new Skoczek(false, rozkodujPozycje("B1")));
+    biale_bierki.push_back(new Goniec(false, rozkodujPozycje("C1")));
+    biale_bierki.push_back(new Hetman(false, rozkodujPozycje("D1")));
+    biale_bierki.push_back(new Krol(false, rozkodujPozycje("E1")));
+    biale_bierki.push_back(new Goniec(false, rozkodujPozycje("F1")));
+    biale_bierki.push_back(new Skoczek(false, rozkodujPozycje("G1")));
+    biale_bierki.push_back(new Wieza(false, rozkodujPozycje("H1")));
+
+    czarne_bierki.push_back(new Wieza(true, rozkodujPozycje("A8")));
+    czarne_bierki.push_back(new Skoczek(true, rozkodujPozycje("B8")));
+    czarne_bierki.push_back(new Goniec(true, rozkodujPozycje("C8")));
+    czarne_bierki.push_back(new Hetman(true, rozkodujPozycje("D8")));
+    czarne_bierki.push_back(new Krol(true, rozkodujPozycje("E8")));
+    czarne_bierki.push_back(new Goniec(true, rozkodujPozycje("F8")));
+    czarne_bierki.push_back(new Skoczek(true, rozkodujPozycje("G8")));
+    czarne_bierki.push_back(new Wieza(true, rozkodujPozycje("H8")));
+
+    write(th_data->first_socket_descriptor,"white",BUFF_SIZE);
+    write(th_data->second_socket_descriptor,"black",BUFF_SIZE);
+
+    bool aktualny_gracz_to_biale = true;
+    bool gra_trwa = true;
+    while (gra_trwa) {
+        int player;
+        int enemy;
+        if (aktualny_gracz_to_biale) {
+            player = th_data->first_socket_descriptor;
+            enemy = th_data->second_socket_descriptor;
+        } else {
+            enemy = th_data->first_socket_descriptor;
+            player = th_data->second_socket_descriptor;
+        }
+        int success;
+        char * buffor = (char *) malloc(sizeof(char)*BUFF_SIZE);
+        success = read(player, buffor, BUFF_SIZE);
+        bool poprawny_zapis = sprawdzCzyPoprawne(buffor);
+        if (!poprawny_zapis) {
+            write(player,"E:ASC",BUFF_SIZE);
+        } else {
+            //sprawdz czy tu jest figura
+            string start_s = string() + buffor[0] + buffor[1];
+            string koniec_s = string() + buffor[3] + buffor[4];
+            polozenie start = rozkodujPozycje(start_s);
+            polozenie koniec = rozkodujPozycje(koniec_s);
+            Bierka* wybrana_bierka;
+            bool wybrana = false;
+            if (aktualny_gracz_to_biale) {
+                for (vector<Bierka*>::iterator it = biale_bierki.begin(); it!=biale_bierki.end(); ++it) {
+                    //cout << (*it)->pozycja.k << " "  << (*it)->pozycja.w << endl;
+                    if ( (*it)->pozycja.k == start.k && (*it)->pozycja.w == start.w ) {
+                        wybrana = true;
+                        wybrana_bierka = *it;
+                        break;
+                    }
+                }
+                if (!wybrana) {
+                    write(player,"E:STA",BUFF_SIZE);
+                } else {
+                    vector<string> vectorek = wybrana_bierka->znajdzMozliweRuchy(szachownica);
+                    bool poprawny_ruch = false;
+                    for (vector<string>::iterator wyb = vectorek.begin(); wyb!=vectorek.end(); ++wyb) {
+                        if ( koniec_s.compare(*wyb) == 0 ) {
+                            poprawny_ruch = true;
+                            break;
+                        }
+                        //cout << *wyb << " " << endl;
+                    }
+                    if (!poprawny_ruch) {
+                        write(player,"E:KON",BUFF_SIZE);
+                    } else {
+                        cout << "RUCH POPRAWNY"<<endl;
+                    }
+                }
+            } else {
+
+            }
+//            if (aktualny_gracz_to_biale) {
+//                aktualny_gracz_to_biale = false;
+//                write(th_data->second_socket_descriptor, "ready", BUFF_SIZE);
+//            } else {
+//                aktualny_gracz_to_biale = true;
+//                write(th_data->first_socket_descriptor, "ready", BUFF_SIZE);
+//            }
         }
     }
+
+//        vector<string> vectorek = biale_bierki[0]->znajdzMozliweRuchy(szachownica);
+//        for (vector<string>::iterator it = vectorek.begin(); it!=vectorek.end(); ++it) {
+//            cout << *it << " ";
+//        }
+//        cout << "\n";
+
+
     free(th_data);
     pthread_exit(NULL);
 }
@@ -599,27 +714,6 @@ int main(int argc, char* argv[])
        fprintf(stderr, "%s: Błąd przy próbie utworzenia gniazda..\n", argv[0]);
        exit(1);
    }
-    //////////////////////
-
-
-//    int szachownica [9][9] = {
-//            {0,0,0,0,0,0,0,0,0},
-//            {0,1,1,0,0,0,0,-1,-1},
-//            {0,1,1,0,0,0,0,-1,-1},
-//            {0,1,1,0,0,0,0,-1,-1},
-//            {0,1,1,0,0,0,0,-1,-1},
-//            {0,1,1,0,0,0,0,-1,-1},
-//            {0,1,1,0,0,0,0,-1,-1},
-//            {0,1,1,0,0,0,0,-1,-1},
-//            {0,1,1,0,0,0,0,-1,-1},
-//   };
-//   polozenie poz;
-//   poz.k=1;
-//   poz.w=2;
-//    Pion pionek(false, poz);
-//    vector<string> vectorek = pionek.znajdzMozliweRuchy(szachownica);
-//    cout <<"oto vectorek: " << vectorek[0] << vectorek[1];
-    //////////////////////
    setsockopt(server_socket_descriptor, SOL_SOCKET, SO_REUSEADDR, (char*)&reuse_addr_val, sizeof(reuse_addr_val));
    printf("Socket serwera: %d\n",server_socket_descriptor);
    bind_result = bind(server_socket_descriptor, (struct sockaddr*)&server_address, sizeof(struct sockaddr));
