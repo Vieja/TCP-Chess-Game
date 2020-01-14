@@ -94,8 +94,9 @@ public:
     bool kolor_czarny;
     polozenie pozycja;
     int ilosc_wykon_ruchow=0;
-    void wykonanoRuch() {
+    void wykonanoRuch(polozenie nowa) {
         ilosc_wykon_ruchow+=1;
+        pozycja = nowa;
     };
     virtual vector<string> znajdzMozliweRuchy(int glupia_szachownica [][9])=0;
     virtual string getNazwaBierki()=0;
@@ -606,19 +607,65 @@ void *ThreadBehavior(void *t_data)
                     if (!poprawny_ruch) {
                         write(player,"E:KON",BUFF_SIZE);
                     } else {
-                        cout << "RUCH POPRAWNY"<<endl;
+                        //cout << "RUCH POPRAWNY"<<endl;
+                        for (vector<Bierka*>::iterator wroga = czarne_bierki.begin(); wroga!=czarne_bierki.end(); ++wroga) {
+                            if (koniec_s.compare(zakodujPozycje((*wroga)->pozycja.k, (*wroga)->pozycja.w)) == 0 ) {
+                                czarne_bierki.erase(wroga);
+                                break;
+                            }
+                        }
+                        wybrana_bierka->wykonanoRuch(koniec);
+                        aktualny_gracz_to_biale = false;
+                        szachownica[start.k][start.w] = 0;
+                        szachownica[koniec.k][koniec.w] = 1;
+                        for (int i = 1; i < 9; i++)
+                            for (int j = 1; j < 9; j++)
+                                szachownica[i][j] = (-1) * szachownica[i][j];
+                        write(enemy,buffor,BUFF_SIZE);
                     }
                 }
             } else {
-
+                for (vector<Bierka*>::iterator it = czarne_bierki.begin(); it!=czarne_bierki.end(); ++it) {
+                    //cout << (*it)->pozycja.k << " "  << (*it)->pozycja.w << endl;
+                    if ( (*it)->pozycja.k == start.k && (*it)->pozycja.w == start.w ) {
+                        wybrana = true;
+                        wybrana_bierka = *it;
+                        break;
+                    }
+                }
+                if (!wybrana) {
+                    write(player,"E:STA",BUFF_SIZE);
+                } else {
+                    vector<string> vectorek = wybrana_bierka->znajdzMozliweRuchy(szachownica);
+                    bool poprawny_ruch = false;
+                    for (vector<string>::iterator wyb = vectorek.begin(); wyb!=vectorek.end(); ++wyb) {
+                        if ( koniec_s.compare(*wyb) == 0 ) {
+                            poprawny_ruch = true;
+                            break;
+                        }
+                        //cout << *wyb << " " << endl;
+                    }
+                    if (!poprawny_ruch) {
+                        write(player,"E:KON",BUFF_SIZE);
+                    } else {
+                        //cout << "RUCH POPRAWNY"<<endl;
+                        for (vector<Bierka*>::iterator wroga = biale_bierki.begin(); wroga!=biale_bierki.end(); ++wroga) {
+                            if (koniec_s.compare(zakodujPozycje((*wroga)->pozycja.k, (*wroga)->pozycja.w)) == 0 ) {
+                                biale_bierki.erase(wroga);
+                                break;
+                            }
+                        }
+                        wybrana_bierka->wykonanoRuch(koniec);
+                        aktualny_gracz_to_biale = true;
+                        szachownica[start.k][start.w] = 0;
+                        szachownica[koniec.k][koniec.w] = 1;
+                        for (int i = 1; i < 9; i++)
+                            for (int j = 1; j < 9; j++)
+                                szachownica[i][j] = (-1) * szachownica[i][j];
+                        write(enemy,buffor,BUFF_SIZE);
+                    }
+                }
             }
-//            if (aktualny_gracz_to_biale) {
-//                aktualny_gracz_to_biale = false;
-//                write(th_data->second_socket_descriptor, "ready", BUFF_SIZE);
-//            } else {
-//                aktualny_gracz_to_biale = true;
-//                write(th_data->first_socket_descriptor, "ready", BUFF_SIZE);
-//            }
         }
     }
 
