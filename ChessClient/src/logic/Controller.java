@@ -1,27 +1,17 @@
 package logic;
 
 import bierki.Bierka;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.value.ObservableValue;
-import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 
-import java.awt.*;
-import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class Controller implements Initializable {
-
-    public Label label_kto;
 
     public ImageView a1, a2, a3, a4, a5, a6, a7, a8,
             b1, b2, b3, b4, b5, b6, b7, b8,
@@ -40,6 +30,9 @@ public class Controller implements Initializable {
             f1pane, f2pane, f3pane, f4pane, f5pane, f6pane, f7pane, f8pane,
             g1pane, g2pane, g3pane, g4pane, g5pane, g6pane, g7pane, g8pane,
             h1pane, h2pane, h3pane, h4pane, h5pane, h6pane, h7pane, h8pane;
+
+    public Label yourLogin;
+    public Label whoNow;
 
 
     private Game game = new Game();
@@ -69,7 +62,7 @@ public class Controller implements Initializable {
         if (game.czyTyToBiale) {
             ty = "bialy";
             przeciwnik = "czarny";
-            label_kto.setText("białe");
+            //label_kto.setText("białe");
             d1.setImage(new Image("file:images/hetman_"+ty+".png"));
             e1.setImage(new Image("file:images/krol_"+ty+".png"));
             d8.setImage(new Image("file:images/hetman_"+przeciwnik+".png"));
@@ -77,7 +70,7 @@ public class Controller implements Initializable {
         } else {
             ty = "czarny";
             przeciwnik = "bialy";
-            label_kto.setText("czarne");
+            //label_kto.setText("czarne");
             d1.setImage(new Image("file:images/krol_"+ty+".png"));
             e1.setImage(new Image("file:images/hetman_"+ty+".png"));
             d8.setImage(new Image("file:images/krol_"+przeciwnik+".png"));
@@ -994,203 +987,206 @@ public class Controller implements Initializable {
         }
     }
 
-    public void clickA1(MouseEvent mouseEvent) {
+    public void clickA1( ) {
         clickOn("A1");
     }
-    public void clickB1(MouseEvent mouseEvent) {
+    public void clickB1( ) {
         clickOn("B1");
     }
-    public void clickC1(MouseEvent mouseEvent) {
+    public void clickC1( ) {
         clickOn("C1");
     }
-    public void clickD1(MouseEvent mouseEvent) {
+    public void clickD1( ) {
         clickOn("D1");
     }
-    public void clickE1(MouseEvent mouseEvent) {
+    public void clickE1( ) {
         clickOn("E1");
     }
-    public void clickF1(MouseEvent mouseEvent) {
+    public void clickF1( ) {
         clickOn("F1");
     }
-    public void clickG1(MouseEvent mouseEvent) {
+    public void clickG1( ) {
         clickOn("G1");
     }
-    public void clickH1(MouseEvent mouseEvent) {
+    public void clickH1( ) {
         clickOn("H1");
     }
 
-    public void clickA2(MouseEvent mouseEvent) {
+    public void clickA2( ) {
         clickOn("A2");
     }
-    public void clickB2(MouseEvent mouseEvent) {
+    public void clickB2( ) {
         clickOn("B2");
     }
-    public void clickC2(MouseEvent mouseEvent) {
+    public void clickC2( ) {
         clickOn("C2");
     }
-    public void clickD2(MouseEvent mouseEvent) {
+    public void clickD2( ) {
         clickOn("D2");
     }
-    public void clickE2(MouseEvent mouseEvent) {
+    public void clickE2( ) {
         clickOn("E2");
     }
-    public void clickF2(MouseEvent mouseEvent) {
+    public void clickF2( ) {
         clickOn("F2");
     }
-    public void clickG2(MouseEvent mouseEvent) {
+    public void clickG2( ) {
         clickOn("G2");
     }
-    public void clickH2(MouseEvent mouseEvent) {
+    public void clickH2( ) {
         clickOn("H2");
     }
 
-    public void clickA3(MouseEvent mouseEvent) {
+    public void clickA3( ) {
         clickOn("A3");
     }
-    public void clickB3(MouseEvent mouseEvent) {
+    public void clickB3( ) {
         clickOn("B3");
     }
-    public void clickC3(MouseEvent mouseEvent) {
+    public void clickC3( ) {
         clickOn("C3");
     }
-    public void clickD3(MouseEvent mouseEvent) {
+    public void clickD3( ) {
         clickOn("D3");
     }
-    public void clickE3(MouseEvent mouseEvent) {
+    public void clickE3( ) {
         clickOn("E3");
     }
-    public void clickF3(MouseEvent mouseEvent) {
+    public void clickF3( ) {
         clickOn("F3");
     }
-    public void clickG3(MouseEvent mouseEvent) {
+    public void clickG3( ) {
         clickOn("G3");
     }
-    public void clickH3(MouseEvent mouseEvent) {
+    public void clickH3( ) {
         clickOn("H3");
     }
 
-    public void clickA4(MouseEvent mouseEvent) {
+    public void clickA4( ) {
         clickOn("A4");
     }
-    public void clickB4(MouseEvent mouseEvent) {
+    public void clickB4( ) {
         clickOn("B4");
     }
-    public void clickC4(MouseEvent mouseEvent) {
+    public void clickC4( ) {
         clickOn("C4");
     }
-    public void clickD4(MouseEvent mouseEvent) {
+    public void clickD4( ) {
         clickOn("D4");
     }
-    public void clickE4(MouseEvent mouseEvent) {
+    public void clickE4( ) {
         clickOn("E4");
     }
-    public void clickF4(MouseEvent mouseEvent) {
+    public void clickF4( ) {
         clickOn("F4");
     }
-    public void clickG4(MouseEvent mouseEvent) {
+    public void clickG4( ) {
         clickOn("G4");
     }
-    public void clickH4(MouseEvent mouseEvent) {
+    public void clickH4( ) {
         clickOn("H4");
     }
 
-    public void clickA5(MouseEvent mouseEvent) {
+    public void clickA5( ) {
         clickOn("A5");
     }
-    public void clickB5(MouseEvent mouseEvent) {
+    public void clickB5( ) {
         clickOn("B5");
     }
-    public void clickC5(MouseEvent mouseEvent) {
+    public void clickC5( ) {
         clickOn("C5");
     }
-    public void clickD5(MouseEvent mouseEvent) {
+    public void clickD5( ) {
         clickOn("D5");
     }
-    public void clickE5(MouseEvent mouseEvent) {
+    public void clickE5( ) {
         clickOn("E5");
     }
-    public void clickF5(MouseEvent mouseEvent) {
+    public void clickF5( ) {
         clickOn("F5");
     }
-    public void clickG5(MouseEvent mouseEvent) {
+    public void clickG5( ) {
         clickOn("G5");
     }
-    public void clickH5(MouseEvent mouseEvent) {
+    public void clickH5( ) {
         clickOn("H5");
     }
 
-    public void clickA6(MouseEvent mouseEvent) {
+    public void clickA6( ) {
         clickOn("A6");
     }
-    public void clickB6(MouseEvent mouseEvent) {
+    public void clickB6( ) {
         clickOn("B6");
     }
-    public void clickC6(MouseEvent mouseEvent) {
+    public void clickC6( ) {
         clickOn("C6");
     }
-    public void clickD6(MouseEvent mouseEvent) {
+    public void clickD6( ) {
         clickOn("D6");
     }
-    public void clickE6(MouseEvent mouseEvent) {
+    public void clickE6( ) {
         clickOn("E6");
     }
-    public void clickF6(MouseEvent mouseEvent) {
+    public void clickF6( ) {
         clickOn("F6");
     }
-    public void clickG6(MouseEvent mouseEvent) {
+    public void clickG6( ) {
         clickOn("G6");
     }
-    public void clickH6(MouseEvent mouseEvent) {
+    public void clickH6( ) {
         clickOn("H6");
     }
 
-    public void clickA7(MouseEvent mouseEvent) {
+    public void clickA7( ){
         clickOn("A7");
     }
-    public void clickB7(MouseEvent mouseEvent) {
+    public void clickB7( ){
         clickOn("B7");
     }
-    public void clickC7(MouseEvent mouseEvent) {
+    public void clickC7( ) {
         clickOn("C7");
     }
-    public void clickD7(MouseEvent mouseEvent) {
+    public void clickD7( ) {
         clickOn("D7");
     }
-    public void clickE7(MouseEvent mouseEvent) {
+    public void clickE7( ) {
         clickOn("E7");
     }
-    public void clickF7(MouseEvent mouseEvent) {
+    public void clickF7( ) {
         clickOn("F7");
     }
-    public void clickG7(MouseEvent mouseEvent) {
+    public void clickG7( ) {
         clickOn("G7");
     }
-    public void clickH7(MouseEvent mouseEvent) {
+    public void clickH7( ) {
         clickOn("H7");
     }
 
-    public void clickA8(MouseEvent mouseEvent) {
+    public void clickA8( ) {
         clickOn("A8");
     }
-    public void clickB8(MouseEvent mouseEvent) {
+    public void clickB8( ) {
         clickOn("B8");
     }
-    public void clickC8(MouseEvent mouseEvent) {
+    public void clickC8( ) {
         clickOn("C8");
     }
-    public void clickD8(MouseEvent mouseEvent) {
+    public void clickD8( ) {
         clickOn("D8");
     }
-    public void clickE8(MouseEvent mouseEvent) {
+    public void clickE8( ) {
         clickOn("E8");
     }
-    public void clickF8(MouseEvent mouseEvent) {
+    public void clickF8( ) {
         clickOn("F8");
     }
-    public void clickG8(MouseEvent mouseEvent) {
+    public void clickG8( ) {
         clickOn("G8");
     }
-    public void clickH8(MouseEvent mouseEvent) {
+    public void clickH8( ) {
         clickOn("H8");
+    }
+
+    public void executeSurrender( ) {
     }
 }
