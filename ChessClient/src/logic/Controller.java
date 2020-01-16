@@ -1,6 +1,7 @@
 package logic;
 
 import bierki.Bierka;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -986,6 +987,11 @@ public class Controller implements Initializable {
             }
         }
     }
+    @FXML
+    public void setLogins(String login, String enemyLogin) {
+        yourLogin.setText(login);
+        whoNow.setText(enemyLogin);
+    }
 
     public void clickA1( ) {
         clickOn("A1");
@@ -1189,4 +1195,5 @@ public class Controller implements Initializable {
 
     public void executeSurrender( ) {
     }
+
 }

@@ -74,6 +74,11 @@
                   <Font size="24.0" />
                </font>
             </Label>
+            <Label fx:id="waitingLabel" alignment="CENTER" layoutX="315.0" layoutY="407.0" text="Szukanie gracza..." textFill="RED" visible="false">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
          </children>
       </AnchorPane>
    </center>

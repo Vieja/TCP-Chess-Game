@@ -8,12 +8,15 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.Socket;
 
 public class Main extends Application {
 
     private Stage primaryStage;
     private Socket socket;
+    LoginController loginController;
 
     @Override
     public void start(Stage primaryStage) {
@@ -27,8 +30,8 @@ public class Main extends Application {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(Main.class.getResource("../layout/LoginView.fxml"));
             BorderPane sign = loader.load();
-            LoginController controller = loader.getController();
-            controller.setMain(this);
+            loginController = loader.getController();
+            loginController.setMain(this);
             Scene scene = new Scene(sign);
             primaryStage.setScene(scene);
             primaryStage.setResizable(false);
@@ -38,24 +41,15 @@ public class Main extends Application {
         }
     }
 
-    public void initializeGameView() {
+    public void initializeGameView(String yourLogin, String enemyLogin) {
         try {
-            initializeGameView();
-            System.out.format("[Client] Connected to server!\n");
-
-            final Thread outThread = new Thread() {
-                @Override
-                public void run() {
-                    System.out.println("Started...");
-                };
-            };
-            outThread.start();
-
             primaryStage.close();
             primaryStage = new Stage();
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(Main.class.getResource("../layout/GameView.fxml"));
             BorderPane rootLayout = loader.load();
+            Controller gameController = loader.getController();
+            gameController.setLogins(yourLogin, enemyLogin);
             Scene scene = new Scene(rootLayout);
             primaryStage.setScene(scene);
             primaryStage.setResizable(false);
@@ -65,9 +59,52 @@ public class Main extends Application {
         }
     }
 
-    public int connect() {
+    public int connect(String login, String address, String port) {
         try {
             socket = new Socket("127.0.0.1", 1234);
+
+            System.out.format("[Client] Connected to server!\n");
+            final Thread outThread = new Thread() {
+                @Override
+                public void run() {
+                    System.out.println("Started...");
+                    InputStream is;
+                    OutputStream os ;
+                    String received;
+                    String response;
+                    int ile;
+                    byte[] buffer = new byte[5];
+                    try {
+                        is = socket.getInputStream();
+                        os = socket.getOutputStream();
+
+                        ile = is.read(buffer);
+                        received = new String(buffer,0,5);
+                        if (received.equals("login")) {
+                            response = login;
+                            os.write(response.getBytes());
+                        } else {
+                            System.out.println("Błąd: niezrozumiałe polecenie, przerwano logowanie");
+                            loginController.threadExists = false;
+                            this.interrupt();
+                        }
+
+                        ile = is.read(buffer);
+                        received = new String(buffer,0,5);
+                        initializeGameView(login, received);
+
+                        while(true) {
+                            sleep(100);
+                        }
+                    } catch (IOException | InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+
+                };
+            };
+            outThread.start();
+
         } catch (IOException e) {
             return -1;
         }
