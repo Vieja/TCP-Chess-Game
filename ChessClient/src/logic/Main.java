@@ -77,6 +77,7 @@ public class Main extends Application {
                     String response;
                     int ile;
                     byte[] buffer = new byte[5];
+                    byte[] buffer_login = new byte[8];
                     try {
                         is = socket.getInputStream();
                         os = socket.getOutputStream();
@@ -92,8 +93,8 @@ public class Main extends Application {
                             this.interrupt();
                         }
 
-                        ile = is.read(buffer);
-                        received = new String(buffer,0,5);
+                        ile = is.read(buffer_login);
+                        received = new String(buffer_login,0,8);
                         final String enemyLogin = received;
 
                         ile = is.read(buffer);

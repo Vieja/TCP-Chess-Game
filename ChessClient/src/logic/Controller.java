@@ -57,10 +57,12 @@ public class Controller implements Initializable {
         });
     }
 
-    @FXML
     public void startGame(String color) {
-        if (color.equals("black"))
+        if (color.equals("black")) {
+            System.out.println("czarny");
             game.jednakCzarne();
+        }
+        System.out.println(color);
         String ty;
         String przeciwnik;
         if (game.czyTyToBiale) {
