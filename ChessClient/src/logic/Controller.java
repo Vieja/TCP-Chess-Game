@@ -141,7 +141,7 @@ public class Controller implements Initializable {
                     movePiece(game.wybrana_bierka, what);
                     game.zaktualizujPolozenieBierki(what);
                     game.czyscMozliweRuchy();
-                    game.poraNaWroga = true;
+                    game.ruchGotowyDoWysylki = true;
                     break;
                 case 2: //WYBRANO PRAWIDLOWO BIERKE
                     System.out.println("Wybrano piona z możliwymi ruchami");

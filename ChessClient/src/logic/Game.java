@@ -12,6 +12,7 @@ public class Game {
     public boolean czyTyToBiale = true;
     public boolean etap_wybierania_piona = true;
     public boolean poraNaWroga;
+    public boolean ruchGotowyDoWysylki = false;
     private boolean dluga_roszada = false;
     private boolean krotka_roszada = false;
     private boolean wykonano_roszade = false;
@@ -27,6 +28,7 @@ public class Game {
     public String Przeciwnik_KONIEC;
     public Bierka Przeciwnik_BIERKA;
     public BooleanProperty Przeciwnik_wykonal_ruch = new SimpleBooleanProperty();
+    public String wysylka;
 
     public Game() {
         glupia_szachownica = new int[9][9];
@@ -99,6 +101,7 @@ public class Game {
                         wybrana_bierka.wykonanoRuch();
                         //aktualny_gracz_to_biale = !aktualny_gracz_to_biale;
                         zaktualizujGlupiaSzachownice(wybrana_bierka.getPolozenie(), Operacje.rozkodujPozycje(where));
+                        wysylka = wybrana_bierka.getPolozenieJakoString() + ':' + where;
                         //odwrocGlupiaSzachownice();
                         break;
                     }

@@ -20,7 +20,25 @@ public class ConnectionHandler implements Runnable {
         try {
             InputStream is = socket.getInputStream();
             OutputStream os = socket.getOutputStream();
+            //String received;
+            //String response;
+            byte[] buffer = new byte[5];
+            int ile;
             while (true) {
+                if (game.poraNaWroga) {
+                    ile = is.read(buffer);
+                    //received = new String(buffer,0,5);
+                    if (buffer[2] == ':') {
+                        game.wrogWykonalRuch(new String(buffer,0,2), new String(buffer,3,2));
+                        game.poraNaWroga = false;
+                    } else {
+                        System.out.println("Jakiś błąd...");
+                    }
+                } else if (game.ruchGotowyDoWysylki) {
+                    os.write(game.wysylka.getBytes());
+                    game.poraNaWroga = true;
+                    game.ruchGotowyDoWysylki = false;
+                }
                 System.out.println("working...");
                 Thread.sleep(3000);
             }
