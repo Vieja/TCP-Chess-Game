@@ -42,21 +42,12 @@ public class Controller implements Initializable {
     private ArrayList<String> niebieskie_pola = new ArrayList<>();
     Socket socket;
 
-    public Controller (Socket socket) {
-        this.socket = socket;
-    }
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
         EnemyAction enemy = new EnemyAction(game);
         Thread enemyThread = new Thread(enemy);
         enemyThread.start();
-
-        ConnectionHandler connectionHandler = new ConnectionHandler(socket, game);
-        Thread connectionThread = new Thread(connectionHandler);
-        connectionThread.start();
-
 
         game.Przeciwnik_wykonal_ruch.addListener((observable, oldValue, newValue) -> {
             // Only if completed
@@ -997,10 +988,17 @@ public class Controller implements Initializable {
             }
         }
     }
+
     @FXML
     public void setLogins(String you, String enemy) {
         yourLogin.setText(you);
         enemyLogin.setText(enemy);
+    }
+
+    public void setConnectionThread(Socket socket) {
+        ConnectionHandler connectionHandler = new ConnectionHandler(socket, game);
+        Thread connectionThread = new Thread(connectionHandler);
+        connectionThread.start();
     }
 
     public void clickA1( ) {

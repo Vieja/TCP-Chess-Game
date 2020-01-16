@@ -50,6 +50,7 @@ public class Main extends Application {
             loader.setLocation(Main.class.getResource("../layout/GameView.fxml"));
             BorderPane rootLayout = loader.load();
             Controller gameController = loader.getController();
+            gameController.setConnectionThread(socket);
             gameController.setLogins(yourLogin, enemyLogin);
             Scene scene = new Scene(rootLayout);
             primaryStage.setScene(scene);
