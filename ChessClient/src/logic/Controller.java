@@ -8,6 +8,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 
+import java.net.Socket;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -34,12 +35,16 @@ public class Controller implements Initializable {
 
     public Label yourLogin;
     public Label whoNow;
+    public Label enemyLogin;
 
 
     private Game game = new Game();
     private ArrayList<String> niebieskie_pola = new ArrayList<>();
+    Socket socket;
 
-
+    public Controller (Socket socket) {
+        this.socket = socket;
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -47,6 +52,11 @@ public class Controller implements Initializable {
         EnemyAction enemy = new EnemyAction(game);
         Thread enemyThread = new Thread(enemy);
         enemyThread.start();
+
+        ConnectionHandler connectionHandler = new ConnectionHandler(socket, game);
+        Thread connectionThread = new Thread(connectionHandler);
+        connectionThread.start();
+
 
         game.Przeciwnik_wykonal_ruch.addListener((observable, oldValue, newValue) -> {
             // Only if completed
@@ -988,9 +998,9 @@ public class Controller implements Initializable {
         }
     }
     @FXML
-    public void setLogins(String login, String enemyLogin) {
-        yourLogin.setText(login);
-        whoNow.setText(enemyLogin);
+    public void setLogins(String you, String enemy) {
+        yourLogin.setText(you);
+        enemyLogin.setText(enemy);
     }
 
     public void clickA1( ) {

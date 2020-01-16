@@ -1,6 +1,7 @@
 package logic;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -64,7 +65,7 @@ public class Main extends Application {
             socket = new Socket("127.0.0.1", 1234);
 
             System.out.format("[Client] Connected to server!\n");
-            final Thread outThread = new Thread() {
+            final Thread newGameThread = new Thread() {
                 @Override
                 public void run() {
                     System.out.println("Started...");
@@ -91,19 +92,20 @@ public class Main extends Application {
 
                         ile = is.read(buffer);
                         received = new String(buffer,0,5);
-                        initializeGameView(login, received);
+                        final String enemyLogin = received;
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                initializeGameView(login, enemyLogin);
+                            }
+                        });
 
-                        while(true) {
-                            sleep(100);
-                        }
-                    } catch (IOException | InterruptedException e) {
+                    } catch (IOException e) {
                         e.printStackTrace();
                     }
-
-
                 };
             };
-            outThread.start();
+            newGameThread.start();
 
         } catch (IOException e) {
             return -1;
