@@ -9,7 +9,7 @@ import java.util.HashSet;
 import java.util.List;
 
 public class Game {
-    public boolean czyTyToBiale;
+    public boolean czyTyToBiale = true;
     public boolean etap_wybierania_piona = true;
     public boolean poraNaWroga;
     private boolean dluga_roszada = false;
@@ -439,8 +439,8 @@ public class Game {
         mozliwe_ruchy.clear();
     }
 
-    public void setCzyBiale(boolean czy) {
-        this.czyTyToBiale = czy;
+    public void jednakCzarne( ) {
+        this.czyTyToBiale = false;
     }
 
     public ArrayList<String> getMozliweRuchy() {

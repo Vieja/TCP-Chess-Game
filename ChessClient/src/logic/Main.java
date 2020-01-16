@@ -42,7 +42,7 @@ public class Main extends Application {
         }
     }
 
-    public void initializeGameView(String yourLogin, String enemyLogin) {
+    public void initializeGameView(String yourLogin, String enemyLogin, String color) {
         try {
             primaryStage.close();
             primaryStage = new Stage();
@@ -52,6 +52,7 @@ public class Main extends Application {
             Controller gameController = loader.getController();
             gameController.setConnectionThread(socket);
             gameController.setLogins(yourLogin, enemyLogin);
+            gameController.startGame(color);
             Scene scene = new Scene(rootLayout);
             primaryStage.setScene(scene);
             primaryStage.setResizable(false);
@@ -94,10 +95,15 @@ public class Main extends Application {
                         ile = is.read(buffer);
                         received = new String(buffer,0,5);
                         final String enemyLogin = received;
+
+                        ile = is.read(buffer);
+                        received = new String(buffer,0,5);
+                        final String color = received;
+
                         Platform.runLater(new Runnable() {
                             @Override
                             public void run() {
-                                initializeGameView(login, enemyLogin);
+                                initializeGameView(login, enemyLogin, color);
                             }
                         });
 

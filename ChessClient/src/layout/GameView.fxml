@@ -383,12 +383,12 @@
                   </Pane>
                </children>
             </GridPane>
-            <Label layoutX="115.0" layoutY="19.0" text="Przeciwnik:">
+            <Label layoutX="68.0" layoutY="19.0" text="Przeciwnik:">
                <font>
                   <Font size="22.0" />
                </font>
             </Label>
-            <Label fx:id="enemyLogin" layoutX="236.0" layoutY="19.0" text="&lt;enemyLogin&gt;">
+            <Label fx:id="enemyLogin" layoutX="229.0" layoutY="19.0" text="&lt;enemyLogin&gt;">
                <font>
                   <Font size="22.0" />
                </font>
@@ -507,12 +507,12 @@
                   </Label>
                </children>
             </GridPane>
-            <Label layoutX="163.0" layoutY="599.0" text="Gracz:">
+            <Label layoutX="116.0" layoutY="599.0" text="Gracz:">
                <font>
                   <Font size="22.0" />
                </font>
             </Label>
-            <Label fx:id="yourLogin" layoutX="236.0" layoutY="599.0" text="&lt;yourLogin&gt;">
+            <Label fx:id="yourLogin" layoutX="240.0" layoutY="599.0" text="&lt;yourLogin&gt;">
                <font>
                   <Font size="22.0" />
                </font>

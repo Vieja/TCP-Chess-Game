@@ -40,7 +40,6 @@ public class Controller implements Initializable {
 
     private Game game = new Game();
     private ArrayList<String> niebieskie_pola = new ArrayList<>();
-    Socket socket;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -56,9 +55,12 @@ public class Controller implements Initializable {
                 game.Przeciwnik_wykonal_ruch.set(false);
             }
         });
+    }
 
-
-        game.setCzyBiale(true);
+    @FXML
+    public void startGame(String color) {
+        if (color.equals("black"))
+            game.jednakCzarne();
         String ty;
         String przeciwnik;
         if (game.czyTyToBiale) {
