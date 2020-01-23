@@ -80,6 +80,9 @@ public class Game {
         int odp = 0;
         if (etap_wybierania_piona) {
             mozliwe_ruchy = wybieranieBierki(where);
+            for (String ruch : mozliwe_ruchy) {
+                System.out.println(ruch);
+            }
             if (mozliwe_ruchy.isEmpty()) odp = 0;
             else odp = 2;
         }

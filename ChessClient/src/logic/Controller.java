@@ -41,6 +41,7 @@ public class Controller implements Initializable {
     private Game game = new Game();
     private ArrayList<String> niebieskie_pola = new ArrayList<>();
 
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
@@ -114,8 +115,14 @@ public class Controller implements Initializable {
     }
 
     private void przesunBierkePrzeciwnika() {
-        czyscBierke(game.Przeciwnik_START);
-        movePiece(game.Przeciwnik_BIERKA, game.Przeciwnik_KONIEC);
+        String start = game.Przeciwnik_START;
+        String koniec = game.Przeciwnik_KONIEC;
+        if (!game.czyTyToBiale) {
+            start = odwrocWhere(start);
+            koniec = odwrocWhere(koniec);
+        }
+        czyscBierke(start);
+        movePiece(game.Przeciwnik_BIERKA, koniec);
     }
 
     public void  movePiece(Bierka bierka, String where) {
@@ -128,6 +135,7 @@ public class Controller implements Initializable {
     }
 
     public void clickOn(String what) {
+        if(!game.czyTyToBiale) what = odwrocWhere(what);
         if(!game.poraNaWroga) {
             int wyn = game.onClick(what);
             switch (wyn) {
@@ -137,8 +145,12 @@ public class Controller implements Initializable {
                     break;
                 case 1: // bierka wykonuje ruch
                     odkolorujWszystko();
-                    czyscBierke(game.wybrana_bierka.getPolozenieJakoString());
+                    if (!game.czyTyToBiale) {
+                        czyscBierke(odwrocWhere(game.wybrana_bierka.getPolozenieJakoString()));
+                        what = odwrocWhere(what);
+                    } else czyscBierke(game.wybrana_bierka.getPolozenieJakoString());
                     movePiece(game.wybrana_bierka, what);
+                    if(!game.czyTyToBiale) what = odwrocWhere(what);
                     game.zaktualizujPolozenieBierki(what);
                     game.czyscMozliweRuchy();
                     game.ruchGotowyDoWysylki = true;
@@ -165,6 +177,15 @@ public class Controller implements Initializable {
         }
     }
 
+    private String odwrocWhere(String where) {
+        //System.out.println("przed: "+where);
+        int fir = 9 - (where.charAt(0) - 64) + 64;
+        int sec = 9 - (where.charAt(1) - 48);
+        where = (char) fir + Integer.toString(sec);
+        //System.out.println("po: "+where);
+        return where;
+    }
+
     //usun niebieskie pola
     public void odkolorujWszystko() {
         kolorujPola(niebieskie_pola, "#f0dbc0", "#6a4c4c");
@@ -173,7 +194,15 @@ public class Controller implements Initializable {
 
     // pokoloruj mozliwe ruchy na niebiesko
     public void pokolorujNaNiebiesko() {
-        niebieskie_pola.addAll(game.getMozliweRuchy());
+        if (!game.czyTyToBiale) {
+            for (String ruch : game.getMozliweRuchy()) {
+                ruch = odwrocWhere(ruch);
+                niebieskie_pola.add(ruch);
+            }
+        } else {
+            niebieskie_pola.addAll(game.getMozliweRuchy());
+        }
+
         kolorujPola(niebieskie_pola, "#5199FF", "#1771F1");
     }
 
