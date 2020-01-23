@@ -64,7 +64,7 @@ public class Main extends Application {
 
     public int connect(String login, String address, String port) {
         try {
-            socket = new Socket("127.0.0.1", 1234);
+            socket = new Socket(address, Integer.parseInt(port));
 
             System.out.format("[Client] Connected to server!\n");
             final Thread newGameThread = new Thread() {
