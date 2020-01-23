@@ -45,10 +45,6 @@ public class Controller implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-        EnemyAction enemy = new EnemyAction(game);
-        Thread enemyThread = new Thread(enemy);
-        enemyThread.start();
-
         game.Przeciwnik_wykonal_ruch.addListener((observable, oldValue, newValue) -> {
             // Only if completed
             if (newValue) {

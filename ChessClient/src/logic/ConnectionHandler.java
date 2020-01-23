@@ -39,8 +39,8 @@ public class ConnectionHandler implements Runnable {
                     game.poraNaWroga = true;
                     game.ruchGotowyDoWysylki = false;
                 }
-                System.out.println("working...");
-                Thread.sleep(3000);
+                //System.out.println("working...");
+                Thread.sleep(1000);
             }
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();

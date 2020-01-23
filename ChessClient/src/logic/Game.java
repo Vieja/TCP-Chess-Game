@@ -447,6 +447,8 @@ public class Game {
 
     public void jednakCzarne( ) {
         this.czyTyToBiale = false;
+        this.poraNaWroga = true;
+        odwrocGlupiaSzachownice();
     }
 
     public ArrayList<String> getMozliweRuchy() {
