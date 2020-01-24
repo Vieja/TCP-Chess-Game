@@ -80,9 +80,6 @@ public class Game {
         int odp = 0;
         if (etap_wybierania_piona) {
             mozliwe_ruchy = wybieranieBierki(where);
-            for (String ruch : mozliwe_ruchy) {
-                System.out.println(ruch);
-            }
             if (mozliwe_ruchy.isEmpty()) odp = 0;
             else odp = 2;
         }
@@ -102,10 +99,8 @@ public class Game {
                         //usun bierke wroga, jeżeli nastąpiło bicie
                         czyBicie(where);
                         wybrana_bierka.wykonanoRuch();
-                        //aktualny_gracz_to_biale = !aktualny_gracz_to_biale;
                         zaktualizujGlupiaSzachownice(wybrana_bierka.getPolozenie(), Operacje.rozkodujPozycje(where));
                         wysylka = wybrana_bierka.getPolozenieJakoString() + ':' + where;
-                        //odwrocGlupiaSzachownice();
                         break;
                     }
 
@@ -160,7 +155,7 @@ public class Game {
             } else { //wybrano pionek, mamy listę możliwych ruchów
                 boolean wybranoKrola = false;
                 if (wybrana_bierka.getNazwaBierki().equals("krol")) wybranoKrola = true;
-                mozliweRuchyBezSzachaZOdkrycia(wybrana_bierka.getPolozenie(), wybranoKrola);
+                mozliwe = mozliweRuchyBezSzachaZOdkrycia(wybrana_bierka.getPolozenie(), mozliwe, wybranoKrola);
                 if (!mozliwe.isEmpty()) {
                     //jeżeli coś jest na liście to zakończ etap wybierania piona
                     etap_wybierania_piona = false;
@@ -170,7 +165,7 @@ public class Game {
         return mozliwe;
     }
 
-    public void wrogWykonalRuch(String start, String koniec) {
+    public boolean wrogWykonalRuch(String start, String koniec) {
         Bierka ruszana = czyJestTuBierkaGraczaX(!czyTyToBiale, start);
         Bierka zbijana = czyJestTuBierkaGraczaX(czyTyToBiale, koniec);
         if (zbijana!=null) {
@@ -185,6 +180,7 @@ public class Game {
         Przeciwnik_KONIEC = koniec;
         Przeciwnik_BIERKA = ruszana;
         Przeciwnik_wykonal_ruch.set(true);
+        return sprawdzCzySzachMat();
     }
 
     public Bierka czyJestTuBierkaGraczaX(Boolean biale, String where) {
@@ -214,7 +210,7 @@ public class Game {
         return pozycjaKrola;
     }
 
-    public void mozliweRuchyBezSzachaZOdkrycia(int[] polozenie, boolean wybranoKrola) {
+    public ArrayList<String> mozliweRuchyBezSzachaZOdkrycia(int[] polozenie, ArrayList<String> mozliwe, boolean wybranoKrola) {
         int[][] tmp_glupia = new int[9][9];
         boolean czy;
         int[] nowa_pozycja;
@@ -222,7 +218,7 @@ public class Game {
         int[] pozycjaKrola = new int[2];
         ArrayList<String> doUsuniecia = new ArrayList<>();
 
-        for (String ruch : mozliwe_ruchy) {
+        for (String ruch : mozliwe) {
             for (int i = 1; i < 9; i++)
                 for (int j = 1; j < 9; j++) tmp_glupia[i][j] = glupia_szachownica[i][j];
             nowa_pozycja = Operacje.rozkodujPozycje(ruch);
@@ -244,7 +240,8 @@ public class Game {
             }
         }
         if (wybranoKrola) dodajMozliweRoszady();
-        mozliwe_ruchy.removeAll(doUsuniecia);
+        mozliwe.removeAll(doUsuniecia);
+        return mozliwe;
     }
 
     public boolean sprawdzCzySzach() {
@@ -263,6 +260,27 @@ public class Game {
         }
         odwrocGlupiaSzachownice();
         return false;
+    }
+
+    public boolean sprawdzCzySzachMat() {
+        ArrayList<Bierka> lista;
+        if (czyTyToBiale) lista = biale_bierki;
+        else lista = czarne_bierki;
+        boolean ruchKrolem;
+
+        for (Bierka bierka : lista) {
+            mozliwe_ruchy.clear();
+            mozliwe_ruchy = bierka.znajdzMozliweRuchy(glupia_szachownica);
+            if (bierka.getNazwaBierki().equals("krol")) ruchKrolem = true;
+            else ruchKrolem = false;
+
+            mozliweRuchyBezSzachaZOdkrycia(bierka.getPolozenie(), mozliwe_ruchy, ruchKrolem);
+            if (mozliwe_ruchy.size() != 0) {
+                mozliwe_ruchy.clear();
+                return false;
+            }
+        }
+        return true;
     }
 
     public boolean sprawdzCzySzach(int[][] tab, int[] potancjalneBicie, int[] pozycjaKrola) {
