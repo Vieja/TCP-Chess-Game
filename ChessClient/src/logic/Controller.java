@@ -55,9 +55,9 @@ public class Controller implements Initializable {
         });
 
 
-        game.setCzyBiale(false);
-        game.poraNaWroga = true;
-        game.odwrocGlupiaSzachownice();
+        game.setCzyBiale(true);
+        //game.poraNaWroga = true;
+        //game.odwrocGlupiaSzachownice();
         String ty;
         String przeciwnik;
         if (game.czyTyToBiale) {
@@ -149,6 +149,12 @@ public class Controller implements Initializable {
                     game.zaktualizujPolozenieBierki(what);
                     game.czyscMozliweRuchy();
                     game.poraNaWroga = true;
+
+                    //boolean szach = game.sprawdzCzySzach();
+                    //boolean szachMat = game.sprawdzCzySzachMat();
+                    //if (szachMat ){//&& szach) {
+                      //  System.out.println("SZACH MAT");
+                    //}
                     break;
                 case 2: //WYBRANO PRAWIDLOWO BIERKE
                     System.out.println("Wybrano piona z możliwymi ruchami");

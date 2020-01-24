@@ -18,8 +18,9 @@ public class EnemyAction implements Runnable{
                 Scanner scan = new Scanner(System.in);
                 String start = scan.nextLine();
                 String koniec = scan.nextLine();
-                game.wrogWykonalRuch(start, koniec);
-                game.poraNaWroga = false;
+                boolean mat = game.wrogWykonalRuch(start, koniec);
+                if (mat) System.out.println("SZACH MAT");
+                else game.poraNaWroga = false;
             }
 
             try {
