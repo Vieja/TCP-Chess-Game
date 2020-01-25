@@ -476,18 +476,14 @@ bool sprawdzCzySzachNaszegoKrolaGdyTakiRuch(int tab[][9], polozenie potancjalneB
     for (int i = 1; i < 9; i++)
         for (int j = 1; j < 9; j++)
             szachownica[i][j] = (-1) * tab[i][j];
-    cout << "pozycjaKrola: " << pozycjaKrola.k << pozycjaKrola.w << endl;
-    cout << "potencjalneBicie: " << potancjalneBicie.k << potancjalneBicie.w << endl;
     bool czyKrolJestAtakowany = false;
     for (vector<Bierka*>::iterator bierka = bierki_przeciwnika.begin(); bierka != bierki_przeciwnika.end(); ++bierka) {
         if ( (*bierka)->pozycja.k != potancjalneBicie.k || (*bierka)->pozycja.w != potancjalneBicie.w ) {
             vector <string> tmp = (*bierka)->znajdzMozliweRuchy(szachownica);
             for (vector<string>::iterator ruch = tmp.begin(); ruch != tmp.end(); ++ruch) {
                 polozenie pole = rozkodujPozycje(*ruch);
-                cout << "pole:" << pole.k << pole.w << endl;
                 if (pole.k == pozycjaKrola.k && pole.w == pozycjaKrola.w) {
                     czyKrolJestAtakowany = true;
-                    cout << "krol atakowany!" << endl;
                 }
             }
         }
@@ -498,7 +494,6 @@ bool sprawdzCzySzachNaszegoKrolaGdyTakiRuch(int tab[][9], polozenie potancjalneB
 vector<string> mozliweRuchyBezSzachaZOdkrycia(polozenie pozycjaBierki, vector<string> mozliwe, bool wybranoKrola, int glupia_szachownica[][9], polozenie potencjalnyKrol, vector<Bierka*> bierki_przeciwnika) {
     vector<string> mozliwe_bez_szacha = mozliwe;
     for (vector<string>::iterator it = mozliwe_bez_szacha.begin(); it != mozliwe_bez_szacha.end(); ++it) {
-        cout << "mozliwe: "<<*it <<endl;
         int tmp_glupia[9][9];
         for (int i = 1; i < 9; i++)
             for (int j = 1; j < 9; j++) tmp_glupia[i][j] = glupia_szachownica[i][j];
@@ -516,13 +511,23 @@ vector<string> mozliweRuchyBezSzachaZOdkrycia(polozenie pozycjaBierki, vector<st
 
         bool czy = sprawdzCzySzachNaszegoKrolaGdyTakiRuch(tmp_glupia, nowa_pozycja, pozycjaKrola, bierki_przeciwnika);
         if (czy) {
-            cout << "usuwam "<< (*it) << endl;
             mozliwe_bez_szacha.erase(it--);
         }
     }
     return mozliwe_bez_szacha;
 }
 
+bool sprawdzCzySzachMat(vector<Bierka*> bierki_twoje, vector<Bierka*> bierki_przeciwnika, int tab[][9],polozenie krol) {
+    for (vector<Bierka*>::iterator bierka = bierki_twoje.begin(); bierka != bierki_twoje.end(); ++bierka) {
+        bool wybranoKrola = false;
+        if ((*bierka)->getNazwaBierki().compare("krol") == 0) wybranoKrola = true;
+        vector<string> mozliwe = (*bierka)->znajdzMozliweRuchy(tab);
+        vector<string> mozliwe_bez_szacha = mozliweRuchyBezSzachaZOdkrycia((*bierka)->pozycja,mozliwe,wybranoKrola,tab,krol,bierki_przeciwnika);
+        cout <<(*bierka)->pozycja.k<<(*bierka)->pozycja.w<<" : "<< mozliwe_bez_szacha.size() << endl;
+        if (mozliwe_bez_szacha.size() > 0) return false;
+    }
+    return true;
+}
 
 //struktura zawierająca dane, które zostaną przekazane do wątku
 struct data_thread_join
@@ -695,7 +700,10 @@ void *ThreadBehavior(void *t_data)
                 if (!wybrana) {
                     write(player,"E:STA",BUFF_SIZE);
                 } else {
-                    vector<string> vectorek = wybrana_bierka->znajdzMozliweRuchy(szachownica);
+                    bool wybranoKrola = false;
+                    if (wybrana_bierka->getNazwaBierki().compare("krol") == 0) wybranoKrola = true;
+                    vector<string> mozliwe_wedlug_bierki = wybrana_bierka->znajdzMozliweRuchy(szachownica);
+                    vector<string> vectorek = mozliweRuchyBezSzachaZOdkrycia(wybrana_bierka->pozycja,mozliwe_wedlug_bierki,wybranoKrola,szachownica,krol_czarny,biale_bierki);
                     bool poprawny_ruch = false;
                     for (vector<string>::iterator wyb = vectorek.begin(); wyb!=vectorek.end(); ++wyb) {
                         if ( koniec_s.compare(*wyb) == 0 ) {
@@ -715,12 +723,17 @@ void *ThreadBehavior(void *t_data)
                             }
                         }
                         wybrana_bierka->wykonanoRuch(koniec);
+                        if (wybrana_bierka->getNazwaBierki().compare("krol") == 0) krol_bialy = wybrana_bierka->pozycja;
                         aktualny_gracz_to_biale = true;
                         szachownica[start.k][start.w] = 0;
                         szachownica[koniec.k][koniec.w] = 1;
                         for (int i = 1; i < 9; i++)
                             for (int j = 1; j < 9; j++)
                                 szachownica[i][j] = (-1) * szachownica[i][j];
+                        bool szach_mat = sprawdzCzySzachMat(biale_bierki,czarne_bierki,szachownica,krol_bialy);
+                        if (szach_mat) {
+                            cout << "SZACH MAT KONIEEEEEC"<<endl;
+                        }
                         write(enemy,buffor,BUFF_SIZE);
                     }
                 }
