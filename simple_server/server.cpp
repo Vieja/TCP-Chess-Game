@@ -22,6 +22,7 @@
 #define BUFF_SIZE 5
 #define LOGIN_SIZE 8
 #define DESCRIPTION_ARRAY_SIZE 100
+pthread_mutex_t queue_mutex = PTHREAD_MUTEX_INITIALIZER;
 
 using namespace std;
 
@@ -543,8 +544,7 @@ vector<string> mozliweRuchyBezSzachaZOdkrycia(polozenie pozycjaBierki, vector<st
     return mozliwe_bez_szacha;
 }
 
-bool
-sprawdzCzySzachMat(vector<Bierka *> bierki_twoje, vector<Bierka *> bierki_przeciwnika, int tab[][9], polozenie krol) {
+bool sprawdzCzySzachMat(vector<Bierka *> bierki_twoje, vector<Bierka *> bierki_przeciwnika, int tab[][9], polozenie krol) {
     for (vector<Bierka *>::iterator bierka = bierki_twoje.begin(); bierka != bierki_twoje.end(); ++bierka) {
         bool wybranoKrola = false;
         if ((*bierka)->getNazwaBierki().compare("krol") == 0) wybranoKrola = true;
@@ -559,10 +559,8 @@ sprawdzCzySzachMat(vector<Bierka *> bierki_twoje, vector<Bierka *> bierki_przeci
 
 //struktura zawierająca dane, które zostaną przekazane do wątku
 struct data_thread_join {
-// -2 gdy nie istnieje
-// -1 gdy istnieje, ale nie ma przeciwnika
-//  0 -  DESCRIPTION_ARRAY_SIZE deskryptor przeciwnika
-    int *descriptor_array;
+    queue<int> &players_queue;
+    data_thread_join(queue<int> &players) : players_queue(players) {}
 };
 
 struct data_thread_game {
@@ -792,51 +790,38 @@ void *ThreadJoin(void *t_data) {
     pthread_detach(pthread_self());
     struct data_thread_join *th_data = (struct data_thread_join *) t_data;
     while (1) {
-        int first = -1;
-        int second = -1;
-        for (int i = 0; i < DESCRIPTION_ARRAY_SIZE; i++) {
-            if (th_data->descriptor_array[i] == -2) {
-                if (first == -1) {
-                    first = i;
-                } else {
-                    second = i;
-                    break;
-                }
-            }
-        }
-        if (second != -1) {
-            printf("%d oraz %d moga grac\n", first, second);
-            th_data->descriptor_array[first] = second;
-            th_data->descriptor_array[second] = first;
-
-            int create_result = 0;
+        if ( th_data->players_queue.size() >= 2 ) {
             //uchwyt na wątek
             pthread_t thread1;
             //dane, które zostaną przekazane do wątku
             struct data_thread_game *game_data = (struct data_thread_game *) malloc(sizeof(struct data_thread_game));
-            game_data->first_socket_descriptor = first;
-            game_data->second_socket_descriptor = second;
+
+            pthread_mutex_lock(&queue_mutex);
+            game_data->first_socket_descriptor = th_data->players_queue.front();
+            th_data->players_queue.pop();
+            game_data->second_socket_descriptor = th_data->players_queue.front();
+            th_data->players_queue.pop();
+            pthread_mutex_unlock(&queue_mutex);
+            cout<<"["<<game_data->first_socket_descriptor<<"-"<<game_data->second_socket_descriptor<<"] --- NOWA GRA ---"<<endl;
+            int create_result = 0;
             create_result = pthread_create(&thread1, NULL, ThreadBehavior, (void *) game_data);
 
             if (create_result) {
                 printf("Błąd przy próbie utworzenia wątku, kod błędu: %d\n", create_result);
                 exit(-1);
             }
-
         }
     }
 }
 
-//utworzenie wątku który będzie tworzył nowe pokoje
-void handleConnection(int *descriptor_array) {
+//utworzenie wątku, który będzie łączyć graczy w pray i tworzył dla nich nową grę
+void createThreadJoin(queue<int> &new_players_sockets) {
     //wynik funkcji tworzącej wątek
     int create_result = 0;
-
     //uchwyt na wątek
     pthread_t thread1;
     //dane, które zostaną przekazane do wątku
-    struct data_thread_join *t_data = (struct data_thread_join *) malloc(sizeof(struct data_thread_join));
-    t_data->descriptor_array = descriptor_array;
+    struct data_thread_join *t_data = new data_thread_join(new_players_sockets);
     create_result = pthread_create(&thread1, NULL, ThreadJoin, (void *) t_data);
 
     if (create_result) {
@@ -846,9 +831,7 @@ void handleConnection(int *descriptor_array) {
 }
 
 int main(int argc, char *argv[]) {
-    int *descriptor_array = (int *) malloc(sizeof(int) * DESCRIPTION_ARRAY_SIZE);
-    //queue <int> new_players_sockets;
-
+    queue <int> new_players_sockets;
     int server_socket_descriptor;
     int connection_socket_descriptor;
     int bind_result;
@@ -857,7 +840,6 @@ int main(int argc, char *argv[]) {
     struct sockaddr_in server_address;
 
     //inicjalizacja gniazda serwera
-    memset(descriptor_array, -1, sizeof(int) * DESCRIPTION_ARRAY_SIZE);
     memset(&server_address, 0, sizeof(struct sockaddr));
     server_address.sin_family = AF_INET;
     server_address.sin_addr.s_addr = htonl(INADDR_ANY);
@@ -881,20 +863,19 @@ int main(int argc, char *argv[]) {
         fprintf(stderr, "%s: Błąd przy próbie ustawienia wielkości kolejki.\n", argv[0]);
         exit(1);
     }
-
-    handleConnection(descriptor_array);
-
+    createThreadJoin(new_players_sockets);
     while (1) {
         connection_socket_descriptor = accept(server_socket_descriptor, NULL, NULL);
         printf("Nastąpiło połączenie na sockecie: %d\n", connection_socket_descriptor);
         if (connection_socket_descriptor < 0) {
             fprintf(stderr, "%s: Błąd przy próbie utworzenia gniazda dla połączenia.\n", argv[0]);
             exit(1);
+        } else {
+            pthread_mutex_lock(&queue_mutex);
+            new_players_sockets.push(connection_socket_descriptor);
+            pthread_mutex_unlock(&queue_mutex);
         }
-
-        descriptor_array[connection_socket_descriptor] = -2;
     }
-    free(descriptor_array);
     close(server_socket_descriptor);
     return (0);
 }
