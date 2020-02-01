@@ -71,19 +71,19 @@ public class Main extends Application {
                 public void run() {
                     System.out.println("Started...");
                     InputStream is;
-                    OutputStream os;
+                    OutputStream os ;
+                    String received;
                     String response;
                     int ile;
                     byte[] buffer = new byte[5];
-                    byte[] buffer_login = new byte[9];
-                    byte[] buffer_login_size = new byte[1];
+                    byte[] buffer_login = new byte[8];
                     try {
                         is = socket.getInputStream();
                         os = socket.getOutputStream();
 
                         ile = is.read(buffer);
-                        String s1 = new String(buffer);
-                        if (s1.equals("login")) {
+                        received = new String(buffer,0,5);
+                        if (received.equals("login")) {
                             response = login;
                             os.write(response.getBytes());
                         } else {
@@ -91,18 +91,14 @@ public class Main extends Application {
                             loginController.threadExists = false;
                             this.interrupt();
                         }
-                        ile = is.read(buffer_login_size);
-                        int size = buffer_login_size[0] - 48;
-                        System.out.println("Size: "+size);
+
                         ile = is.read(buffer_login);
-                        String s2 = new String(buffer_login,0,size);
-                        final String enemyLogin = s2;
-                        System.out.println("login: "+enemyLogin);
-                        System.out.println("length: " + enemyLogin.length());
+                        received = new String(buffer_login,0,8);
+                        final String enemyLogin = received;
+
                         ile = is.read(buffer);
-                        System.out.println("ile wczytałem"+ile);
-                        String s3 = new String(buffer);
-                        final String color = s3;
+                        received = new String(buffer,0,5);
+                        final String color = received;
 
                         Platform.runLater(new Runnable() {
                             @Override

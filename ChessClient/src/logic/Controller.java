@@ -55,8 +55,7 @@ public class Controller implements Initializable {
     }
 
     public void startGame(String color) {
-        System.out.println(color);
-        if (color.equals("-----")) {
+        if (color.equals("black")) {
             System.out.println("czarny");
             game.jednakCzarne();
         }
