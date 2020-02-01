@@ -567,21 +567,24 @@ struct data_thread_game {
 //funkcja opisującą zachowanie wątku - musi przyjmować argument typu (void *) i zwracać (void *)
 void *ThreadBehavior(void *t_data) {
     pthread_detach(pthread_self());
-    int czy_polaczony = 1;
     struct data_thread_game *th_data = (struct data_thread_game *) t_data;
-    //dostęp do pól struktury: (*th_data).pole
-    int read_result;
     char *login_1 = (char *) malloc(sizeof(char) * LOGIN_SIZE);
     char *login_2 = (char *) malloc(sizeof(char) * LOGIN_SIZE);
+
+    int bytes_read = 0;
+    int bytes_write = 0;
+    int result_read;
+    int result_write;
+
     write(th_data->first_socket_descriptor, "login", BUFF_SIZE);
-    read_result = read(th_data->first_socket_descriptor, login_1, LOGIN_SIZE);
-    if (read_result > 0) {
+    result_read = read(th_data->first_socket_descriptor, login_1, LOGIN_SIZE);
+    if (result_read > 0) {
         printf("[%d-%d] White login: %s\n", th_data->first_socket_descriptor,th_data->second_socket_descriptor,login_1);
     } else printf("Blad\n");
 
     write(th_data->second_socket_descriptor, "login", BUFF_SIZE);
-    read_result = read(th_data->second_socket_descriptor, login_2, LOGIN_SIZE);
-    if (read_result > 0) {
+    result_read = read(th_data->second_socket_descriptor, login_2, LOGIN_SIZE);
+    if (result_read > 0) {
         printf("[%d-%d] Black login: %s\n", th_data->first_socket_descriptor,th_data->second_socket_descriptor,login_2);
     } else printf("Blad\n");
 
@@ -637,6 +640,8 @@ void *ThreadBehavior(void *t_data) {
 
     bool aktualny_gracz_to_biale = true;
     bool gra_trwa = true;
+    bool first_is_dead = false;
+    bool second_is_dead = false;
     char *buffor = (char *) malloc(sizeof(char) * BUFF_SIZE);
 
     while (gra_trwa) {
@@ -652,17 +657,19 @@ void *ThreadBehavior(void *t_data) {
             player = th_data->second_socket_descriptor;
         }
         // czytaj ruch gracza (wiemy, że będzie mieć długość 5 znaków)
-        int bytes_read = 0;
-        int reasult_read;
+        bytes_read = 0;
         while (bytes_read < 5) {
-            read_result = read(player, buffor + bytes_read, BUFF_SIZE - bytes_read);
-            if (result < 1) break;
-            bytes_read += reasult_read;
+            result_read = read(player, buffor + bytes_read, BUFF_SIZE - bytes_read);
+            if (result_read < 1) break;
+            bytes_read += result_read;
         }
         // 0 i -1 uznajemy za taki sam rezultat - nie jesteśmy w stanie kontynuować gry
         // z danym graczem więc zamykamy pokój
-        if (result < 1) {
+        if (result_read < 1) {
             gra_trwa = false;
+            if (aktualny_gracz_to_biale)
+                first_is_dead = true;
+            else second_is_dead = true;
             break;
         }
         //weryfikujemy, czy nadesłana wiadomość to poprawnie zapisany ruch
@@ -673,7 +680,24 @@ void *ThreadBehavior(void *t_data) {
         if (!poprawny_zapis) {
             //gdy zapis niepoprawny zwracamy informację do nadawcy o błędzie (ASC od ASCII)
             //nie zrywamy połączenia, ponownie będziemy czekać na podanie ruchu_
-            write(player, "E:ASC", BUFF_SIZE);
+            char * error = (char *) malloc(sizeof(char) * BUFF_SIZE);
+            strcpy(error,"E:ASC");
+            bytes_write = 0;
+            while (bytes_write < 5) {
+                result_write = write(player, error + bytes_write, BUFF_SIZE - bytes_write);
+                if (result_write < 1) break;
+                bytes_write += result_write;
+            }
+            free(error);
+            // 0 i -1 uznajemy za taki sam rezultat - nie jesteśmy w stanie kontynuować gry
+            // z danym graczem więc zamykamy pokój
+            if (result_write < 1) {
+                gra_trwa = false;
+                if (aktualny_gracz_to_biale)
+                    first_is_dead = true;
+                else second_is_dead = true;
+                break;
+            }
         } else {
             string start_s = string() + buffor[0] + buffor[1];
             string koniec_s = string() + buffor[3] + buffor[4];
@@ -694,7 +718,22 @@ void *ThreadBehavior(void *t_data) {
                 }
                 // musi taka istnieć, jeżeli nie, to ruch jest niepoprawny, STA od START, pola startowego
                 if (!wybrana) {
-                    write(player, "E:STA", BUFF_SIZE);
+                    char * error = (char *) malloc(sizeof(char) * BUFF_SIZE);
+                    strcpy(error,"E:STA");
+                    bytes_write = 0;
+                    while (bytes_write < 5) {
+                        result_write = write(player, error + bytes_write, BUFF_SIZE - bytes_write);
+                        if (result_write < 1) break;
+                        bytes_write += result_write;
+                    }
+                    free(error);
+                    // 0 i -1 uznajemy za taki sam rezultat - nie jesteśmy w stanie kontynuować gry
+                    // z danym graczem więc zamykamy pokój
+                    if (result_write < 1) {
+                        gra_trwa = false;
+                        first_is_dead = true;
+                        break;
+                    }
                 } else {
                     // poproś bierkę aby stworzyła listę swoich możliwych ruchów na podstawie macierzy pokrycia szachownicy
                     vector<string> mozliwe_wedlug_bierki = wybrana_bierka->znajdzMozliweRuchy(szachownica);
@@ -715,7 +754,22 @@ void *ThreadBehavior(void *t_data) {
                     }
                     //jeżeli nie znajduje się, wybrano nieprawidłowy ruch; KON od KONIEC, pozycja końcowa
                     if (!poprawny_ruch) {
-                        write(player, "E:KON", BUFF_SIZE);
+                        char * error = (char *) malloc(sizeof(char) * BUFF_SIZE);
+                        strcpy(error,"E:KON");
+                        bytes_write = 0;
+                        while (bytes_write < 5) {
+                            result_write = write(player, error + bytes_write, BUFF_SIZE - bytes_write);
+                            if (result_write < 1) break;
+                            bytes_write += result_write;
+                        }
+                        free(error);
+                        // 0 i -1 uznajemy za taki sam rezultat - nie jesteśmy w stanie kontynuować gry
+                        // z danym graczem więc zamykamy pokój
+                        if (result_write < 1) {
+                            gra_trwa = false;
+                            first_is_dead = true;
+                            break;
+                        }
                     } else {
                         //znajdz i usun ewentualną bierkę przeciwnika znajdującą się na polu końcowym
                         for (vector<Bierka *>::iterator wroga = czarne_bierki.begin();
@@ -743,14 +797,62 @@ void *ThreadBehavior(void *t_data) {
                         if (szach_mat) {
                             //jeżeli koniec gry, poinformuj o tym obu graczy, drugiemu graczowi wyślij informację o ruchu i zakończ grę
                             printf("[%d-%d] White wins\n", th_data->first_socket_descriptor,th_data->second_socket_descriptor);
-                            write(player,"_INFO", BUFF_SIZE);
-                            write(player,"WIN:W", BUFF_SIZE);
-                            write(enemy,"_INFO", BUFF_SIZE);
-                            write(enemy,"WIN:W", BUFF_SIZE);
-                            write(enemy, buffor, BUFF_SIZE);
+                            // jeżeli wynik write < 1 to nic z tym nie robimy: gra i tak się skończyła
+                            char * info = (char *) malloc(sizeof(char) * BUFF_SIZE);
+                            strcpy(info,"_INFO");
+                            bytes_write = 0;
+                            while (bytes_write < 5) {
+                                result_write = write(player, info + bytes_write, BUFF_SIZE - bytes_write);
+                                if (result_write < 1) break;
+                                bytes_write += result_write;
+                            }
+                            bytes_write = 0;
+                            while (bytes_write < 5) {
+                                result_write = write(enemy, info + bytes_write, BUFF_SIZE - bytes_write);
+                                if (result_write < 1) break;
+                                bytes_write += result_write;
+                            }
+                            free(info);
+
+                            char * info2 = (char *) malloc(sizeof(char) * BUFF_SIZE);
+                            strcpy(info2,"WIN:W");
+                            bytes_write = 0;
+                            while (bytes_write < 5) {
+                                result_write = write(player, info2 + bytes_write, BUFF_SIZE - bytes_write);
+                                if (result_write < 1) break;
+                                bytes_write += result_write;
+                            }
+                            bytes_write = 0;
+                            while (bytes_write < 5) {
+                                result_write = write(enemy, info2 + bytes_write, BUFF_SIZE - bytes_write);
+                                if (result_write < 1) break;
+                                bytes_write += result_write;
+                            }
+                            free(info2);
+
+                            bytes_write = 0;
+                            while (bytes_write < 5) {
+                                result_write = write(enemy, buffor + bytes_write, BUFF_SIZE - bytes_write);
+                                if (result_write < 1) break;
+                                bytes_write += result_write;
+                            }
                             gra_trwa = false;
-                        //jeżeli brak mata, przekaż ruch drugiemuu graczowi
-                        } else write(enemy, buffor, BUFF_SIZE);
+                        } else {
+                            //jeżeli brak mata, przekaż ruch drugiemuu graczowi
+                            bytes_write = 0;
+                            while (bytes_write < 5) {
+                                result_write = write(enemy, buffor + bytes_write, BUFF_SIZE - bytes_write);
+                                if (result_write < 1) break;
+                                bytes_write += result_write;
+                            }
+                            // 0 i -1 uznajemy za taki sam rezultat - nie jesteśmy w stanie kontynuować gry
+                            // z danym graczem więc zamykamy pokój
+                            if (result_write < 1) {
+                                gra_trwa = false;
+                                second_is_dead = true;
+                                break;
+                            }
+                        }
                     }
                 }
             //jeżeli ruch wykonuje czarny
@@ -765,7 +867,22 @@ void *ThreadBehavior(void *t_data) {
                 }
                 // musi taka istnieć, jeżeli nie, to ruch jest niepoprawny, STA od START, pola startowego
                 if (!wybrana) {
-                    write(player, "E:STA", BUFF_SIZE);
+                    char * error = (char *) malloc(sizeof(char) * BUFF_SIZE);
+                    strcpy(error,"E:STA");
+                    bytes_write = 0;
+                    while (bytes_write < 5) {
+                        result_write = write(player, error + bytes_write, BUFF_SIZE - bytes_write);
+                        if (result_write < 1) break;
+                        bytes_write += result_write;
+                    }
+                    free(error);
+                    // 0 i -1 uznajemy za taki sam rezultat - nie jesteśmy w stanie kontynuować gry
+                    // z danym graczem więc zamykamy pokój
+                    if (result_write < 1) {
+                        gra_trwa = false;
+                        second_is_dead = true;
+                        break;
+                    }
                 } else {
                     // poproś bierkę aby stworzyła listę swoich możliwych ruchów na podstawie macierzy pokrycia szachownicy
                     vector<string> mozliwe_wedlug_bierki = wybrana_bierka->znajdzMozliweRuchy(szachownica);
@@ -786,7 +903,22 @@ void *ThreadBehavior(void *t_data) {
                     }
                     //jeżeli nie znajduje się, wybrano nieprawidłowy ruch; KON od KONIEC, pozycja końcowa
                     if (!poprawny_ruch) {
-                        write(player, "E:KON", BUFF_SIZE);
+                        char * error = (char *) malloc(sizeof(char) * BUFF_SIZE);
+                        strcpy(error,"E:KON");
+                        bytes_write = 0;
+                        while (bytes_write < 5) {
+                            result_write = write(player, error + bytes_write, BUFF_SIZE - bytes_write);
+                            if (result_write < 1) break;
+                            bytes_write += result_write;
+                        }
+                        free(error);
+                        // 0 i -1 uznajemy za taki sam rezultat - nie jesteśmy w stanie kontynuować gry
+                        // z danym graczem więc zamykamy pokój
+                        if (result_write < 1) {
+                            gra_trwa = false;
+                            second_is_dead = true;
+                            break;
+                        }
                     } else {
                         //znajdz i usun ewentualną bierkę przeciwnika znajdującą się na polu końcowym
                         for (vector<Bierka *>::iterator wroga = biale_bierki.begin();
@@ -814,20 +946,94 @@ void *ThreadBehavior(void *t_data) {
                         if (szach_mat) {
                             //jeżeli koniec gry, poinformuj o tym obu graczy, drugiemu graczowi wyślij informację o ruchu i zakończ grę
                             printf("[%d-%d] Black wins\n", th_data->first_socket_descriptor,th_data->second_socket_descriptor);
-                            write(player,"_INFO", BUFF_SIZE);
-                            write(player,"WIN:B", BUFF_SIZE);
-                            write(enemy,"_INFO", BUFF_SIZE);
-                            write(enemy,"WIN:B", BUFF_SIZE);
-                            write(enemy, buffor, BUFF_SIZE);
+                            // jeżeli wynik write < 1 to nic z tym nie robimy: gra i tak się skończyła
+                            char * info = (char *) malloc(sizeof(char) * BUFF_SIZE);
+                            strcpy(info,"_INFO");
+                            bytes_write = 0;
+                            while (bytes_write < 5) {
+                                result_write = write(player, info + bytes_write, BUFF_SIZE - bytes_write);
+                                if (result_write < 1) break;
+                                bytes_write += result_write;
+                            }
+                            bytes_write = 0;
+                            while (bytes_write < 5) {
+                                result_write = write(enemy, info + bytes_write, BUFF_SIZE - bytes_write);
+                                if (result_write < 1) break;
+                                bytes_write += result_write;
+                            }
+                            free(info);
+
+                            char * info2 = (char *) malloc(sizeof(char) * BUFF_SIZE);
+                            strcpy(info2,"WIN:B");
+                            bytes_write = 0;
+                            while (bytes_write < 5) {
+                                result_write = write(player, info2 + bytes_write, BUFF_SIZE - bytes_write);
+                                if (result_write < 1) break;
+                                bytes_write += result_write;
+                            }
+                            bytes_write = 0;
+                            while (bytes_write < 5) {
+                                result_write = write(enemy, info2 + bytes_write, BUFF_SIZE - bytes_write);
+                                if (result_write < 1) break;
+                                bytes_write += result_write;
+                            }
+                            free(info2);
+
+                            bytes_write = 0;
+                            while (bytes_write < 5) {
+                                result_write = write(enemy, buffor + bytes_write, BUFF_SIZE - bytes_write);
+                                if (result_write < 1) break;
+                                bytes_write += result_write;
+                            }
                             gra_trwa = false;
                         //jeżeli brak mata, przekaż ruch drugiemuu graczowi
-                        } else write(enemy, buffor, BUFF_SIZE);
+                        } else {
+                            //jeżeli brak mata, przekaż ruch drugiemuu graczowi
+                            bytes_write = 0;
+                            while (bytes_write < 5) {
+                                result_write = write(enemy, buffor + bytes_write, BUFF_SIZE - bytes_write);
+                                if (result_write < 1) break;
+                                bytes_write += result_write;
+                            }
+                            // 0 i -1 uznajemy za taki sam rezultat - nie jesteśmy w stanie kontynuować gry
+                            // z danym graczem więc zamykamy pokój
+                            if (result_write < 1) {
+                                gra_trwa = false;
+                                first_is_dead = true;
+                                break;
+                            }
+                        }
                     }
                 }
             }
         }
     }
     printf("[%d-%d] Zamknięcie pokoju\n", th_data->first_socket_descriptor,th_data->second_socket_descriptor);
+    if (first_is_dead || second_is_dead) {
+        char * info = (char *) malloc(sizeof(char) * BUFF_SIZE);
+        strcpy(info,"_INFO");
+        bytes_write = 0;
+        while (bytes_write < 5) {
+            if (first_is_dead)
+                result_write = write(th_data->second_socket_descriptor, info + bytes_write, BUFF_SIZE - bytes_write);
+            else
+                result_write = write(th_data->first_socket_descriptor, info + bytes_write, BUFF_SIZE - bytes_write);
+            if (result_write < 1) break;
+            bytes_write += result_write;
+        }
+        info = (char *) malloc(sizeof(char) * BUFF_SIZE);
+        strcpy(info,"_CONN");
+        bytes_write = 0;
+        while (bytes_write < 5) {
+            if (first_is_dead)
+                result_write = write(th_data->second_socket_descriptor, info + bytes_write, BUFF_SIZE - bytes_write);
+            else
+                result_write = write(th_data->first_socket_descriptor, info + bytes_write, BUFF_SIZE - bytes_write);
+            if (result_write < 1) break;
+            bytes_write += result_write;
+        }
+        free(info);
+    }
     free(buffor);
     free(login_1);
     free(login_2);
