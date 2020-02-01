@@ -28,7 +28,6 @@ void *ThreadBehavior(void *t_data)
     //dostęp do pól struktury: (*th_data).pole
     //TODO (przy zadaniu 1) klawiatura -> wysyłanie albo odbieranie -> wyświetlanie
     while(1){
-    printf("Wpisz wiadomosc: ");
     scanf("%s", (*th_data).wiadomosc1);
     write((*th_data).nr_deskryptora, (*th_data).wiadomosc1, strlen((*th_data).wiadomosc1));
     }

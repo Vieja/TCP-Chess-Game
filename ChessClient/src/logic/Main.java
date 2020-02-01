@@ -3,7 +3,6 @@ package logic;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
@@ -72,19 +71,19 @@ public class Main extends Application {
                 public void run() {
                     System.out.println("Started...");
                     InputStream is;
-                    OutputStream os ;
-                    String received;
+                    OutputStream os;
                     String response;
                     int ile;
                     byte[] buffer = new byte[5];
-                    byte[] buffer_login = new byte[8];
+                    byte[] buffer_login = new byte[9];
+                    byte[] buffer_login_size = new byte[1];
                     try {
                         is = socket.getInputStream();
                         os = socket.getOutputStream();
 
                         ile = is.read(buffer);
-                        received = new String(buffer,0,5);
-                        if (received.equals("login")) {
+                        String s1 = new String(buffer);
+                        if (s1.equals("login")) {
                             response = login;
                             os.write(response.getBytes());
                         } else {
@@ -92,14 +91,18 @@ public class Main extends Application {
                             loginController.threadExists = false;
                             this.interrupt();
                         }
-
+                        ile = is.read(buffer_login_size);
+                        int size = buffer_login_size[0] - 48;
+                        System.out.println("Size: "+size);
                         ile = is.read(buffer_login);
-                        received = new String(buffer_login,0,8);
-                        final String enemyLogin = received;
-
+                        String s2 = new String(buffer_login,0,size);
+                        final String enemyLogin = s2;
+                        System.out.println("login: "+enemyLogin);
+                        System.out.println("length: " + enemyLogin.length());
                         ile = is.read(buffer);
-                        received = new String(buffer,0,5);
-                        final String color = received;
+                        System.out.println("ile wczytałem"+ile);
+                        String s3 = new String(buffer);
+                        final String color = s3;
 
                         Platform.runLater(new Runnable() {
                             @Override

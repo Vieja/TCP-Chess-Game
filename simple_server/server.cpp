@@ -20,9 +20,10 @@
 #define SERVER_PORT 1234
 #define QUEUE_SIZE 5
 #define BUFF_SIZE 5
-#define LOGIN_SIZE 8
+#define LOGIN_SIZE 9
 #define DESCRIPTION_ARRAY_SIZE 100
 pthread_mutex_t queue_mutex = PTHREAD_MUTEX_INITIALIZER;
+pthread_cond_t at_least_two_players = PTHREAD_COND_INITIALIZER;
 
 using namespace std;
 
@@ -575,23 +576,26 @@ void *ThreadBehavior(void *t_data) {
     struct data_thread_game *th_data = (struct data_thread_game *) t_data;
     //dostęp do pól struktury: (*th_data).pole
     int read_result;
-    printf("Powstałem!\n");
     char *login_1 = (char *) malloc(sizeof(char) * LOGIN_SIZE);
     char *login_2 = (char *) malloc(sizeof(char) * LOGIN_SIZE);
     write(th_data->first_socket_descriptor, "login", BUFF_SIZE);
     read_result = read(th_data->first_socket_descriptor, login_1, LOGIN_SIZE);
     if (read_result > 0) {
-        printf("Login gracza pierwszego: %s\n", login_1);
+        printf("[%d-%d] Białe login: %s\n", th_data->first_socket_descriptor,th_data->second_socket_descriptor,login_1);
     } else printf("Blad");
 
     write(th_data->second_socket_descriptor, "login", BUFF_SIZE);
     read_result = read(th_data->second_socket_descriptor, login_2, LOGIN_SIZE);
     if (read_result > 0) {
-        printf("Login gracza drugiego: %s\n", login_2);
+        printf("[%d-%d] Czarne login: %s\n", th_data->first_socket_descriptor,th_data->second_socket_descriptor,login_2);
     } else printf("Blad");
-
-    write(th_data->first_socket_descriptor, login_2, LOGIN_SIZE);
-    write(th_data->second_socket_descriptor, login_1, LOGIN_SIZE);
+    char size;
+    size = strlen(login_2) + '0';
+    write(th_data->first_socket_descriptor, &size, 1);
+    write(th_data->first_socket_descriptor, login_2, strlen(login_2));
+    size = strlen(login_1) + '0';
+    write(th_data->second_socket_descriptor, &size, 1);
+    write(th_data->second_socket_descriptor, login_1, strlen(login_1));
     // create game
     int szachownica[9][9] = {
             {0, 0, 0, 0, 0, 0, 0, 0,  0},
@@ -637,8 +641,8 @@ void *ThreadBehavior(void *t_data) {
     czarne_bierki.push_back(new Skoczek(true, rozkodujPozycje("G8")));
     czarne_bierki.push_back(new Wieza(true, rozkodujPozycje("H8")));
 
-    write(th_data->first_socket_descriptor, "white", BUFF_SIZE);
-    write(th_data->second_socket_descriptor, "black", BUFF_SIZE);
+    write(th_data->first_socket_descriptor, "+++++", BUFF_SIZE);
+    write(th_data->second_socket_descriptor, "-----", BUFF_SIZE);
 
     bool aktualny_gracz_to_biale = true;
     bool gra_trwa = true;
@@ -790,27 +794,54 @@ void *ThreadJoin(void *t_data) {
     pthread_detach(pthread_self());
     struct data_thread_join *th_data = (struct data_thread_join *) t_data;
     while (1) {
-        if ( th_data->players_queue.size() >= 2 ) {
-            //uchwyt na wątek
-            pthread_t thread1;
-            //dane, które zostaną przekazane do wątku
-            struct data_thread_game *game_data = (struct data_thread_game *) malloc(sizeof(struct data_thread_game));
-
-            pthread_mutex_lock(&queue_mutex);
-            game_data->first_socket_descriptor = th_data->players_queue.front();
-            th_data->players_queue.pop();
-            game_data->second_socket_descriptor = th_data->players_queue.front();
-            th_data->players_queue.pop();
-            pthread_mutex_unlock(&queue_mutex);
-            cout<<"["<<game_data->first_socket_descriptor<<"-"<<game_data->second_socket_descriptor<<"] --- NOWA GRA ---"<<endl;
-            int create_result = 0;
-            create_result = pthread_create(&thread1, NULL, ThreadBehavior, (void *) game_data);
-
-            if (create_result) {
-                printf("Błąd przy próbie utworzenia wątku, kod błędu: %d\n", create_result);
-                exit(-1);
-            }
+        pthread_mutex_lock(&queue_mutex);
+        cout<<"check"<<endl;
+        while (th_data->players_queue.size() < 2) {
+            pthread_cond_wait(&at_least_two_players,&queue_mutex);
         }
+        // uchwyt na wątek
+        pthread_t thread1;
+        //dane, które zostaną przekazane do wątku
+        struct data_thread_game *game_data = (struct data_thread_game *) malloc(sizeof(struct data_thread_game));
+
+        game_data->first_socket_descriptor = th_data->players_queue.front();
+        th_data->players_queue.pop();
+        game_data->second_socket_descriptor = th_data->players_queue.front();
+        th_data->players_queue.pop();
+        pthread_mutex_unlock(&queue_mutex);
+        cout<<"["<<game_data->first_socket_descriptor<<"-"<<game_data->second_socket_descriptor<<"] --- NOWA GRA ---"<<endl;
+        int create_result = 0;
+        create_result = pthread_create(&thread1, NULL, ThreadBehavior, (void *) game_data);
+
+        if (create_result) {
+            printf("Błąd przy próbie utworzenia wątku, kod błędu: %d\n", create_result);
+            exit(-1);
+        }
+        pthread_mutex_unlock(&queue_mutex);
+//        if ( th_data->players_queue.size() >= 2 ) {
+//            cout<<"są dwa"<<endl;
+//            //uchwyt na wątek
+//            pthread_t thread1;
+//            //dane, które zostaną przekazane do wątku
+//            struct data_thread_game *game_data = (struct data_thread_game *) malloc(sizeof(struct data_thread_game));
+//
+//            game_data->first_socket_descriptor = th_data->players_queue.front();
+//            th_data->players_queue.pop();
+//            game_data->second_socket_descriptor = th_data->players_queue.front();
+//            th_data->players_queue.pop();
+//            pthread_mutex_unlock(&queue_mutex);
+//            cout<<"["<<game_data->first_socket_descriptor<<"-"<<game_data->second_socket_descriptor<<"] --- NOWA GRA ---"<<endl;
+//            int create_result = 0;
+//            create_result = pthread_create(&thread1, NULL, ThreadBehavior, (void *) game_data);
+//
+//            if (create_result) {
+//                printf("Błąd przy próbie utworzenia wątku, kod błędu: %d\n", create_result);
+//                exit(-1);
+//            }
+//        } else {
+//            cout<<"ima head out"<<endl;
+//            pthread_cond_wait(&at_least_two_players,&queue_mutex);
+//        }
     }
 }
 
@@ -869,10 +900,12 @@ int main(int argc, char *argv[]) {
         printf("Nastąpiło połączenie na sockecie: %d\n", connection_socket_descriptor);
         if (connection_socket_descriptor < 0) {
             fprintf(stderr, "%s: Błąd przy próbie utworzenia gniazda dla połączenia.\n", argv[0]);
-            exit(1);
         } else {
             pthread_mutex_lock(&queue_mutex);
+            cout <<"nie zablokowalem sie"<<endl;
             new_players_sockets.push(connection_socket_descriptor);
+            cout << "sygnal sle"<<endl;
+            if (new_players_sockets.size() >= 2) pthread_cond_signal(&at_least_two_players);
             pthread_mutex_unlock(&queue_mutex);
         }
     }

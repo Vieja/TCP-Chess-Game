@@ -55,11 +55,11 @@ public class Controller implements Initializable {
     }
 
     public void startGame(String color) {
-        if (color.equals("black")) {
+        System.out.println(color);
+        if (color.equals("-----")) {
             System.out.println("czarny");
             game.jednakCzarne();
         }
-        System.out.println(color);
         String ty;
         String przeciwnik;
         if (game.czyTyToBiale) {
