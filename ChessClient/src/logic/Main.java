@@ -83,9 +83,11 @@ public class Main extends Application {
 
                         ile = is.read(buffer);
                         received = new String(buffer,0,5);
-                        if (received.equals("login")) {
-                            response = login;
+                        System.out.println(received);
+                        if (received.equals("LOGIN")) {
+                            response = login+"\0";
                             os.write(response.getBytes());
+                            System.out.println(response);
                         } else {
                             System.out.println("Błąd: niezrozumiałe polecenie, przerwano logowanie");
                             loginController.threadExists = false;
@@ -94,6 +96,7 @@ public class Main extends Application {
 
                         ile = is.read(buffer_login);
                         received = new String(buffer_login,0,8);
+                        System.out.println(received);
                         final String enemyLogin = received;
 
                         ile = is.read(buffer);

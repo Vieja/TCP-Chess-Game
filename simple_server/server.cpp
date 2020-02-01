@@ -570,27 +570,129 @@ void *ThreadBehavior(void *t_data) {
     struct data_thread_game *th_data = (struct data_thread_game *) t_data;
     char *login_1 = (char *) malloc(sizeof(char) * LOGIN_SIZE);
     char *login_2 = (char *) malloc(sizeof(char) * LOGIN_SIZE);
+    char *login_request = (char *) malloc(sizeof(char) * BUFF_SIZE);
+    strcpy(login_request,"LOGIN");
 
     int bytes_read = 0;
     int bytes_write = 0;
     int result_read;
     int result_write;
 
-    write(th_data->first_socket_descriptor, "login", BUFF_SIZE);
-    result_read = read(th_data->first_socket_descriptor, login_1, LOGIN_SIZE);
-    if (result_read > 0) {
-        printf("[%d-%d] White login: %s\n", th_data->first_socket_descriptor,th_data->second_socket_descriptor,login_1);
-    } else printf("Blad\n");
+    //Poproś graczy kolejno o ich loginy
+    bytes_write = 0;
+    while (bytes_write < BUFF_SIZE) {
+        result_write = write(th_data->first_socket_descriptor, login_request + bytes_write, BUFF_SIZE - bytes_write);
+        if (result_write < 1) break;
+        bytes_write += result_write;
+    }
+    if (result_write < 1) {
+        //nie weryfikujemy wyników write, ponieważ i tak zamykamy grę
+        write(th_data->second_socket_descriptor,"_INFO",BUFF_SIZE);
+        write(th_data->second_socket_descriptor,"_CONN",BUFF_SIZE);
+        printf("[%d-%d] Zamknięcie pokoju\n", th_data->first_socket_descriptor,th_data->second_socket_descriptor);
+        free(login_request);
+        free(th_data);
+        free(login_1);
+        free(login_2);
+        close(th_data->first_socket_descriptor);
+        close(th_data->second_socket_descriptor);
+        pthread_exit(NULL);
+    }
+    bytes_read = 0;
+    while (bytes_read < BUFF_SIZE) {
+        result_read = read(th_data->first_socket_descriptor, login_1 + bytes_read, LOGIN_SIZE - bytes_read);
+        if (result_read < 1) break;
+        bytes_read += result_read;
+    }
+    if (result_read < 1) {
+        write(th_data->second_socket_descriptor,"_INFO",BUFF_SIZE);
+        write(th_data->second_socket_descriptor,"_CONN",BUFF_SIZE);
+        printf("[%d-%d] Zamknięcie pokoju\n", th_data->first_socket_descriptor,th_data->second_socket_descriptor);
+        free(login_request);
+        free(th_data);
+        free(login_1);
+        free(login_2);
+        close(th_data->first_socket_descriptor);
+        close(th_data->second_socket_descriptor);
+        pthread_exit(NULL);
+    }
+    printf("[%d-%d] White login: %s\n", th_data->first_socket_descriptor,th_data->second_socket_descriptor,login_1);
 
-    write(th_data->second_socket_descriptor, "login", BUFF_SIZE);
-    result_read = read(th_data->second_socket_descriptor, login_2, LOGIN_SIZE);
-    if (result_read > 0) {
-        printf("[%d-%d] Black login: %s\n", th_data->first_socket_descriptor,th_data->second_socket_descriptor,login_2);
-    } else printf("Blad\n");
+    bytes_write = 0;
+    while (bytes_write < BUFF_SIZE) {
+        result_write = write(th_data->second_socket_descriptor, login_request + bytes_write, BUFF_SIZE - bytes_write);
+        if (result_write < 1) break;
+        bytes_write += result_write;
+    }
+    if (result_write < 1) {
+        write(th_data->first_socket_descriptor,"_INFO",BUFF_SIZE);
+        write(th_data->first_socket_descriptor,"_CONN",BUFF_SIZE);
+        printf("[%d-%d] Zamknięcie pokoju\n", th_data->first_socket_descriptor,th_data->second_socket_descriptor);
+        free(login_request);
+        free(th_data);
+        free(login_1);
+        free(login_2);
+        close(th_data->first_socket_descriptor);
+        close(th_data->second_socket_descriptor);
+        pthread_exit(NULL);
+    }
+    bytes_read = 0;
+    while (bytes_read < BUFF_SIZE) {
+        result_read = read(th_data->second_socket_descriptor, login_2 + bytes_read, LOGIN_SIZE - bytes_read);
+        if (result_read < 1) break;
+        bytes_read += result_read;
+    }
+    if (result_read < 1) {
+        write(th_data->first_socket_descriptor,"_INFO",BUFF_SIZE);
+        write(th_data->first_socket_descriptor,"_CONN",BUFF_SIZE);
+        printf("[%d-%d] Zamknięcie pokoju\n", th_data->first_socket_descriptor,th_data->second_socket_descriptor);
+        free(login_request);
+        free(th_data);
+        free(login_1);
+        free(login_2);
+        close(th_data->first_socket_descriptor);
+        close(th_data->second_socket_descriptor);
+        pthread_exit(NULL);
+    }
+    printf("[%d-%d] Black login: %s\n", th_data->first_socket_descriptor,th_data->second_socket_descriptor,login_2);
+    free(login_request);
 
-    write(th_data->first_socket_descriptor, login_2, LOGIN_SIZE);
-    write(th_data->second_socket_descriptor, login_1, LOGIN_SIZE);
-    // create game
+    //Prześlij każdemu z graczy login jego przeciwnika
+    bytes_write = 0;
+    while (bytes_write < LOGIN_SIZE) {
+        result_write = write(th_data->first_socket_descriptor, login_2 + bytes_write, LOGIN_SIZE - bytes_write);
+        if (result_write < 1) break;
+        bytes_write += result_write;
+    }
+    if (result_write < 1) {
+        write(th_data->second_socket_descriptor,"_INFO_LOG",LOGIN_SIZE);
+        printf("[%d-%d] Zamknięcie pokoju\n", th_data->first_socket_descriptor,th_data->second_socket_descriptor);
+        free(th_data);
+        free(login_1);
+        free(login_2);
+        close(th_data->first_socket_descriptor);
+        close(th_data->second_socket_descriptor);
+        pthread_exit(NULL);
+    }
+    bytes_write = 0;
+    while (bytes_write < LOGIN_SIZE) {
+        result_write = write(th_data->second_socket_descriptor, login_1 + bytes_write, LOGIN_SIZE - bytes_write);
+        if (result_write < 1) break;
+        bytes_write += result_write;
+    }
+    if (result_write < 1) {
+        write(th_data->first_socket_descriptor,"_INFO_LOG",LOGIN_SIZE);
+        printf("[%d-%d] Zamknięcie pokoju\n", th_data->first_socket_descriptor,th_data->second_socket_descriptor);
+        free(th_data);
+        free(login_1);
+        free(login_2);
+        close(th_data->first_socket_descriptor);
+        close(th_data->second_socket_descriptor);
+        pthread_exit(NULL);
+    }
+    free(login_1);
+    free(login_2);
+    // Utwórz początkowy stan gry
     int szachownica[9][9] = {
             {0, 0, 0, 0, 0, 0, 0, 0,  0},
             {0, 1, 1, 0, 0, 0, 0, -1, -1},
@@ -635,8 +737,51 @@ void *ThreadBehavior(void *t_data) {
     czarne_bierki.push_back(new Skoczek(true, rozkodujPozycje("G8")));
     czarne_bierki.push_back(new Wieza(true, rozkodujPozycje("H8")));
 
-    write(th_data->first_socket_descriptor, "white", BUFF_SIZE);
-    write(th_data->second_socket_descriptor, "black", BUFF_SIZE);
+    //Prześlij informację graczom o ich kolorze
+    //Tożsame z rozpoczęciem gry - po tym będziemy oczekiwać na ruch gracza białego
+    char *c_white = (char *) malloc(sizeof(char) * BUFF_SIZE);
+    strcpy(c_white,"white");
+    char *c_black = (char *) malloc(sizeof(char) * BUFF_SIZE);
+    strcpy(c_black,"black");
+
+    bytes_write = 0;
+    while (bytes_write < BUFF_SIZE) {
+        result_write = write(th_data->first_socket_descriptor, c_white + bytes_write, BUFF_SIZE - bytes_write);
+        if (result_write < 1) break;
+        bytes_write += result_write;
+    }
+    if (result_write < 1) {
+        write(th_data->second_socket_descriptor,"_INFO",BUFF_SIZE);
+        write(th_data->second_socket_descriptor,"_CONN",BUFF_SIZE);
+        printf("[%d-%d] Zamknięcie pokoju\n", th_data->first_socket_descriptor,th_data->second_socket_descriptor);
+        free(c_white);
+        free(c_black);
+        free(th_data);
+        close(th_data->first_socket_descriptor);
+        close(th_data->second_socket_descriptor);
+        pthread_exit(NULL);
+    }
+    bytes_write = 0;
+    while (bytes_write < BUFF_SIZE) {
+        result_write = write(th_data->second_socket_descriptor, c_black + bytes_write, BUFF_SIZE - bytes_write);
+        if (result_write < 1) break;
+        bytes_write += result_write;
+    }
+    if (result_write < 1) {
+        write(th_data->first_socket_descriptor,"_INFO",BUFF_SIZE);
+        write(th_data->first_socket_descriptor,"_CONN",BUFF_SIZE);
+        printf("[%d-%d] Zamknięcie pokoju\n", th_data->first_socket_descriptor,th_data->second_socket_descriptor);
+        free(c_white);
+        free(c_black);
+        free(th_data);
+        close(th_data->first_socket_descriptor);
+        close(th_data->second_socket_descriptor);
+        pthread_exit(NULL);;
+    }
+    free(c_white);
+    free(c_black);
+
+    //Rozpocznij grę
 
     bool aktualny_gracz_to_biale = true;
     bool gra_trwa = true;
@@ -656,9 +801,9 @@ void *ThreadBehavior(void *t_data) {
             enemy = th_data->first_socket_descriptor;
             player = th_data->second_socket_descriptor;
         }
-        // czytaj ruch gracza (wiemy, że będzie mieć długość 5 znaków)
+        // czytaj ruch gracza
         bytes_read = 0;
-        while (bytes_read < 5) {
+        while (bytes_read < BUFF_SIZE) {
             result_read = read(player, buffor + bytes_read, BUFF_SIZE - bytes_read);
             if (result_read < 1) break;
             bytes_read += result_read;
@@ -683,7 +828,7 @@ void *ThreadBehavior(void *t_data) {
             char * error = (char *) malloc(sizeof(char) * BUFF_SIZE);
             strcpy(error,"E:ASC");
             bytes_write = 0;
-            while (bytes_write < 5) {
+            while (bytes_write < BUFF_SIZE) {
                 result_write = write(player, error + bytes_write, BUFF_SIZE - bytes_write);
                 if (result_write < 1) break;
                 bytes_write += result_write;
@@ -721,7 +866,7 @@ void *ThreadBehavior(void *t_data) {
                     char * error = (char *) malloc(sizeof(char) * BUFF_SIZE);
                     strcpy(error,"E:STA");
                     bytes_write = 0;
-                    while (bytes_write < 5) {
+                    while (bytes_write < BUFF_SIZE) {
                         result_write = write(player, error + bytes_write, BUFF_SIZE - bytes_write);
                         if (result_write < 1) break;
                         bytes_write += result_write;
@@ -757,7 +902,7 @@ void *ThreadBehavior(void *t_data) {
                         char * error = (char *) malloc(sizeof(char) * BUFF_SIZE);
                         strcpy(error,"E:KON");
                         bytes_write = 0;
-                        while (bytes_write < 5) {
+                        while (bytes_write < BUFF_SIZE) {
                             result_write = write(player, error + bytes_write, BUFF_SIZE - bytes_write);
                             if (result_write < 1) break;
                             bytes_write += result_write;
@@ -801,13 +946,13 @@ void *ThreadBehavior(void *t_data) {
                             char * info = (char *) malloc(sizeof(char) * BUFF_SIZE);
                             strcpy(info,"_INFO");
                             bytes_write = 0;
-                            while (bytes_write < 5) {
+                            while (bytes_write < BUFF_SIZE) {
                                 result_write = write(player, info + bytes_write, BUFF_SIZE - bytes_write);
                                 if (result_write < 1) break;
                                 bytes_write += result_write;
                             }
                             bytes_write = 0;
-                            while (bytes_write < 5) {
+                            while (bytes_write < BUFF_SIZE) {
                                 result_write = write(enemy, info + bytes_write, BUFF_SIZE - bytes_write);
                                 if (result_write < 1) break;
                                 bytes_write += result_write;
@@ -817,13 +962,13 @@ void *ThreadBehavior(void *t_data) {
                             char * info2 = (char *) malloc(sizeof(char) * BUFF_SIZE);
                             strcpy(info2,"WIN:W");
                             bytes_write = 0;
-                            while (bytes_write < 5) {
+                            while (bytes_write < BUFF_SIZE) {
                                 result_write = write(player, info2 + bytes_write, BUFF_SIZE - bytes_write);
                                 if (result_write < 1) break;
                                 bytes_write += result_write;
                             }
                             bytes_write = 0;
-                            while (bytes_write < 5) {
+                            while (bytes_write < BUFF_SIZE) {
                                 result_write = write(enemy, info2 + bytes_write, BUFF_SIZE - bytes_write);
                                 if (result_write < 1) break;
                                 bytes_write += result_write;
@@ -831,7 +976,7 @@ void *ThreadBehavior(void *t_data) {
                             free(info2);
 
                             bytes_write = 0;
-                            while (bytes_write < 5) {
+                            while (bytes_write < BUFF_SIZE) {
                                 result_write = write(enemy, buffor + bytes_write, BUFF_SIZE - bytes_write);
                                 if (result_write < 1) break;
                                 bytes_write += result_write;
@@ -840,7 +985,7 @@ void *ThreadBehavior(void *t_data) {
                         } else {
                             //jeżeli brak mata, przekaż ruch drugiemuu graczowi
                             bytes_write = 0;
-                            while (bytes_write < 5) {
+                            while (bytes_write < BUFF_SIZE) {
                                 result_write = write(enemy, buffor + bytes_write, BUFF_SIZE - bytes_write);
                                 if (result_write < 1) break;
                                 bytes_write += result_write;
@@ -870,7 +1015,7 @@ void *ThreadBehavior(void *t_data) {
                     char * error = (char *) malloc(sizeof(char) * BUFF_SIZE);
                     strcpy(error,"E:STA");
                     bytes_write = 0;
-                    while (bytes_write < 5) {
+                    while (bytes_write < BUFF_SIZE) {
                         result_write = write(player, error + bytes_write, BUFF_SIZE - bytes_write);
                         if (result_write < 1) break;
                         bytes_write += result_write;
@@ -906,7 +1051,7 @@ void *ThreadBehavior(void *t_data) {
                         char * error = (char *) malloc(sizeof(char) * BUFF_SIZE);
                         strcpy(error,"E:KON");
                         bytes_write = 0;
-                        while (bytes_write < 5) {
+                        while (bytes_write < BUFF_SIZE) {
                             result_write = write(player, error + bytes_write, BUFF_SIZE - bytes_write);
                             if (result_write < 1) break;
                             bytes_write += result_write;
@@ -950,13 +1095,13 @@ void *ThreadBehavior(void *t_data) {
                             char * info = (char *) malloc(sizeof(char) * BUFF_SIZE);
                             strcpy(info,"_INFO");
                             bytes_write = 0;
-                            while (bytes_write < 5) {
+                            while (bytes_write < BUFF_SIZE) {
                                 result_write = write(player, info + bytes_write, BUFF_SIZE - bytes_write);
                                 if (result_write < 1) break;
                                 bytes_write += result_write;
                             }
                             bytes_write = 0;
-                            while (bytes_write < 5) {
+                            while (bytes_write < BUFF_SIZE) {
                                 result_write = write(enemy, info + bytes_write, BUFF_SIZE - bytes_write);
                                 if (result_write < 1) break;
                                 bytes_write += result_write;
@@ -966,13 +1111,13 @@ void *ThreadBehavior(void *t_data) {
                             char * info2 = (char *) malloc(sizeof(char) * BUFF_SIZE);
                             strcpy(info2,"WIN:B");
                             bytes_write = 0;
-                            while (bytes_write < 5) {
+                            while (bytes_write < BUFF_SIZE) {
                                 result_write = write(player, info2 + bytes_write, BUFF_SIZE - bytes_write);
                                 if (result_write < 1) break;
                                 bytes_write += result_write;
                             }
                             bytes_write = 0;
-                            while (bytes_write < 5) {
+                            while (bytes_write < BUFF_SIZE) {
                                 result_write = write(enemy, info2 + bytes_write, BUFF_SIZE - bytes_write);
                                 if (result_write < 1) break;
                                 bytes_write += result_write;
@@ -980,7 +1125,7 @@ void *ThreadBehavior(void *t_data) {
                             free(info2);
 
                             bytes_write = 0;
-                            while (bytes_write < 5) {
+                            while (bytes_write < BUFF_SIZE) {
                                 result_write = write(enemy, buffor + bytes_write, BUFF_SIZE - bytes_write);
                                 if (result_write < 1) break;
                                 bytes_write += result_write;
@@ -990,7 +1135,7 @@ void *ThreadBehavior(void *t_data) {
                         } else {
                             //jeżeli brak mata, przekaż ruch drugiemuu graczowi
                             bytes_write = 0;
-                            while (bytes_write < 5) {
+                            while (bytes_write < BUFF_SIZE) {
                                 result_write = write(enemy, buffor + bytes_write, BUFF_SIZE - bytes_write);
                                 if (result_write < 1) break;
                                 bytes_write += result_write;
@@ -1013,7 +1158,7 @@ void *ThreadBehavior(void *t_data) {
         char * info = (char *) malloc(sizeof(char) * BUFF_SIZE);
         strcpy(info,"_INFO");
         bytes_write = 0;
-        while (bytes_write < 5) {
+        while (bytes_write < BUFF_SIZE) {
             if (first_is_dead)
                 result_write = write(th_data->second_socket_descriptor, info + bytes_write, BUFF_SIZE - bytes_write);
             else
@@ -1024,7 +1169,7 @@ void *ThreadBehavior(void *t_data) {
         info = (char *) malloc(sizeof(char) * BUFF_SIZE);
         strcpy(info,"_CONN");
         bytes_write = 0;
-        while (bytes_write < 5) {
+        while (bytes_write < BUFF_SIZE) {
             if (first_is_dead)
                 result_write = write(th_data->second_socket_descriptor, info + bytes_write, BUFF_SIZE - bytes_write);
             else
@@ -1035,9 +1180,9 @@ void *ThreadBehavior(void *t_data) {
         free(info);
     }
     free(buffor);
-    free(login_1);
-    free(login_2);
     free(th_data);
+    close(th_data->first_socket_descriptor);
+    close(th_data->second_socket_descriptor);
     pthread_exit(NULL);
 }
 
