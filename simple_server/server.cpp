@@ -485,7 +485,6 @@ bool sprawdzCzyPoprawne(char *bufor) {
     int z3 = (int) bufor[2];
     int z4 = (int) bufor[3];
     int z5 = (int) bufor[4];
-    //cout << z1 << " " << z2 << " " << z3 << " " << z4 << " " << z5 << " " << endl;
     if ((64 < z1) && (z1 < 73) &&
         (64 < z4) && (z4 < 73) &&
         (48 < z2) && (z2 < 57) &&
@@ -496,8 +495,7 @@ bool sprawdzCzyPoprawne(char *bufor) {
     return odp;
 }
 
-bool sprawdzCzySzachNaszegoKrolaGdyTakiRuch(int tab[][9], polozenie potancjalneBicie, polozenie pozycjaKrola,
-                                            vector<Bierka *> bierki_przeciwnika) {
+bool sprawdzCzySzachNaszegoKrolaGdyTakiRuch(int tab[][9], polozenie potancjalneBicie, polozenie pozycjaKrola, vector<Bierka *> bierki_przeciwnika) {
     int szachownica[9][9];
     for (int i = 1; i < 9; i++)
         for (int j = 1; j < 9; j++)
@@ -517,9 +515,7 @@ bool sprawdzCzySzachNaszegoKrolaGdyTakiRuch(int tab[][9], polozenie potancjalneB
     return czyKrolJestAtakowany;
 }
 
-vector<string> mozliweRuchyBezSzachaZOdkrycia(polozenie pozycjaBierki, vector<string> mozliwe, bool wybranoKrola,
-                                              int glupia_szachownica[][9], polozenie potencjalnyKrol,
-                                              vector<Bierka *> bierki_przeciwnika) {
+vector<string> mozliweRuchyBezSzachaZOdkrycia(polozenie pozycjaBierki, vector<string> mozliwe, bool wybranoKrola,int glupia_szachownica[][9], polozenie potencjalnyKrol,vector<Bierka *> bierki_przeciwnika) {
     vector<string> mozliwe_bez_szacha = mozliwe;
     for (vector<string>::iterator it = mozliwe_bez_szacha.begin(); it != mozliwe_bez_szacha.end(); ++it) {
         int tmp_glupia[9][9];
@@ -552,7 +548,6 @@ bool sprawdzCzySzachMat(vector<Bierka *> bierki_twoje, vector<Bierka *> bierki_p
         vector<string> mozliwe = (*bierka)->znajdzMozliweRuchy(tab);
         vector<string> mozliwe_bez_szacha = mozliweRuchyBezSzachaZOdkrycia((*bierka)->pozycja, mozliwe, wybranoKrola,
                                                                            tab, krol, bierki_przeciwnika);
-        cout << (*bierka)->pozycja.k << (*bierka)->pozycja.w << " : " << mozliwe_bez_szacha.size() << endl;
         if (mozliwe_bez_szacha.size() > 0) return false;
     }
     return true;
@@ -581,14 +576,14 @@ void *ThreadBehavior(void *t_data) {
     write(th_data->first_socket_descriptor, "login", BUFF_SIZE);
     read_result = read(th_data->first_socket_descriptor, login_1, LOGIN_SIZE);
     if (read_result > 0) {
-        printf("[%d-%d] Białe login: %s\n", th_data->first_socket_descriptor,th_data->second_socket_descriptor,login_1);
-    } else printf("Blad");
+        printf("[%d-%d] White login: %s\n", th_data->first_socket_descriptor,th_data->second_socket_descriptor,login_1);
+    } else printf("Blad\n");
 
     write(th_data->second_socket_descriptor, "login", BUFF_SIZE);
     read_result = read(th_data->second_socket_descriptor, login_2, LOGIN_SIZE);
     if (read_result > 0) {
-        printf("[%d-%d] Czarne login: %s\n", th_data->first_socket_descriptor,th_data->second_socket_descriptor,login_2);
-    } else printf("Blad");
+        printf("[%d-%d] Black login: %s\n", th_data->first_socket_descriptor,th_data->second_socket_descriptor,login_2);
+    } else printf("Blad\n");
 
     write(th_data->first_socket_descriptor, login_2, LOGIN_SIZE);
     write(th_data->second_socket_descriptor, login_1, LOGIN_SIZE);
@@ -645,6 +640,8 @@ void *ThreadBehavior(void *t_data) {
     char *buffor = (char *) malloc(sizeof(char) * BUFF_SIZE);
 
     while (gra_trwa) {
+        //przypisz deskryptory do gracza i jego przeciwnika
+        //first_socket_descriptor zawsze należy do białego gracza
         int player;
         int enemy;
         if (aktualny_gracz_to_biale) {
@@ -654,49 +651,73 @@ void *ThreadBehavior(void *t_data) {
             enemy = th_data->first_socket_descriptor;
             player = th_data->second_socket_descriptor;
         }
-        int success;
-        success = read(player, buffor, BUFF_SIZE);
+        // czytaj ruch gracza (wiemy, że będzie mieć długość 5 znaków)
+        int bytes_read = 0;
+        int reasult_read;
+        while (bytes_read < 5) {
+            read_result = read(player, buffor + bytes_read, BUFF_SIZE - bytes_read);
+            if (result < 1) break;
+            bytes_read += reasult_read;
+        }
+        // 0 i -1 uznajemy za taki sam rezultat - nie jesteśmy w stanie kontynuować gry
+        // z danym graczem więc zamykamy pokój
+        if (result < 1) {
+            gra_trwa = false;
+            break;
+        }
+        //weryfikujemy, czy nadesłana wiadomość to poprawnie zapisany ruch
+        //czy zawiera dwa pola od A1 do H8 przedzielone znakiem ':' np. A2:A4
+        //na typ etapie nie weryfikujemy jeszcze czy jest to poprawny ruch
+        //w sensie logiki i stanu gry
         bool poprawny_zapis = sprawdzCzyPoprawne(buffor);
         if (!poprawny_zapis) {
+            //gdy zapis niepoprawny zwracamy informację do nadawcy o błędzie (ASC od ASCII)
+            //nie zrywamy połączenia, ponownie będziemy czekać na podanie ruchu_
             write(player, "E:ASC", BUFF_SIZE);
         } else {
-            //sprawdz czy tu jest figura
             string start_s = string() + buffor[0] + buffor[1];
             string koniec_s = string() + buffor[3] + buffor[4];
             polozenie start = rozkodujPozycje(start_s);
             polozenie koniec = rozkodujPozycje(koniec_s);
             Bierka *wybrana_bierka;
             bool wybrana = false;
+
+            //jeżeli ruch wykonuje biały
             if (aktualny_gracz_to_biale) {
+                // znajdź bierkę gracza znajdującą się na pierwszym polu wysłanym przez gracza
                 for (vector<Bierka *>::iterator it = biale_bierki.begin(); it != biale_bierki.end(); ++it) {
-                    //cout << (*it)->pozycja.k << " "  << (*it)->pozycja.w << endl;
                     if ((*it)->pozycja.k == start.k && (*it)->pozycja.w == start.w) {
                         wybrana = true;
                         wybrana_bierka = *it;
                         break;
                     }
                 }
+                // musi taka istnieć, jeżeli nie, to ruch jest niepoprawny, STA od START, pola startowego
                 if (!wybrana) {
                     write(player, "E:STA", BUFF_SIZE);
                 } else {
+                    // poproś bierkę aby stworzyła listę swoich możliwych ruchów na podstawie macierzy pokrycia szachownicy
+                    vector<string> mozliwe_wedlug_bierki = wybrana_bierka->znajdzMozliweRuchy(szachownica);
+                    // zmniejsz uzyskany wektor możliwych o ruchy, które spowodują szach na naszym królu (tzw. szach z odkrycia)
+                    // jeżeli wybrana bierka to właśnie nasz król, zmienia to zachowanie funkcji
                     bool wybranoKrola = false;
                     if (wybrana_bierka->getNazwaBierki().compare("krol") == 0) wybranoKrola = true;
-                    vector<string> mozliwe_wedlug_bierki = wybrana_bierka->znajdzMozliweRuchy(szachownica);
                     vector<string> vectorek = mozliweRuchyBezSzachaZOdkrycia(wybrana_bierka->pozycja,
                                                                              mozliwe_wedlug_bierki, wybranoKrola,
                                                                              szachownica, krol_bialy, czarne_bierki);
+                    // sprawdz czy ruch wysłany przez gracza znajduje się w wektorze ruchów możliwych
                     bool poprawny_ruch = false;
                     for (vector<string>::iterator wyb = vectorek.begin(); wyb != vectorek.end(); ++wyb) {
                         if (koniec_s.compare(*wyb) == 0) {
                             poprawny_ruch = true;
                             break;
                         }
-                        //cout << *wyb << " " << endl;
                     }
+                    //jeżeli nie znajduje się, wybrano nieprawidłowy ruch; KON od KONIEC, pozycja końcowa
                     if (!poprawny_ruch) {
                         write(player, "E:KON", BUFF_SIZE);
                     } else {
-                        //cout << "RUCH POPRAWNY"<<endl;
+                        //znajdz i usun ewentualną bierkę przeciwnika znajdującą się na polu końcowym
                         for (vector<Bierka *>::iterator wroga = czarne_bierki.begin();
                              wroga != czarne_bierki.end(); ++wroga) {
                             if (koniec_s.compare(zakodujPozycje((*wroga)->pozycja.k, (*wroga)->pozycja.w)) == 0) {
@@ -704,53 +725,70 @@ void *ThreadBehavior(void *t_data) {
                                 break;
                             }
                         }
+                        //zapisz aktualną pozycję bierki
                         wybrana_bierka->wykonanoRuch(koniec);
+                        //jezeli to krol sie przesunął zapamietaj jego pozycję w zmiennej
+                        // (jest ona potrzebna gdy badamy szach z odkrycia)
                         if (wybrana_bierka->getNazwaBierki().compare("krol") == 0) krol_bialy = wybrana_bierka->pozycja;
+                        //przygotuj wszystko przed ruchem następnego gracza
+                        //zmien aktywny kolor, odwróc macierz pokrycia szachownicy
                         aktualny_gracz_to_biale = false;
                         szachownica[start.k][start.w] = 0;
                         szachownica[koniec.k][koniec.w] = 1;
                         for (int i = 1; i < 9; i++)
                             for (int j = 1; j < 9; j++)
                                 szachownica[i][j] = (-1) * szachownica[i][j];
+                        //sprawdz, czy Szach Mat - tzn. czy przeciwnik ma jakikolwiek możliwy ruch
                         bool szach_mat = sprawdzCzySzachMat(czarne_bierki, biale_bierki, szachownica, krol_czarny);
                         if (szach_mat) {
-                            cout << "SZACH MAT - wygrały biale" << endl;
-                            buffor[2] = '#';
+                            //jeżeli koniec gry, poinformuj o tym obu graczy, drugiemu graczowi wyślij informację o ruchu i zakończ grę
+                            printf("[%d-%d] White wins\n", th_data->first_socket_descriptor,th_data->second_socket_descriptor);
+                            write(player,"_INFO", BUFF_SIZE);
+                            write(player,"WIN:W", BUFF_SIZE);
+                            write(enemy,"_INFO", BUFF_SIZE);
+                            write(enemy,"WIN:W", BUFF_SIZE);
                             write(enemy, buffor, BUFF_SIZE);
                             gra_trwa = false;
+                        //jeżeli brak mata, przekaż ruch drugiemuu graczowi
                         } else write(enemy, buffor, BUFF_SIZE);
                     }
                 }
+            //jeżeli ruch wykonuje czarny
             } else {
+                // znajdź bierkę gracza znajdującą się na pierwszym polu wysłanym przez gracza
                 for (vector<Bierka *>::iterator it = czarne_bierki.begin(); it != czarne_bierki.end(); ++it) {
-                    //cout << (*it)->pozycja.k << " "  << (*it)->pozycja.w << endl;
                     if ((*it)->pozycja.k == start.k && (*it)->pozycja.w == start.w) {
                         wybrana = true;
                         wybrana_bierka = *it;
                         break;
                     }
                 }
+                // musi taka istnieć, jeżeli nie, to ruch jest niepoprawny, STA od START, pola startowego
                 if (!wybrana) {
                     write(player, "E:STA", BUFF_SIZE);
                 } else {
+                    // poproś bierkę aby stworzyła listę swoich możliwych ruchów na podstawie macierzy pokrycia szachownicy
+                    vector<string> mozliwe_wedlug_bierki = wybrana_bierka->znajdzMozliweRuchy(szachownica);
+                    // zmniejsz uzyskany wektor możliwych o ruchy, które spowodują szach na naszym królu (tzw. szach z odkrycia)
+                    // jeżeli wybrana bierka to właśnie nasz król, zmienia to zachowanie funkcji
                     bool wybranoKrola = false;
                     if (wybrana_bierka->getNazwaBierki().compare("krol") == 0) wybranoKrola = true;
-                    vector<string> mozliwe_wedlug_bierki = wybrana_bierka->znajdzMozliweRuchy(szachownica);
                     vector<string> vectorek = mozliweRuchyBezSzachaZOdkrycia(wybrana_bierka->pozycja,
                                                                              mozliwe_wedlug_bierki, wybranoKrola,
                                                                              szachownica, krol_czarny, biale_bierki);
+                    // sprawdz czy ruch wysłany przez gracza znajduje się w wektorze ruchów możliwych
                     bool poprawny_ruch = false;
                     for (vector<string>::iterator wyb = vectorek.begin(); wyb != vectorek.end(); ++wyb) {
                         if (koniec_s.compare(*wyb) == 0) {
                             poprawny_ruch = true;
                             break;
                         }
-                        //cout << *wyb << " " << endl;
                     }
+                    //jeżeli nie znajduje się, wybrano nieprawidłowy ruch; KON od KONIEC, pozycja końcowa
                     if (!poprawny_ruch) {
                         write(player, "E:KON", BUFF_SIZE);
                     } else {
-                        //cout << "RUCH POPRAWNY"<<endl;
+                        //znajdz i usun ewentualną bierkę przeciwnika znajdującą się na polu końcowym
                         for (vector<Bierka *>::iterator wroga = biale_bierki.begin();
                              wroga != biale_bierki.end(); ++wroga) {
                             if (koniec_s.compare(zakodujPozycje((*wroga)->pozycja.k, (*wroga)->pozycja.w)) == 0) {
@@ -758,27 +796,38 @@ void *ThreadBehavior(void *t_data) {
                                 break;
                             }
                         }
+                        //zapisz aktualną pozycję bierki
                         wybrana_bierka->wykonanoRuch(koniec);
-                        if (wybrana_bierka->getNazwaBierki().compare("krol") == 0) krol_bialy = wybrana_bierka->pozycja;
+                        //jezeli to krol sie przesunął zapamietaj jego pozycję w zmiennej
+                        // (jest ona potrzebna gdy badamy szach z odkrycia)
+                        if (wybrana_bierka->getNazwaBierki().compare("krol") == 0) krol_czarny = wybrana_bierka->pozycja;
+                        //przygotuj wszystko przed ruchem następnego gracza
+                        //zmien aktywny kolor, odwróc macierz pokrycia szachownicy
                         aktualny_gracz_to_biale = true;
                         szachownica[start.k][start.w] = 0;
                         szachownica[koniec.k][koniec.w] = 1;
                         for (int i = 1; i < 9; i++)
                             for (int j = 1; j < 9; j++)
                                 szachownica[i][j] = (-1) * szachownica[i][j];
+                        //sprawdz, czy Szach Mat - tzn. czy przeciwnik ma jakikolwiek możliwy ruch
                         bool szach_mat = sprawdzCzySzachMat(biale_bierki, czarne_bierki, szachownica, krol_bialy);
                         if (szach_mat) {
-                            cout << "SZACH MAT - wygrały czarne" << endl;
-                            buffor[2] = '#';
+                            //jeżeli koniec gry, poinformuj o tym obu graczy, drugiemu graczowi wyślij informację o ruchu i zakończ grę
+                            printf("[%d-%d] Black wins\n", th_data->first_socket_descriptor,th_data->second_socket_descriptor);
+                            write(player,"_INFO", BUFF_SIZE);
+                            write(player,"WIN:B", BUFF_SIZE);
+                            write(enemy,"_INFO", BUFF_SIZE);
+                            write(enemy,"WIN:B", BUFF_SIZE);
                             write(enemy, buffor, BUFF_SIZE);
                             gra_trwa = false;
+                        //jeżeli brak mata, przekaż ruch drugiemuu graczowi
                         } else write(enemy, buffor, BUFF_SIZE);
                     }
                 }
             }
         }
     }
-    cout << "Zamknięcie pokoju" << endl;
+    printf("[%d-%d] Zamknięcie pokoju\n", th_data->first_socket_descriptor,th_data->second_socket_descriptor);
     free(buffor);
     free(login_1);
     free(login_2);
@@ -786,34 +835,35 @@ void *ThreadBehavior(void *t_data) {
     pthread_exit(NULL);
 }
 
+//wątek odpowiedzialny za łączenie pary graczy w pokoje
 void *ThreadJoin(void *t_data) {
     pthread_detach(pthread_self());
     struct data_thread_join *th_data = (struct data_thread_join *) t_data;
     while (1) {
+        //jeżeli w kolejce jest mniej niż dwóch graczy czekaj na sygnał
         pthread_mutex_lock(&queue_mutex);
-        cout<<"check"<<endl;
         while (th_data->players_queue.size() < 2) {
             pthread_cond_wait(&at_least_two_players,&queue_mutex);
         }
+        //stworz nowy wątek, który będzie odpowiedzialny za rozgrywkę
         // uchwyt na wątek
         pthread_t thread1;
         //dane, które zostaną przekazane do wątku
         struct data_thread_game *game_data = (struct data_thread_game *) malloc(sizeof(struct data_thread_game));
-
+        //dane przekazdywane do wątku do deskryptory pierwszego i drugiego gracza
         game_data->first_socket_descriptor = th_data->players_queue.front();
         th_data->players_queue.pop();
         game_data->second_socket_descriptor = th_data->players_queue.front();
         th_data->players_queue.pop();
         pthread_mutex_unlock(&queue_mutex);
+
         cout<<"["<<game_data->first_socket_descriptor<<"-"<<game_data->second_socket_descriptor<<"] --- NOWA GRA ---"<<endl;
         int create_result = 0;
         create_result = pthread_create(&thread1, NULL, ThreadBehavior, (void *) game_data);
 
         if (create_result) {
             printf("Błąd przy próbie utworzenia wątku, kod błędu: %d\n", create_result);
-            exit(-1);
         }
-        pthread_mutex_unlock(&queue_mutex);
     }
 }
 
@@ -824,9 +874,9 @@ void createThreadJoin(queue<int> &new_players_sockets) {
     //uchwyt na wątek
     pthread_t thread1;
     //dane, które zostaną przekazane do wątku
+    //to wektor podłączonych i oczekujących na grę graczy
     struct data_thread_join *t_data = new data_thread_join(new_players_sockets);
     create_result = pthread_create(&thread1, NULL, ThreadJoin, (void *) t_data);
-
     if (create_result) {
         printf("Błąd przy próbie utworzenia wątku, kod błędu: %d\n", create_result);
         exit(-1);
@@ -868,17 +918,17 @@ int main(int argc, char *argv[]) {
     }
     createThreadJoin(new_players_sockets);
     while (1) {
+        //dodawaj nowo podłączonych graczy do kolejki
+        //jeżeli w kolejce jest 2 lub więcej graczy wysyłaj sygnał
         connection_socket_descriptor = accept(server_socket_descriptor, NULL, NULL);
-        printf("Nastąpiło połączenie na sockecie: %d\n", connection_socket_descriptor);
         if (connection_socket_descriptor < 0) {
             fprintf(stderr, "%s: Błąd przy próbie utworzenia gniazda dla połączenia.\n", argv[0]);
         } else {
+            printf("Nastąpiło połączenie na sockecie: %d\n", connection_socket_descriptor);
             pthread_mutex_lock(&queue_mutex);
             new_players_sockets.push(connection_socket_descriptor);
             if (new_players_sockets.size() >= 2) pthread_cond_signal(&at_least_two_players);
             pthread_mutex_unlock(&queue_mutex);
         }
     }
-    close(server_socket_descriptor);
-    return (0);
 }
