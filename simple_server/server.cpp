@@ -17,7 +17,6 @@
 #include <vector>
 #include <queue>
 
-#define SERVER_PORT 1234
 #define QUEUE_SIZE 5
 #define BUFF_SIZE 5
 #define LOGIN_SIZE 8
@@ -1235,6 +1234,12 @@ void createThreadJoin(queue<int> &new_players_sockets) {
 }
 
 int main(int argc, char *argv[]) {
+    if (argc != 2)
+    {
+        fprintf(stderr, "Sposób użycia: %s port_number\n", argv[0]);
+        exit(1);
+    }
+
     queue <int> new_players_sockets;
     int server_socket_descriptor;
     int connection_socket_descriptor;
@@ -1247,7 +1252,7 @@ int main(int argc, char *argv[]) {
     memset(&server_address, 0, sizeof(struct sockaddr));
     server_address.sin_family = AF_INET;
     server_address.sin_addr.s_addr = htonl(INADDR_ANY);
-    server_address.sin_port = htons(SERVER_PORT);
+    server_address.sin_port = htons(atoi(argv[1]));
 
     server_socket_descriptor = socket(AF_INET, SOCK_STREAM, 0);
     if (server_socket_descriptor < 0) {

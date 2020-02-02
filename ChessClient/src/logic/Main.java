@@ -28,6 +28,7 @@ public class Main extends Application {
 
     public void initializeLoginView(){
         try {
+            primaryStage = new Stage();
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(Main.class.getResource("../layout/LoginView.fxml"));
             BorderPane sign = loader.load();
@@ -57,20 +58,30 @@ public class Main extends Application {
             primaryStage.setScene(scene);
             primaryStage.setResizable(false);
             primaryStage.show();
+            primaryStage.setOnCloseRequest(e->{
+                Platform.exit();
+                System.exit(0);
+            });
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     public void backToLoginView(String title, String content) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(title);
-        alert.setHeaderText(content);
-        alert.showAndWait();
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle(title);
+                alert.setHeaderText(content);
+                alert.showAndWait();
 
-        primaryStage.close();
-        primaryStage = new Stage();
-        initializeLoginView();
+                primaryStage.close();
+                initializeLoginView();
+            }
+        });
+
+
     }
 
     public int connect(String login, String address, String port) {
@@ -96,7 +107,7 @@ public class Main extends Application {
                         received = new String(buffer,0,5);
                         System.out.println(received);
                         if (received.equals("LOGIN")) {
-                            response = login+"\0";
+                            response = login+"\n";
                             os.write(response.getBytes());
                             System.out.println(response);
                         } else {

@@ -32,14 +32,16 @@ public class ConnectionHandler implements Runnable {
                         game.poraNaWroga = false;
                     } else {
                         String received = new String(buffer,0,5);
+                        System.out.println(received);
                         if (received.equals("_INFO")) {
                             ile = is.read(buffer);
                             received = new String(buffer,0,5);
+                            System.out.println(received);
                             if (received.equals("_CONN")) {
-                                game.theEnd(null);
-                            } else if (received.equals("W:WHI")) {
+                                game.theEnd("nikt");
+                            } else if (received.equals("WIN:W")) {
                                 game.theEnd("white");
-                            } else if (received.equals("W:BLA")) {
+                            } else if (received.equals("WIN:B")) {
                                 game.theEnd("black");
                             } else {
                                 System.out.println("Otrzymabo błędną wiadomość...");

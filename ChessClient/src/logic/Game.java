@@ -6,7 +6,6 @@ import javafx.beans.property.SimpleBooleanProperty;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 
 public class Game {
     public boolean czyTyToBiale = true;
@@ -478,7 +477,7 @@ public class Game {
     public void theEnd(String who) {
         String title;
         String content;
-        if (who.isEmpty()) {
+        if (who.equals("nikt")) {
             title = "Wystąpił błąd";
             content = "Nastąpił problem z połączeniem. Powrót do okna logowania.";
         } else if (who.equals("white")) {
@@ -487,7 +486,7 @@ public class Game {
             else title = "Porażka...";
         } else {
             content = "Zwyciężyły czarne";
-            if (czyTyToBiale) title = "Zwycięstwo!";
+            if (!czyTyToBiale) title = "Zwycięstwo!";
             else title = "Porażka...";
         }
         connectionThread.stop = true;
