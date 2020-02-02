@@ -1,5 +1,3 @@
-// gcc -pthread -o serwer server.c
-
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <sys/socket.h>
@@ -1200,7 +1198,7 @@ void *ThreadJoin(void *t_data) {
         pthread_t thread1;
         //dane, które zostaną przekazane do wątku
         struct data_thread_game *game_data = (struct data_thread_game *) malloc(sizeof(struct data_thread_game));
-        //dane przekazdywane do wątku do deskryptory pierwszego i drugiego gracza
+        //dane przekazdywane do wątku to deskryptory pierwszego i drugiego gracza
         game_data->first_socket_descriptor = th_data->players_queue.front();
         th_data->players_queue.pop();
         game_data->second_socket_descriptor = th_data->players_queue.front();

@@ -1,0 +1,40 @@
+\documentclass[a4paper]{article}
+\usepackage[T1]{fontenc} % Polskie znaki
+\usepackage{graphicx} % Wstwianie grafiki
+\usepackage{subcaption}
+\usepackage{float}
+%opening
+\title{Sprawozdanie\\Projekt Sieci Komputerowe 2}
+\author{Magdalena Wiechczyńska, 132337}
+\date{} %Usunięcie daty
+
+\begin{document}
+
+\maketitle
+
+\section{Protokół komunikacyjny}
+	Serwer po uruchomieniu tworzy wątek, który odpowiada za łączenie oczekujących na grę graczy w pary. Dla wybranej pary deskryptorów klientów tworzony jest nowy wątek obsługujący ich grę.
+	
+	W pierwszej kolejności wątek gry prosi po kolei klientów o ich loginy, wysyłając wiadomość \textit{LOGIN}.
+Klienci odsyłają swoje loginy, które muszą być zakończone znakiem nowej linii. Następnie serwer przesyła klientom odpowiednio \textit{white} oraz \textit{black}, które powiadamiają ich o kolorze ich bierek. Jest to równoznaczne z pomyślnym rozpoczęciem gry i serwer będzie teraz oczekiwał na ruch gracza białego.
+
+	Wiadomość zawierająca ruch składa się z 5 znaków, prezentuje dwa pola oddzielone znakiem ':', gdzie pierwsze pole to pozycja startowa ruszanej bierki, a drugie to pole na którym kończy swój ruch.
+Przykład poprawnie zapisanego ruchu: \textit{E2:E4}. Serwer weryfikuje, czy jest to prawidłowy ruch. Jeżeli wiadomość nie jest poprawna składniowo, serwer odsyła nadawcy wiadomość \textit{E:ASC} (od ASCII), po czym raz jeszcze oczekuje na podanie prawidłowego ruchu. Jeżeli na polu startowym nie istnieje żadna bierka gracza, odsyłany jest komunikat \textit{E:STA} (od słowa start). Jeżeli bierka istnieje, lecz nie jest możliwe wykonanie zadanego ruchu, to odsyłany jest komunikat \textit{E:KON}. (od słowa koniec). Gdy ruch jest prawidłowy, serwer aktualizuje swój stan gry oraz sprawdza, czy przeciwnik ma jakikolwiek możliwy ruch. Jeżeli tak, to odsyła mu wykonany ruch oraz oczekuje na jego.
+Jeżeli nie, oznacza to, że nastąpił szach-mat.
+	
+	Zamiast ruchu przeciwnika, serwer może przesłać klientowi wiadomość \textit{\_INFO}. Klient wie wtedy, że zaszło pewne zdarzenie i powinien odebrać kolejne wiadomości serwera przed wykonaniem swojego ruchu. Jeżeli przeciwnik rozłączył się z serwerem, gracz otrzyma od serwera informację \textit{\_CONN}. Jeżeli nastąpił szach-mat, gracz otrzyma wiadomość o treści \textit{WIN:W} albo \textit{WIN:B}, w zależności od koloru wygrywającego.
+
+	Po rozłączeniu jednego z graczy bądź po macie wątek gry jest niszczony.
+	
+\section{Struktura projektu}
+    Projekt składa się z programu serwera, napisanego w języku C++ oraz z programu klienta, napisanego w języku Java.
+
+	Kod programu serwera znajduje się w jednym pliku .cpp. Program klienta składa się z trzynastu klas, z których 9 odpowiada za logikę gry, 2 to kontrolery okien GUI, jedna służy do komunikacji z serwerem a ostatnia to klasa Main, w której inicjowane są wszystkie elementy GUI. 
+    
+\section{Sposób kompilacji i uruchomienia projektu}
+	Serwer kompiluje się bez błędów wykonując komendę \textit{g++ -pthread -o serwer server.cpp}. Przy uruchomieniu serwera należy pamiętać, że wymagane jest podanie numeru portu serwera jako argument, np. \textit{./serwer 1234}
+	
+	Program klienta najlepiej uruchomić z poziomu IDE Intelli. Aby uruchomić kilka instancji klienta na jednym urządzeniu, należy w oknie Run/Debug Configurations zaznaczyć opcję Allow parallel run.
+
+
+\end{document}
