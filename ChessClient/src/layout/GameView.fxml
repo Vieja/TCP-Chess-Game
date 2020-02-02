@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
@@ -14,32 +11,10 @@
 <?import javafx.scene.text.Font?>
 
 <BorderPane maxHeight="650.0" maxWidth="800.0" minHeight="650.0" minWidth="800.0" prefHeight="650.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="logic.Controller">
-   <left>
-      <SplitPane prefHeight="700.0" prefWidth="116.0" BorderPane.alignment="CENTER">
-         <items>
-            <BorderPane prefHeight="598.0" prefWidth="130.0">
-               <top>
-                  <AnchorPane prefHeight="29.0" prefWidth="198.0" BorderPane.alignment="CENTER">
-                     <children>
-                        <Label layoutX="32.0" layoutY="5.0" text="Historia">
-                           <font>
-                              <Font size="15.0" />
-                           </font>
-                        </Label>
-                     </children>
-                  </AnchorPane>
-               </top>
-               <center>
-                  <ListView prefHeight="569.0" prefWidth="124.0" BorderPane.alignment="CENTER" />
-               </center>
-            </BorderPane>
-         </items>
-      </SplitPane>
-   </left>
    <center>
       <AnchorPane prefHeight="700.0" prefWidth="600.0" BorderPane.alignment="CENTER">
          <children>
-            <GridPane alignment="CENTER" gridLinesVisible="true" layoutX="54.0" layoutY="63.0" prefHeight="500.0" prefWidth="500.0">
+            <GridPane alignment="CENTER" gridLinesVisible="true" layoutX="150.0" layoutY="63.0" prefHeight="500.0" prefWidth="500.0">
                <columnConstraints>
                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -383,17 +358,17 @@
                   </Pane>
                </children>
             </GridPane>
-            <Label layoutX="68.0" layoutY="19.0" text="Przeciwnik:">
+            <Label layoutX="245.0" layoutY="19.0" text="Przeciwnik:">
                <font>
                   <Font size="22.0" />
                </font>
             </Label>
-            <Label fx:id="enemyLogin" layoutX="229.0" layoutY="19.0" text="&lt;enemyLogin&gt;">
+            <Label fx:id="enemyLogin" layoutX="406.0" layoutY="19.0" text="&lt;enemyLogin&gt;">
                <font>
                   <Font size="22.0" />
                </font>
             </Label>
-            <GridPane layoutX="21.0" layoutY="63.0" prefHeight="500.0" prefWidth="22.0">
+            <GridPane layoutX="116.0" layoutY="63.0" prefHeight="500.0" prefWidth="22.0">
                <columnConstraints>
                   <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                </columnConstraints>
@@ -450,7 +425,7 @@
                   </Label>
                </children>
             </GridPane>
-            <GridPane alignment="CENTER" layoutX="54.0" layoutY="569.0" prefHeight="30.0" prefWidth="500.0">
+            <GridPane alignment="CENTER" layoutX="150.0" layoutY="563.0" prefHeight="30.0" prefWidth="500.0">
                <columnConstraints>
                   <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                   <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -507,22 +482,17 @@
                   </Label>
                </children>
             </GridPane>
-            <Label layoutX="116.0" layoutY="599.0" text="Gracz:">
+            <Label layoutX="293.0" layoutY="599.0" text="Gracz:">
                <font>
                   <Font size="22.0" />
                </font>
             </Label>
-            <Label fx:id="yourLogin" layoutX="240.0" layoutY="599.0" text="&lt;yourLogin&gt;">
+            <Label fx:id="yourLogin" layoutX="417.0" layoutY="599.0" text="&lt;yourLogin&gt;">
                <font>
                   <Font size="22.0" />
                </font>
             </Label>
-            <Button layoutX="570.0" layoutY="578.0" mnemonicParsing="false" onMouseClicked="#executeSurrender" prefHeight="52.0" prefWidth="93.0" text="Poddaj" textAlignment="CENTER" wrapText="true">
-               <font>
-                  <Font size="20.0" />
-               </font>
-            </Button>
-            <Label fx:id="whoNow" graphicTextGap="0.0" layoutX="558.0" layoutY="258.0" prefHeight="111.0" prefWidth="117.0" text="Ruch przeciwnika" textAlignment="CENTER" wrapText="true">
+            <Label fx:id="whoNow" graphicTextGap="0.0" layoutX="663.0" layoutY="258.0" prefHeight="111.0" prefWidth="117.0" text="Ruch przeciwnika" textAlignment="CENTER" wrapText="true">
                <font>
                   <Font size="20.0" />
                </font>

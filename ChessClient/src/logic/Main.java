@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
@@ -51,7 +52,7 @@ public class Main extends Application {
             Controller gameController = loader.getController();
             gameController.setConnectionThread(socket);
             gameController.setLogins(yourLogin, enemyLogin);
-            gameController.startGame(color);
+            gameController.startGame(color, this);
             Scene scene = new Scene(rootLayout);
             primaryStage.setScene(scene);
             primaryStage.setResizable(false);
@@ -59,6 +60,17 @@ public class Main extends Application {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void backToLoginView(String title, String content) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(content);
+        alert.showAndWait();
+
+        primaryStage.close();
+        primaryStage = new Stage();
+        initializeLoginView();
     }
 
     public int connect(String login, String address, String port) {
@@ -80,7 +92,6 @@ public class Main extends Application {
                     try {
                         is = socket.getInputStream();
                         os = socket.getOutputStream();
-
                         ile = is.read(buffer);
                         received = new String(buffer,0,5);
                         System.out.println(received);
@@ -126,4 +137,6 @@ public class Main extends Application {
     public static void main(String[] args) {
         launch(args);
     }
+
+
 }

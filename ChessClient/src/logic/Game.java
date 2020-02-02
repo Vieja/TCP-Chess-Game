@@ -13,6 +13,7 @@ public class Game {
     public boolean etap_wybierania_piona = true;
     public boolean poraNaWroga;
     public boolean ruchGotowyDoWysylki = false;
+    public ConnectionHandler connectionThread;
     private boolean dluga_roszada = false;
     private boolean krotka_roszada = false;
     private boolean wykonano_roszade = false;
@@ -21,6 +22,8 @@ public class Game {
 
     public Bierka wybrana_bierka = null;
     ArrayList<String> mozliwe_ruchy = new ArrayList<>();
+
+    private Main main;
 
     private ArrayList<Bierka> biale_bierki = new ArrayList<>();
     private ArrayList<Bierka> czarne_bierki = new ArrayList<>();
@@ -148,7 +151,6 @@ public class Game {
         wybrana_bierka = null;
         wybrana_bierka = czyJestTuBierkaGraczaX(czyTyToBiale, where);
         if (wybrana_bierka != null) { //wybrano pionek, nie wiemy czy ma możliwe ruchy
-            /* TODO tutaj mozna wsadzic bicie w przelocie "" kazBierceZnalezcMozliweRuchy "" */
             mozliwe= wybrana_bierka.znajdzMozliweRuchy(glupia_szachownica);
             if (mozliwe.isEmpty()) {
                 wybrana_bierka = null;
@@ -471,5 +473,32 @@ public class Game {
 
     public ArrayList<String> getMozliweRuchy() {
         return mozliwe_ruchy;
+    }
+
+    public void theEnd(String who) {
+        String title;
+        String content;
+        if (who.isEmpty()) {
+            title = "Wystąpił błąd";
+            content = "Nastąpił problem z połączeniem. Powrót do okna logowania.";
+        } else if (who.equals("white")) {
+            content = "Zwyciężyły białe";
+            if (czyTyToBiale) title = "Zwycięstwo!";
+            else title = "Porażka...";
+        } else {
+            content = "Zwyciężyły czarne";
+            if (czyTyToBiale) title = "Zwycięstwo!";
+            else title = "Porażka...";
+        }
+        connectionThread.stop = true;
+        main.backToLoginView(title, content);
+    }
+
+    public void setMain(Main main) {
+        this.main = main;
+    }
+
+    public void setConnectionThread(ConnectionHandler connectionHandler) {
+        this.connectionThread = connectionHandler;
     }
 }

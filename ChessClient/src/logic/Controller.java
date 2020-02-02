@@ -54,11 +54,12 @@ public class Controller implements Initializable {
         });
     }
 
-    public void startGame(String color) {
+    public void startGame(String color, Main main) {
         if (color.equals("black")) {
             System.out.println("czarny");
             game.jednakCzarne();
         }
+        game.setMain(main);
         String ty;
         String przeciwnik;
         if (game.czyTyToBiale) {
@@ -1027,6 +1028,7 @@ public class Controller implements Initializable {
         ConnectionHandler connectionHandler = new ConnectionHandler(socket, game);
         Thread connectionThread = new Thread(connectionHandler);
         connectionThread.start();
+        game.setConnectionThread(connectionHandler);
     }
 
     public void clickA1( ) {
